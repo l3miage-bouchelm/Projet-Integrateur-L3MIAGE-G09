@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "projetintegrateur9": {
+      "hosting": {
+        "client-planificateur": [
+          "projetintegrateur9"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "projetintegrateur9"
+  }
+}
