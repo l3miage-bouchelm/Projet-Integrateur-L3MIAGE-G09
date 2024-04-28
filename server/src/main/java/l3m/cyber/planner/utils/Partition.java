@@ -16,6 +16,7 @@ public abstract class Partition {
         this.nbElem = elems.size();
         this.k = k;
         this.elemSpecial = elemSpecial;
+        this.elems = elems;
         partitionVide();
     }
 
@@ -23,6 +24,12 @@ public abstract class Partition {
         this.nbElem = n;
         this.k = k;
         this.elemSpecial = elemSpecial;
+        this.elems = new ArrayList<Integer>();
+        for (int i = 0; i < nbElem; i++) {
+            if (i != elemSpecial) {
+                elems.add(i);
+            }
+        }
         partitionVide();
     }
 
@@ -30,11 +37,18 @@ public abstract class Partition {
         this.nbElem = n;
         this.elemSpecial = 0;
         this.k = k;
+        this.elems = new ArrayList<Integer>();
+        for (int i = 0; i < nbElem; i++) {
+            if (i != elemSpecial) {
+                elems.add(i);
+            }
+        }
         partitionVide();
 
     }
+
+
     public void partitionVide(){
-        this.elems = new ArrayList<Integer>();
         this.parties = new ArrayList<>();
         for(int i = 0;i<k;i++){
             ArrayList<Integer> chemin_liveur = new ArrayList<>();
@@ -51,9 +65,9 @@ public abstract class Partition {
         for (int i = 0; i < k; i++) {
             builder.append("Partie ").append(i + 1).append(": ");
             ArrayList<Integer> partie = parties.get(i);
-            for (int j = 0; j < k; j++) {
+            for (int j = 0; j < partie.size(); j++) {
                 builder.append(partie.get(j));
-                if (j < k - 1) {
+                if (j < partie.size() - 1) {
                     builder.append(", ");
                 }
             }

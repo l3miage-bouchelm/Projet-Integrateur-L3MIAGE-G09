@@ -1,14 +1,17 @@
 package l3m.cyber.planner.utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
+import java.util.Stack;
 
 public class Graphe implements Cloneable {
     private int nbSommets;
-    private int[][] adj;//Et adj est utilisé pour déterminer rapidement s'il existe une connexion directe entre deux sommets.
-    private double[][] poidsA;//poidsA est important car il fournit des informations sur le coût de chaque arête. 
-    private ArrayList<Integer> nomSommets;
+    private int[][] adj;//Et adj est un matrix utilisé pour déterminer rapidement s'il existe une connexion directe entre deux sommets.临接矩阵
+    private double[][] poidsA;//poidsA est important car il fournit des informations sur le coût de chaque arête. 权重矩阵
+    private ArrayList<Integer> nomSommets;//还没有被添加的点
 
     //crée un graphe avec n sommets, nommés 0 à n-1 et aucune arête
     public Graphe(int n){
@@ -80,6 +83,38 @@ public class Graphe implements Cloneable {
         this.nomSommets = nomSommets;
         this.nbSommets = nomSommets.size();
     }
+
+
+    //+pondereAretes() : void是用来干什么的
+
+    //创建并返回Graphe对象的一个深拷贝。这个实现确保了所有的数据结构—如数组和列表—都被逐个元素复制，而不是仅仅复制引用
+    @Override
+    public Graphe clone() {
+        try {
+            Graphe cloned = (Graphe) super.clone(); // 调用Object类的clone()方法进行浅拷贝,针对各种定义的属性
+            // 深克隆数组和集合，因为
+            cloned.adj = this.adj != null ? this.adj.clone() : null;
+            if (this.adj != null) {
+                cloned.adj = new int[this.adj.length][];
+                for (int i = 0; i < this.adj.length; i++) {
+                    cloned.adj[i] = this.adj[i].clone(); // 对每个子数组进行深拷贝
+                }
+            }
+            if (this.poidsA != null) {
+                cloned.poidsA = new double[this.poidsA.length][];
+                for (int i = 0; i < this.poidsA.length; i++) {
+                    cloned.poidsA[i] = this.poidsA[i].clone(); // 对权重矩阵进行深拷贝
+                }
+            }
+            cloned.nomSommets = new ArrayList<>(this.nomSommets); // 对顶点名列表进行深拷贝
+            return cloned;
+        } catch (CloneNotSupportedException e) {
+            // 此异常不应发生，因为我们实现了Cloneable接口
+            throw new AssertionError(e);
+        }
+    }
+
+
 
     //ajouter l'arete dans le graphe
     //考虑有向图和无向图之间的关系，如果是有向图只需要单项设置，但是无向图需要两个都添加
@@ -160,18 +195,76 @@ public class Graphe implements Cloneable {
     }
 
 
-    //DFS
+    //DFS 画图解释是最好的
+    //stack遵循后进先出
+    //深度优先搜索（Depth-First Search, DFS）通常使用栈来实现，这是因为栈的后进先出（Last-In-First-Out, LIFO）特性非常适合DFS的探索方式
+    public ArrayList<Integer> parcoursProfondeur(int debut) {
+        ArrayList<Integer> visited = new ArrayList<>();  // 创建一个列表来存储访问过的顶点
+        Stack<Integer> stack = new Stack<>();            // 使用栈来支持深度优先搜索
+        stack.push(debut);                               // 将起始顶点压入栈
+    
+        while (!stack.isEmpty()) {                       // 只要栈不为空就继续
+            int vertex = stack.pop();                    // 从栈中取出一个顶点
+            if (!visited.contains(vertex)) {             // 如果这个顶点尚未被访问过
+                visited.add(vertex);                     // 标记为已访问
+                for (int i = nbSommets - 1; i >= 0; i--) {  // 逆序遍历这个顶点的所有邻接点
+                    if (adj[vertex][i] == 1 && !visited.contains(i)) {  // 如果邻接点是连通的并且未被访问
+                        stack.push(i);                   // 将邻接点压入栈
+                    }
+                }
+            }
+        }
+        return visited;                                  // 返回访问顺序列表
+    }
 
 
 
 
-/* 
     //Déterminer si le graphe est connexe
     public boolean estConnexe(){
-
+        ArrayList<Integer> visited = parcoursProfondeur(0);  // 从顶点0开始DFS
+        return visited.size() == nbSommets;  // 如果访问的顶点数量等于图中顶点总数，则图连通
     }
-*/
+
+    //提取图中边的集合到一个list里
+    public List<Triplet> listeAretes(){
+        List<Triplet> list = new ArrayList<>();
+        for(int i=0;i<this.nbSommets;i++){
+            for(int j=0;j<this.nbSommets;j++){
+                if(this.poidsA[i][j] != 0){
+                    Triplet edge = new Triplet(i, j, this.poidsA[i][j]);
+                    list.add(edge);
+                }
+            }
+        }
+        return list;
+    }
+
+    //根据边的权重，进行排序
+    public List<Triplet> aretesTriees(boolean croissant){
+        List<Triplet> list = listeAretes();  // 调用之前定义的方法来获取所有边的列表
+        if (croissant) {
+            Collections.sort(list);  // 升序排序
+        } else {
+            Collections.sort(list, Collections.reverseOrder());  // 降序排序
+        }
+        return list;
+    }
 
 
+    //版本一中，暂时不关注权重问题，所以不涉及Kruskal 算法
+    //只把tsp算法定义为，按照顶点编号的升序排列来形成一个哈密顿回路
+    //暂时先在这里的头尾人为添加仓库元素
+    public ArrayList<Integer> tsp(int debut){
+        ArrayList<Integer> tour = new ArrayList<>();
+        for(int i=0; i<nbSommets;i++){
+            if (i != debut) {
+                tour.add(nomSommets.get(i));  // 添加除起点外的其他顶点
+            }
+        }
+        tour.add(0, nomSommets.get(debut));  // 在列表前面添加起点
+        tour.add(nomSommets.get(debut));     // 在列表末尾再次添加起点，形成闭环
+        return tour;
+    }
 
 }
