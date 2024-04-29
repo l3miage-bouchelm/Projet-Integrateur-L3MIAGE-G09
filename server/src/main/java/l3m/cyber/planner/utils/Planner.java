@@ -38,11 +38,8 @@ public class Planner{
         
         
         //return new PlanningResult(tournees, longTournees);
-        ArrayList<ArrayList<Integer>> a= new ArrayList<ArrayList<Integer>>();
-       ArrayList<Double> b= new ArrayList<Double>();
-        return new PlannerResult(a, b); // TODO: remplacer par la ligne precedente
 
-        //return new PlannerResult(new ArrayList<ArrayList<Integer>>(), new ArrayList<Double>()); // TODO: remplacer par la ligne precedente
+        return new PlannerResult(new ArrayList<ArrayList<Integer>>(), new ArrayList<Double>()); // TODO: remplacer par la ligne precedente
 
     }
 
