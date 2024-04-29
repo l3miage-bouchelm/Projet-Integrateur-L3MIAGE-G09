@@ -252,18 +252,12 @@ public class Graphe implements Cloneable {
     }
 
 
-    //版本一中，暂时不关注权重问题，所以不涉及Kruskal 算法
-    //只把tsp算法定义为，按照顶点编号的升序排列来形成一个哈密顿回路
-    //暂时先在这里的头尾人为添加仓库元素
-    public ArrayList<Integer> tsp(int debut){
-        ArrayList<Integer> tour = new ArrayList<>();
-        for(int i=0; i<nbSommets;i++){
-            if (i != debut) {
-                tour.add(nomSommets.get(i));  // 添加除起点外的其他顶点
-            }
-        }
-        tour.add(0, nomSommets.get(debut));  // 在列表前面添加起点
-        tour.add(nomSommets.get(debut));     // 在列表末尾再次添加起点，形成闭环
+    //版本一为了使这部分能够与项目的其他部分集成而不会引起错误,直接按照编号递增的顺序排列输出
+    public ArrayList<Integer> tsp(int debut) {
+        ArrayList<Integer> tour = new ArrayList<>(nomSommets);  // 创建 nomSommets 的一个副本以避免修改原列表
+        tour.remove(Integer.valueOf(debut));  // 移除 debut 元素
+        Collections.sort(tour);  // 对剩余元素进行排序
+        tour.add(0, debut);  // 将 debut 元素添加回列表的开头
         return tour;
     }
 

@@ -47,14 +47,14 @@ class PlannerApplicationTests {
 	
 	@Test
 	public void testPartitionAlea(){
-		double [][] distances = {{0.0, 1.0, 2.0, 3.0},
+		Double [][] distances = {{0.0, 1.0, 2.0, 3.0},
 								 {1.0, 0.0, 1.0, 2.0},
 								 {2.0, 1.0, 0.0, 1.0},
 								 {3.0, 2.0, 1.0, 0.0}};
 		int k = 2;
 		int depot = 1;
 		ArrayList<Integer> list = new ArrayList<>(List.of(1, 2, 3, 4, 6));
-		double [][] distances2 = {{0.0, 1.0, 2.0, 3.0,4.0},
+		Double [][] distances2 = {{0.0, 1.0, 2.0, 3.0,4.0},
 								 {1.0, 0.0, 1.0, 2.0,3.0},
 								 {2.0, 1.0, 0.0, 1.0,2.0},
 								 {3.0, 2.0, 1.0, 0.0,1.0}};
@@ -146,21 +146,45 @@ class PlannerApplicationTests {
 
 	@Test
     public void testTSPversion1() {
-        int nbSommets = 5;
-        Graphe graphe = new Graphe(nbSommets);
-        ArrayList<Integer> tour = graphe.tsp(0);  // 从顶点0开始
+		ArrayList<Integer> vertices = new ArrayList<Integer>() {{
+			add(2);
+			add(0);
+			add(3);
+			add(1);
+			add(4);
+		}};
+		Graphe graphe = new Graphe(vertices);
 
-        assertNotNull(tour,"Tour should not be null");
-        assertEquals( nbSommets + 1, tour.size(),"Tour should have correct length");
-        assertEquals(tour.get(0), tour.get(tour.size() - 1),"Tour should start and end at the start vertex");
-
-        // 验证回路包含所有顶点
-        boolean allVerticesVisited = tour.subList(1, tour.size() - 1)
-                                        .stream()
-                                        .distinct()
-                                        .count() == nbSommets - 1;
-        assertTrue(allVerticesVisited,"All vertices should be visited exactly once");
+		// 测试 tsp 方法，假设传入的 debut 是列表中的第一个有效顶点
+        ArrayList<Integer> result = graphe.tsp(vertices.get(0));
+        // 预期结果应该是从顶点 0 开始的排序列表
+		ArrayList<Integer> expected = new ArrayList<Integer>() {{
+			add(2);
+			add(0);
+			add(1);
+			add(3);
+			add(4);
+		}};
+		assertEquals(expected, result,"TSP method should return sorted vertices starting from the debut vertex");
     }
 
-
+	
+	@Test
+    public void testCalculeTournees() {
+		int k = 2;
+		int start = 0;
+		Double[][] matrix = {{0.0, 1.0, 2.0, 3.0,4.0},
+							 {1.0, 0.0, 1.0, 2.0,3.0},
+							 {2.0, 1.0, 0.0, 1.0,2.0},
+							 {3.0, 2.0, 1.0, 0.0,1.0},
+							 {4.0, 3.0, 2.0, 1.0,0.0}};
+		PlannerParameter param= new PlannerParameter(matrix, k, start);
+		Planner planner = new Planner(param);
+		planner.calculeTournees();
+		planner.calculeLongTournees();
+        // 验证结果
+        assertNotNull(planner.getTournees(),"Tournees should not be null");
+        assertFalse(planner.getTournees().isEmpty(),"Tournees should not be empty");
+    }
+	
 }

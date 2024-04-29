@@ -10,7 +10,7 @@ public abstract class Partition {
     protected ArrayList<ArrayList<Integer>> parties;//Correspond à un itinéraire de livraison d'un livreur
     //l'inindice d'entrepot apparait qu'une fois, au debut de parties[i]
 
-    abstract void partitionne(double[][] distances); 
+    abstract void partitionne(Double[][] distances); 
 
     Partition(ArrayList<Integer> elems, int k, int elemSpecial){
         this.nbElem = elems.size();
