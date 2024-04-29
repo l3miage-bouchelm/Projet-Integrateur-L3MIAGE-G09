@@ -74,3 +74,9 @@ export class CartoComponent implements OnDestroy {
     this.subResize?.unsubscribe();
   }
 }
+
+
+
+//prend les commande 
+//fqit les equipes de  livraison
+// tournees

@@ -1,7 +1,7 @@
 import { Component, Signal } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { Auth, User, authState, signOut, signInWithPopup, GoogleAuthProvider } from '@angular/fire/auth';
-import { Signal, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 
