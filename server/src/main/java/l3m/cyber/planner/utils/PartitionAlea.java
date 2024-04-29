@@ -17,7 +17,7 @@ public class PartitionAlea extends Partition {
 
 
     @Override
-    public void partitionne(double[][] distances) {
+    public void partitionne(Double[][] distances) {
         Random random = new Random();
         if (this.nbElem == 0 || this.elems == null || this.parties == null) {
             // 添加日志或抛出异常，表明无法进行分区因为输入列表为空或未初始化
