@@ -5,19 +5,20 @@ import java.util.ArrayList;
 
 public class methodesUtiles {
 
-    public static int[] CasernePlusProche( int[] ListeCasernes,  int k, int nbElm, double[][] distances){
+    public static int[] CasernePlusProche( int[] ListeCasernes,  int nbrCasernesEnCours, int nbElm, Double[][] distances){
 
-        double d ;
+        double dmin ;
         int c;
         int[] LC = new int[nbElm];
 
         for(int i=0; i < nbElm; i++ ){
             c=0;
-            d = Double.MAX_VALUE;
-            for (int j=0; j<k; j++){
-                if( d > distances[i][j]) {
-                    d = distances[i][j];
-                    c = j;
+            dmin = Double.MAX_VALUE;
+
+            for( int ki: ListeCasernes){
+                if( dmin > distances[i][ki]) {
+                    dmin = distances[i][ki];
+                    c = ki;
                 }
             }
             LC[i] = c;
@@ -28,13 +29,13 @@ public class methodesUtiles {
 
 
     // Trouve le point dont la distance entre lui et sa caserne est la plus grande
-    public static int PlusEloigneDeCaserneRef(int[] ListeCasernes , int nbElm, double[][] distances){
+    public static int PlusEloigneDeCaserneRef(int[] ListeCasernes , int nbElm, Double[][] distances){
         int c=0;
-        double d = Double.MIN_VALUE;
+        double dmax = Double.MIN_VALUE;
         for(int i=0; i < nbElm; i++ ){
-            if( d < distances[i][ ListeCasernes[i]] ){
-                d = distances[i][ ListeCasernes[i]];
-                c = ListeCasernes[i];
+            if( dmax < distances[i][ ListeCasernes[i]] ){
+                dmax = distances[i][ ListeCasernes[i]];
+                c = i;
             }
         }
        return c;
@@ -42,23 +43,23 @@ public class methodesUtiles {
 
 
     // retrouve tous les sommets dont la caserne de reférence est k pour en faire une partion et les met dans une arraylist
-    private static  ArrayList<Integer> SommetsPartieK(int k, int[] AffectationCasernes, int nbElm){
+    private static  ArrayList<Integer> SommetsPartieK(int numCaserne, int[] AffectationCasernes, int[] ListeCasernes, int nbElm){
 
         ArrayList<Integer> p= new ArrayList<>();
         for(int j=0; j < nbElm; j++ ){
-            if( AffectationCasernes[j] == k){ p.add(j); }
+            if( AffectationCasernes[j] == ListeCasernes[numCaserne] ){ p.add(j); }
         }
         return p;
     }
 
     //RemplireParties pour remplire une array avec les différentes partions
-    public static ArrayList<ArrayList<Integer>> RemplireParties(int[] AffectationCasernes, int nbElm, int k){
+    public static ArrayList<ArrayList<Integer>> RemplireParties(int[] AffectationCasernes, int[] ListeCasernes, int nbElm, int k){
 
         ArrayList<ArrayList<Integer>> prts = new ArrayList<>();
-        for(int i=0; i < k; i++ ){
+        for(int numCaserne=0; numCaserne < k; numCaserne++ ){
 
-            ArrayList<Integer> p= SommetsPartieK(i, AffectationCasernes, nbElm);
-            prts.add(p);        // un ajoute à l'array la partion dans les point ont pour caserne référente le point i
+            ArrayList<Integer> p= SommetsPartieK(numCaserne, AffectationCasernes, ListeCasernes, nbElm);
+            prts.add(p);        // on ajoute à l'array la partion dont les points ont pour caserne référente le point i
         }
         return prts;
     }

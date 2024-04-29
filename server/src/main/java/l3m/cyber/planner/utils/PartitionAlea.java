@@ -8,7 +8,7 @@ public class PartitionAlea extends Partition {
 
 
     @Override
-    public void partitionne(double[][] distances) {
+    public void partitionne(Double[][] distances) {
         Random random = new Random();
         for(int i = 0; i<this.nbElem;i++){
             if (elems.get(i) == 0) {
