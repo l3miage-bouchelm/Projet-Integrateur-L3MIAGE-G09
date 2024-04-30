@@ -7,10 +7,10 @@ import l3m.cyber.planner.responses.PlannerResult;
 
 
 public class Planner{
-    /*******/public Double[][] distances;
+    Double[][] distances;
     int k;
     int debut;
-    /*******/ public Partition p;
+    Partition p;
     ArrayList<ArrayList<Integer>> tournees;
     ArrayList<Double> longTournees;
 
@@ -28,6 +28,7 @@ public class Planner{
         }
          //这里暂时使用了随机分类
         this.p = new PartitionAlea(elems,k,debut);//根据需求，选择对应的构造器进行初始化
+        this.p = new PartitionKCentre( distances.length, k);
          //如果要使用kcentre方法进行分配则需要在这里初始化partitionkcentre的构造器
     }
 

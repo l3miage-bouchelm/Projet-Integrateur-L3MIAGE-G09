@@ -15,10 +15,6 @@ import l3m.cyber.planner.responses.PlannerResult;
 import l3m.cyber.planner.utils.Graphe;
 import l3m.cyber.planner.utils.PartitionAlea;
 import l3m.cyber.planner.utils.PartitionKCentre;
-
-import l3m.cyber.planner.utils.methodesUtiles; //*********************
-
-
 import l3m.cyber.planner.utils.Planner;
 
 
@@ -53,16 +49,16 @@ class PlannerApplicationTests {
 	@Test
 	public void testPartitionAlea(){
 		Double [][] distances = {{0.0, 1.0, 2.0, 3.0},
-								 {1.0, 0.0, 1.0, 2.0},
-								 {2.0, 1.0, 0.0, 1.0},
-								 {3.0, 2.0, 1.0, 0.0}};
+								{1.0, 0.0, 1.0, 2.0},
+								{2.0, 1.0, 0.0, 1.0},
+								{3.0, 2.0, 1.0, 0.0}};
 		int k = 2;
 		int depot = 1;
 		ArrayList<Integer> list = new ArrayList<>(List.of(1, 2, 3, 4, 6));
 		Double [][] distances2 = {{0.0, 1.0, 2.0, 3.0,4.0},
-								 {1.0, 0.0, 1.0, 2.0,3.0},
-								 {2.0, 1.0, 0.0, 1.0,2.0},
-								 {3.0, 2.0, 1.0, 0.0,1.0}};
+								{1.0, 0.0, 1.0, 2.0,3.0},
+								{2.0, 1.0, 0.0, 1.0,2.0},
+								{3.0, 2.0, 1.0, 0.0,1.0}};
 
 		//创建partition实例并调用partitionne方法
 		PartitionAlea partition1 = new PartitionAlea(4, k);
@@ -179,10 +175,10 @@ class PlannerApplicationTests {
 		int k = 2;
 		int start = 0;
 		Double[][] matrix = {{0.0, 1.0, 2.0, 3.0,4.0},
-							 {1.0, 0.0, 1.0, 2.0,3.0},
-							 {2.0, 1.0, 0.0, 1.0,2.0},
-							 {3.0, 2.0, 1.0, 0.0,1.0},
-							 {4.0, 3.0, 2.0, 1.0,0.0}};
+							{1.0, 0.0, 1.0, 2.0,3.0},
+							{2.0, 1.0, 0.0, 1.0,2.0},
+							{3.0, 2.0, 1.0, 0.0,1.0},
+							{4.0, 3.0, 2.0, 1.0,0.0}};
 		PlannerParameter param= new PlannerParameter(matrix, k, start);
 		Planner planner = new Planner(param);
 		planner.calculeTournees();
