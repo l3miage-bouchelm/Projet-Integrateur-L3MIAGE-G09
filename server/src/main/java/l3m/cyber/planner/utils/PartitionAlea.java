@@ -21,6 +21,7 @@ public class PartitionAlea extends Partition {
         Random random = new Random();
         if (this.nbElem == 0 || this.elems == null || this.parties == null) {
             // 添加日志或抛出异常，表明无法进行分区因为输入列表为空或未初始化
+            System.out.println("PartitionAlea: No elements to partition or not initialized");
             throw new IllegalStateException("Elements list is empty or not initialized.");
         }
         
@@ -31,7 +32,11 @@ public class PartitionAlea extends Partition {
             }
             int randomPartie = random.nextInt(this.k);
             parties.get(randomPartie).add(elems.get(i));
+            System.out.println("Element " + elems.get(i) + " assigned to partie " + randomPartie);
+
         }
+        System.out.println("PartitionAlea: Partitioning complete.");
+
     }
     
 

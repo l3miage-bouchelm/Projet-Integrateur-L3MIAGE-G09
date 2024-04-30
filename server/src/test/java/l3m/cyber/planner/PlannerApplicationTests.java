@@ -12,22 +12,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import l3m.cyber.planner.requests.PlannerParameter;
 import l3m.cyber.planner.responses.PlannerResult;
-
 import l3m.cyber.planner.utils.Graphe;
 import l3m.cyber.planner.utils.PartitionAlea;
-
-import l3m.cyber.planner.utils.Partition;
 import l3m.cyber.planner.utils.PartitionKCentre;
+
 import l3m.cyber.planner.utils.methodesUtiles; //*********************
 
+
 import l3m.cyber.planner.utils.Planner;
-
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -159,20 +151,45 @@ class PlannerApplicationTests {
 
 	@Test
     public void testTSPversion1() {
-        int nbSommets = 5;
-        Graphe graphe = new Graphe(nbSommets);
-        ArrayList<Integer> tour = graphe.tsp(0);  // 从顶点0开始
+		ArrayList<Integer> vertices = new ArrayList<Integer>() {{
+			add(2);
+			add(0);
+			add(3);
+			add(1);
+			add(4);
+		}};
+		Graphe graphe = new Graphe(vertices);
 
-        assertNotNull(tour,"Tour should not be null");
-        assertEquals( nbSommets + 1, tour.size(),"Tour should have correct length");
-        assertEquals(tour.get(0), tour.get(tour.size() - 1),"Tour should start and end at the start vertex");
+		// 测试 tsp 方法，假设传入的 debut 是列表中的第一个有效顶点
+        ArrayList<Integer> result = graphe.tsp(vertices.get(0));
+        // 预期结果应该是从顶点 0 开始的排序列表
+		ArrayList<Integer> expected = new ArrayList<Integer>() {{
+			add(2);
+			add(0);
+			add(1);
+			add(3);
+			add(4);
+		}};
+		assertEquals(expected, result,"TSP method should return sorted vertices starting from the debut vertex");
+    }
 
-        // 验证回路包含所有顶点
-        boolean allVerticesVisited = tour.subList(1, tour.size() - 1)
-                                        .stream()
-                                        .distinct()
-                                        .count() == nbSommets - 1;
-        assertTrue(allVerticesVisited,"All vertices should be visited exactly once");
+	
+	@Test
+    public void testCalculeTournees() {
+		int k = 2;
+		int start = 0;
+		Double[][] matrix = {{0.0, 1.0, 2.0, 3.0,4.0},
+							 {1.0, 0.0, 1.0, 2.0,3.0},
+							 {2.0, 1.0, 0.0, 1.0,2.0},
+							 {3.0, 2.0, 1.0, 0.0,1.0},
+							 {4.0, 3.0, 2.0, 1.0,0.0}};
+		PlannerParameter param= new PlannerParameter(matrix, k, start);
+		Planner planner = new Planner(param);
+		planner.calculeTournees();
+		planner.calculeLongTournees();
+        // 验证结果
+        assertNotNull(planner.getTournees(),"Tournees should not be null");
+        assertFalse(planner.getTournees().isEmpty(),"Tournees should not be empty");
     }
 
 
@@ -183,12 +200,12 @@ class PlannerApplicationTests {
 		int start=0;
 		PlannerParameter param= new PlannerParameter(matrix, k, start);
 		Planner pl= new Planner(param);
-		pl.partition = new PartitionKCentre( pl.distances.length, k);
-		pl.partition.partitionne(matrix);
+		pl.p = new PartitionKCentre( pl.distances.length, k);
+		pl.p.partitionne(matrix);
 		ArrayList< ArrayList<Integer>> Ar = new ArrayList< ArrayList<Integer> >(); //[]
 
 
-		assertEquals( Ar, pl.partition.parties); //le tableau tournees doit etre null
+		assertEquals( Ar, pl.p.parties); //le tableau tournees doit etre null
 
 	}
 
@@ -200,13 +217,13 @@ class PlannerApplicationTests {
 		int start=0;
 		PlannerParameter param= new PlannerParameter(matrix, k, start);
 		Planner pl= new Planner(param);
-		pl.partition = new PartitionKCentre( pl.distances.length, k);
-		pl.partition.partitionne(matrix);
+		pl.p = new PartitionKCentre( pl.distances.length, k);
+		pl.p.partitionne(matrix);
 		ArrayList< ArrayList<Integer>> Ar = new ArrayList< ArrayList<Integer> >(); //[ [0], [0]]
 		Ar.add(new ArrayList<>(List.of(0)));
 		Ar.add(new ArrayList<>(List.of(0)));
 
-		assertEquals( Ar, pl.partition.parties); //le tableau tournees doit contenir des listes vides
+		assertEquals( Ar, pl.p.parties); //le tableau tournees doit contenir des listes vides
 
 	}
 
@@ -218,13 +235,13 @@ class PlannerApplicationTests {
 		int start=0;
 		PlannerParameter param= new PlannerParameter(matrix, k, start);
 		Planner pl= new Planner(param);
-		pl.partition = new PartitionKCentre( pl.distances.length, k);
-		pl.partition.partitionne(matrix);
+		pl.p = new PartitionKCentre( pl.distances.length, k);
+		pl.p.partitionne(matrix);
 		ArrayList< ArrayList<Integer>> Ar = new ArrayList< ArrayList<Integer> >(); //({ {0}, {0,1}  } )
 		Ar.add(new ArrayList<>(List.of(0)));
 		Ar.add(new ArrayList<>(List.of(start,1)));
 
-		assertEquals( Ar, pl.partition.parties); //le tableau tournees doit etre non null
+		assertEquals( Ar, pl.p.parties); //le tableau tournees doit etre non null
 
 	}
 
@@ -238,13 +255,13 @@ class PlannerApplicationTests {
 		int start=0;
 		PlannerParameter param= new PlannerParameter(matrix, k, start);
 		Planner pl= new Planner(param);
-		pl.partition = new PartitionKCentre( pl.distances.length, k);
-		pl.partition.partitionne(matrix);
+		pl.p = new PartitionKCentre( pl.distances.length, k);
+		pl.p.partitionne(matrix);
 		ArrayList< ArrayList<Integer>> Ar = new ArrayList< ArrayList<Integer> >(); //({{0, 1}, {0, 2, 3}} )
 		Ar.add(new ArrayList<>(List.of(0, 1)));
 		Ar.add(new ArrayList<>(List.of(start, 2,3)));
 
-		assertEquals( Ar, pl.partition.parties); //le tableau tournees doit etre non null
+		assertEquals( Ar, pl.p.parties); //le tableau tournees doit etre non null
 
 	}
 
@@ -259,13 +276,13 @@ class PlannerApplicationTests {
 		int start=0;
 		PlannerParameter param= new PlannerParameter(matrix, k, start);
 		Planner pl= new Planner(param);
-		pl.partition = new PartitionKCentre( pl.distances.length, k);
-		pl.partition.partitionne(matrix);
+		pl.p = new PartitionKCentre( pl.distances.length, k);
+		pl.p.partitionne(matrix);
 		ArrayList< ArrayList<Integer>> Ar = new ArrayList< ArrayList<Integer> >(); //({{0, 1, 2}, {0, 3, 4, 5}} )
 		Ar.add(new ArrayList<>(List.of(0, 1, 2)));
 		Ar.add(new ArrayList<>(List.of(start, 3, 4, 5)));
 
-        assertEquals( Ar, pl.partition.parties); //le tableau tournees doit etre non null
+        assertEquals( Ar, pl.p.parties); //le tableau tournees doit etre non null
 	}
 
 	@Test
@@ -276,13 +293,13 @@ class PlannerApplicationTests {
 		int start=3;
 		PlannerParameter param= new PlannerParameter(matrix, k, start);
 		Planner pl= new Planner(param);
-		pl.partition = new PartitionKCentre( pl.distances.length, k, start);
-		pl.partition.partitionne(matrix);
+		pl.p = new PartitionKCentre( pl.distances.length, k, start);
+		pl.p.partitionne(matrix);
 		ArrayList< ArrayList<Integer>> Ar = new ArrayList< ArrayList<Integer> >(); //({{3, 0, 1}, {3, 2}} )
 		Ar.add(new ArrayList<>(List.of(3, 0, 1)));
 		Ar.add(new ArrayList<>(List.of(start, 2)));
 
-		assertEquals( Ar, pl.partition.parties); //le tableau tournees doit etre non null
+		assertEquals( Ar, pl.p.parties); //le tableau tournees doit etre non null
 
 	}
 
@@ -295,13 +312,13 @@ class PlannerApplicationTests {
 		int start=3;
 		PlannerParameter param= new PlannerParameter(matrix, k, start);
 		Planner pl= new Planner(param);
-		pl.partition = new PartitionKCentre( pl.distances.length, k, start);
-		pl.partition.partitionne(matrix);
+		pl.p = new PartitionKCentre( pl.distances.length, k, start);
+		pl.p.partitionne(matrix);
 		ArrayList< ArrayList<Integer>> Ar = new ArrayList< ArrayList<Integer> >(); //({{3, 0, 1, 2}, {3, 4, 5}} )
 		Ar.add(new ArrayList<>(List.of(start, 0, 1, 2)));
 		Ar.add(new ArrayList<>(List.of(start, 4, 5)));
 
-		assertEquals( Ar, pl.partition.parties); //le tableau tournees doit etre non null
+		assertEquals( Ar, pl.p.parties); //le tableau tournees doit etre non null
 	}
 
 
