@@ -8,6 +8,7 @@ import l3m.cyber.planner.responses.PlannerResult;
 import l3m.cyber.planner.services.PlannerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+//*******************import org.springframework.web.bind.annotation.GetMapping;
 
 
 @Controller
@@ -15,7 +16,9 @@ import org.springframework.stereotype.Controller;
 public class PlannerController implements PlannerEndpoints {
 	private final PlannerService plannerService;
 
+    
     @Override
+    //************ @GetMapping("/planif/")
     public PlannerResult planif(PlannerParameter params) {
         return plannerService.getResult(params);
     }
