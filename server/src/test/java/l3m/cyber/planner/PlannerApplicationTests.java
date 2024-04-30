@@ -43,36 +43,6 @@ class PlannerApplicationTests {
 	}
 
 
-
-	@Test
-	void MyPtrintTest(){
-		System.out.println("**********My Print Test***********************");
-
-		assertTrue(1!=2);
-		System.out.println("********************************* \n");
-
-		Double[][] matrix = {{0.0, 1.1, 1.0,  3.0, 4.0, 4.0}, {1.1, 0.0, 2.0, 2.0, 3.0, 3.0},
-				{1.0, 2.0, 0.0, 2.0, 3.0, 3.0}, {3.0, 2.0, 2.0, 0.0, 1.1, 1.1}
-				, {4.0, 3.0, 3.0, 1.0, 0.0, 2.0},{4.0, 3.0, 3.0, 1.0, 2.0, 0.0}};
-		int k=2;
-		int start=3;
-		PlannerParameter param= new PlannerParameter(matrix, k, start);
-		Planner pl= new Planner(param);
-		pl.partition = new PartitionKCentre( pl.distances.length, k);
-
-		pl.partition.AfficherPartition(matrix);
-
-		System.out.println("***********Fin Affichage********************** \n");
-
-
-
-
-
-	}
-
-
-
-
 	// Vous pouvez ajouter des tests unitaires ici si vous le souhaitez
 
 	

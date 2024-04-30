@@ -33,18 +33,7 @@ public class PartitionAlea extends Partition {
             parties.get(randomPartie).add(elems.get(i));
         }
     }
-
-
-
-    @Override
-    /*********/ public void AfficherPartition(Double[][] distances){System.out.println("Hellowww");
-
-    }
-
-
-
-
-
+    
 
 
 }
