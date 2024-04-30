@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { LivreurTravailComponent } from '../livreur-travail/livreur-travail.component';
 
 @Component({
   selector: 'app-livreur-login',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule,LivreurTravailComponent],
   templateUrl: './livreur-login.component.html',
   styleUrl: './livreur-login.component.scss'
 })
@@ -14,7 +15,7 @@ export class LivreurLoginComponent {
   nom: string = '';
 
   login() {
-    
-    this.router.navigate(['/livreur-travail'],{ queryParams: { nom: this.nom } });
+  localStorage.setItem('livreurNom', this.nom);
+  this.router.navigate(['/livreur-travail']);
   }
 }

@@ -1,0 +1,31 @@
+<p>journee works!</p>
+<button (click)="getCsvData()">LOAD</button>
+<button (click)="changeEtat()">CONFIRMER</button>
+<div>
+</div>
+<section class="listes">
+    <ng-container *ngFor="let sig of sigLists(); track sig; let i = index">
+        <mat-list role="list" 
+          cdkDropList 
+          #L = "cdkDropList"
+          [cdkDropListConnectedTo] = "sigDropListRefs()"
+          (cdkDropListDropped)="dropIntoList(sig, $event)"
+          >
+          <div *ngIf="i === 0">Commandes ouvertes</div>
+          <div *ngIf="i === 1">Commandes prevus</div>
+          <ng-container *ngFor="let e of sig(); track sig">
+            <mat-list-item cdkDrag [cdkDragData]="{sig: sig, value: e}">{{e}}</mat-list-item>
+          </ng-container>
+        </mat-list>
+    </ng-container>
+</section>
+
+
+@for (sig of sigLists(); track sig) {
+    <code>{{sig() | json}}</code>
+}
+
+
+<div>{{commande.length}}</div>
+<div>{{commandeOuvert.length}}</div>
+<div>{{commandePrevu.length}}</div>

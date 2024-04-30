@@ -2,20 +2,22 @@
   <button mat-icon-button (click)="drawer.toggle()">
     <mat-icon>menu</mat-icon>
   </button>
-  <label>Hello</label>
+  <label>Planificateur</label>
 </mat-toolbar>
 
 <mat-drawer-container class="example-container" autosize>
   <mat-drawer #drawer mode="side">
     <mat-nav-list>
-      <a mat-list-item routerLink="/presentation" routerLinkActive="active">Présentation</a>
+      <a mat-list-item routerLink="/presentation" routerLinkActive="active" *ngIf="!isLoggedIn()">Présentation</a>
       <a mat-list-item routerLink="/leaflet">Cartographie</a>
       <a mat-list-item routerLink="/lists" routerLinkActive="active">Listes</a>
+      <a mat-list-item routerLink="/journee" routerLinkActive="active">Journee</a>
+      <a mat-list-item routerLink="/livreur-travail" routerLinkActive="active">Profil</a>
     </mat-nav-list>
   </mat-drawer>
 
   <section class="content">
     <router-outlet></router-outlet>
   </section>
-
+  
 </mat-drawer-container>

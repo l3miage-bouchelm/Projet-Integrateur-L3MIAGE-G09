@@ -1,7 +1,9 @@
-import { Component,OnInit } from '@angular/core';
+import { Component,OnInit, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
+import { SharedService } from '../../services/shared.service';
+
 
 @Component({
   selector: 'app-livreur-travail',
@@ -15,15 +17,14 @@ export class LivreurTravailComponent implements OnInit{
   livreur:Livreur[]=[];
   nom: string = '';
 
-  constructor(private http:HttpClient,private route: ActivatedRoute) {}
-
+  constructor(private http:HttpClient,private route: ActivatedRoute,private sharedService: SharedService) {}
+  
   ngOnInit(): void {
     this.getCsvData();
-    this.route.queryParams.subscribe(params => {
-      this.nom = params['nom'];
-    });
+    this.nom = localStorage.getItem('livreurNom') || '';
+    this.sharedService.setData(true);
   }
-
+  readonly isLoggedIn1=computed<number>(()=>this.isLoggedIn(this.livreur));
   getCsvData(){
     this.http.get('./assets/Export_Employés.csv',{responseType:'text'})
     .subscribe(data=>{
@@ -58,7 +59,20 @@ export class LivreurTravailComponent implements OnInit{
     }
     return result;
   }
+  isLoggedIn(livreur:Livreur[]){
+    const filteredLivreur = livreur.filter(item => item.nom === this.nom);
+    if (filteredLivreur.length >= 0) {
+        this.sharedService.setData(true);
+        return filteredLivreur.length;
+    } else {
+        this.sharedService.setData(false);
+        return filteredLivreur.length;
+    }
+
+  }
 }
+
+  
 
 
 interface Livreur {
