@@ -14,7 +14,7 @@ public class Planner{
     ArrayList<ArrayList<Integer>> tournees;
     ArrayList<Double> longTournees;
 
-    //这个构造器用于高层次的封装，与外部系统联系时比较有用
+    //这个构造器用于高层次的封装，与外部系统联系时
     public Planner(PlannerParameter param){
         this.distances = param.matrix();
         this.k = param.k();
@@ -22,12 +22,12 @@ public class Planner{
         this.tournees = new ArrayList<>();
         this.longTournees = new ArrayList<>();
          //需要从距离矩阵里提取有用信息作为构造器的参数
-        ArrayList<Integer> elems = new ArrayList<>();
+        /*ArrayList<Integer> elems = new ArrayList<>();
         for(int i=0; i<distances.length;i++){
             elems.add(i);//对于partitionalea构造器来说，需要一个包含所有没被分配顶点的list
-        }
+        }*/
          //这里暂时使用了随机分类
-        this.p = new PartitionAlea(elems,k,debut);//根据需求，选择对应的构造器进行初始化
+        //this.p = new PartitionAlea(distances.length,k,debut);//根据需求，选择对应的构造器进行初始化
         this.p = new PartitionKCentre( distances.length, k);
          //如果要使用kcentre方法进行分配则需要在这里初始化partitionkcentre的构造器
     }
