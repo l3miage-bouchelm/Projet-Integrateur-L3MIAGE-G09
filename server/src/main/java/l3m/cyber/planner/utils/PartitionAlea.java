@@ -36,6 +36,12 @@ public class PartitionAlea extends Partition {
 
 
 
+    @Override
+    /*********/ public void AfficherPartition(Double[][] distances){System.out.println("Hellowww");
+
+    }
+
+
 
 
 

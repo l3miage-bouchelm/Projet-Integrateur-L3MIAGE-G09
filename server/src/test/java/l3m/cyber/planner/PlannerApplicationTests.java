@@ -18,6 +18,7 @@ import l3m.cyber.planner.utils.PartitionAlea;
 
 import l3m.cyber.planner.utils.Partition;
 import l3m.cyber.planner.utils.PartitionKCentre;
+import l3m.cyber.planner.utils.methodesUtiles; //*********************
 
 import l3m.cyber.planner.utils.Planner;
 
@@ -39,8 +40,38 @@ class PlannerApplicationTests {
 		System.out.println("Hello world\n");
 		assertTrue(1!=2);
 		System.out.println("*********************************");
-		
 	}
+
+
+
+	@Test
+	void MyPtrintTest(){
+		System.out.println("**********My Print Test***********************");
+
+		assertTrue(1!=2);
+		System.out.println("********************************* \n");
+
+		Double[][] matrix = {{0.0, 1.1, 1.0,  3.0, 4.0, 4.0}, {1.1, 0.0, 2.0, 2.0, 3.0, 3.0},
+				{1.0, 2.0, 0.0, 2.0, 3.0, 3.0}, {3.0, 2.0, 2.0, 0.0, 1.1, 1.1}
+				, {4.0, 3.0, 3.0, 1.0, 0.0, 2.0},{4.0, 3.0, 3.0, 1.0, 2.0, 0.0}};
+		int k=2;
+		int start=3;
+		PlannerParameter param= new PlannerParameter(matrix, k, start);
+		Planner pl= new Planner(param);
+		pl.partition = new PartitionKCentre( pl.distances.length, k);
+
+		pl.partition.AfficherPartition(matrix);
+
+		System.out.println("***********Fin Affichage********************** \n");
+
+
+
+
+
+	}
+
+
+
 
 	// Vous pouvez ajouter des tests unitaires ici si vous le souhaitez
 
@@ -186,6 +217,7 @@ class PlannerApplicationTests {
 		pl.partition.partitionne(matrix);
 		ArrayList< ArrayList<Integer>> Ar = new ArrayList< ArrayList<Integer> >(); //[]
 
+
 		assertEquals( Ar, pl.partition.parties); //le tableau tournees doit etre null
 
 	}
@@ -193,16 +225,16 @@ class PlannerApplicationTests {
 
 	@Test
 	void myTest0PartionKCentre(){ //************************************ */
-		Double[][] matrix = {};
+		Double[][] matrix = {{0.0}};
 		int k=2;
 		int start=0;
 		PlannerParameter param= new PlannerParameter(matrix, k, start);
 		Planner pl= new Planner(param);
 		pl.partition = new PartitionKCentre( pl.distances.length, k);
 		pl.partition.partitionne(matrix);
-		ArrayList< ArrayList<Integer>> Ar = new ArrayList< ArrayList<Integer> >(); //[ [], []]
-		Ar.add(new ArrayList<>(List.of()));
-		Ar.add(new ArrayList<>(List.of()));
+		ArrayList< ArrayList<Integer>> Ar = new ArrayList< ArrayList<Integer> >(); //[ [0], [0]]
+		Ar.add(new ArrayList<>(List.of(0)));
+		Ar.add(new ArrayList<>(List.of(0)));
 
 		assertEquals( Ar, pl.partition.parties); //le tableau tournees doit contenir des listes vides
 
@@ -218,9 +250,9 @@ class PlannerApplicationTests {
 		Planner pl= new Planner(param);
 		pl.partition = new PartitionKCentre( pl.distances.length, k);
 		pl.partition.partitionne(matrix);
-		ArrayList< ArrayList<Integer>> Ar = new ArrayList< ArrayList<Integer> >(); //({ {0}, {1}  } )
+		ArrayList< ArrayList<Integer>> Ar = new ArrayList< ArrayList<Integer> >(); //({ {0}, {0,1}  } )
 		Ar.add(new ArrayList<>(List.of(0)));
-		Ar.add(new ArrayList<>(List.of(1)));
+		Ar.add(new ArrayList<>(List.of(start,1)));
 
 		assertEquals( Ar, pl.partition.parties); //le tableau tournees doit etre non null
 
@@ -238,9 +270,9 @@ class PlannerApplicationTests {
 		Planner pl= new Planner(param);
 		pl.partition = new PartitionKCentre( pl.distances.length, k);
 		pl.partition.partitionne(matrix);
-		ArrayList< ArrayList<Integer>> Ar = new ArrayList< ArrayList<Integer> >(); //({{0, 1}, {2, 3}} )
+		ArrayList< ArrayList<Integer>> Ar = new ArrayList< ArrayList<Integer> >(); //({{0, 1}, {0, 2, 3}} )
 		Ar.add(new ArrayList<>(List.of(0, 1)));
-		Ar.add(new ArrayList<>(List.of(2,3)));
+		Ar.add(new ArrayList<>(List.of(start, 2,3)));
 
 		assertEquals( Ar, pl.partition.parties); //le tableau tournees doit etre non null
 
@@ -252,20 +284,57 @@ class PlannerApplicationTests {
 	void myTestnPartionKCentre(){ //************************************ */
 		Double[][] matrix = {{0.0, 1.1, 2.0,  3.0, 4.0, 4.0}, {1.1, 0.0, 2.0, 2.0, 3.0, 3.0},
 				{2.0, 2.0, 0.0, 2.0, 3.0, 3.0}, {3.0, 2.0, 2.0, 0.0, 1.1, 1.1}
-				, {4.0, 3.0, 3.0, 1.0, 1.0, 0.0, 2.0},{4.0, 3.0, 3.0, 1.1, 2.0, 0.0}};
+				, {4.0, 3.0, 3.0, 1.0, 0.0, 2.0},{4.0, 3.0, 3.0, 1.0, 2.0, 0.0}};
 		int k=2;
 		int start=0;
 		PlannerParameter param= new PlannerParameter(matrix, k, start);
 		Planner pl= new Planner(param);
 		pl.partition = new PartitionKCentre( pl.distances.length, k);
 		pl.partition.partitionne(matrix);
-		ArrayList< ArrayList<Integer>> Ar = new ArrayList< ArrayList<Integer> >(); //({{0, 1, 2}, {3, 4, 5}} )
+		ArrayList< ArrayList<Integer>> Ar = new ArrayList< ArrayList<Integer> >(); //({{0, 1, 2}, {0, 3, 4, 5}} )
 		Ar.add(new ArrayList<>(List.of(0, 1, 2)));
-		Ar.add(new ArrayList<>(List.of(3, 4, 5)));
+		Ar.add(new ArrayList<>(List.of(start, 3, 4, 5)));
 
         assertEquals( Ar, pl.partition.parties); //le tableau tournees doit etre non null
+	}
+
+	@Test
+	void myTestn2PartionKCentre(){ //************************************ */
+		Double[][] matrix = {{0.0, 1.1, 2.0,  2.0}, {1.1, 0.0, 2.0, 2.0},
+				{2.0, 2.0, 0.0, 1.0}, {2.0, 2.0, 1.1, 0.0}};
+		int k=2;
+		int start=3;
+		PlannerParameter param= new PlannerParameter(matrix, k, start);
+		Planner pl= new Planner(param);
+		pl.partition = new PartitionKCentre( pl.distances.length, k, start);
+		pl.partition.partitionne(matrix);
+		ArrayList< ArrayList<Integer>> Ar = new ArrayList< ArrayList<Integer> >(); //({{3, 0, 1}, {3, 2}} )
+		Ar.add(new ArrayList<>(List.of(3, 0, 1)));
+		Ar.add(new ArrayList<>(List.of(start, 2)));
+
+		assertEquals( Ar, pl.partition.parties); //le tableau tournees doit etre non null
 
 	}
+
+	@Test
+	void myTestn3PartionKCentre(){ //************************************ */
+		Double[][] matrix = {{0.0, 1.1, 1.0,  3.0, 4.0, 4.0}, {1.1, 0.0, 2.0, 2.0, 3.0, 3.0},
+				{1.0, 2.0, 0.0, 2.0, 3.0, 3.0}, {3.0, 2.0, 2.0, 0.0, 1.1, 1.1}
+				,{4.0, 3.0, 3.0, 1.0, 0.0, 2.0},{4.0, 3.0, 3.0, 1.0, 2.0, 0.0}};
+		int k=2;
+		int start=3;
+		PlannerParameter param= new PlannerParameter(matrix, k, start);
+		Planner pl= new Planner(param);
+		pl.partition = new PartitionKCentre( pl.distances.length, k, start);
+		pl.partition.partitionne(matrix);
+		ArrayList< ArrayList<Integer>> Ar = new ArrayList< ArrayList<Integer> >(); //({{3, 0, 1, 2}, {3, 4, 5}} )
+		Ar.add(new ArrayList<>(List.of(start, 0, 1, 2)));
+		Ar.add(new ArrayList<>(List.of(start, 4, 5)));
+
+		assertEquals( Ar, pl.partition.parties); //le tableau tournees doit etre non null
+	}
+
+
 
 
 

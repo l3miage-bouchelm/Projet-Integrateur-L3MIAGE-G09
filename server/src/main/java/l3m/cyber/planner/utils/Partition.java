@@ -11,6 +11,7 @@ public abstract class Partition {
     //l'inindice d'entrepot apparait qu'une fois, au debut de parties[i]
 
     /*********/ public abstract void partitionne(Double[][] distances);
+    /*********/ public abstract void AfficherPartition(Double[][] distances);
 
     Partition(ArrayList<Integer> elems, int k, int elemSpecial){
         this.nbElem = elems.size();
