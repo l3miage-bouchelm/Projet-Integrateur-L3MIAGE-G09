@@ -17,7 +17,6 @@ import l3m.cyber.planner.utils.PartitionAlea;
 import l3m.cyber.planner.utils.PartitionKCentre;
 import l3m.cyber.planner.utils.Planner;
 
-
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 class PlannerApplicationTests {
 
