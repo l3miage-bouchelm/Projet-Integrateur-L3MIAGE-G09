@@ -223,7 +223,7 @@ class PlannerApplicationTests {
 
 
 	@Test
-	void myTest1PartionKCentre(){ //************************************ */
+	void myTest1PartionKCentre(){ //******************/
 		Double[][] matrix = {{0.0, 1.1}, {1.1, 0.0}};
 		int k=2;
 		int start=0;
