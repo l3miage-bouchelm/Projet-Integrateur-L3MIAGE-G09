@@ -1,12 +1,5 @@
 package l3m.cyber.planner.utils;
 
-import com.sun.source.tree.WhileLoopTree;
-
-import java.util.ArrayList;
-
-
-
-
 public class PartitionKCentre extends Partition {
     
     public PartitionKCentre(int n, int k){

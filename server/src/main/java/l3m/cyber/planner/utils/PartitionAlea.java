@@ -38,7 +38,12 @@ public class PartitionAlea extends Partition {
         System.out.println("PartitionAlea: Partitioning complete.");
 
     }
-    
+
+
+
+
+
+
 
 
 }

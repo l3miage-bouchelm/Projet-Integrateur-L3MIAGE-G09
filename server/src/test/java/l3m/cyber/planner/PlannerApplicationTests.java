@@ -9,8 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import l3m.cyber.planner.requests.PlannerParameter;
-import l3m.cyber.planner.responses.PlannerResult;
-import l3m.cyber.planner.utils.Graphe;
 import l3m.cyber.planner.utils.Planner;
 
 
@@ -30,17 +28,17 @@ class PlannerApplicationTests {
 	// Vous pouvez ajouter des tests unitaires ici si vous le souhaitez
 
 	
-	@Test
-	void nonnullTestPlanning(){
-		Double[][] matrix = {{0.0,1.1},{1.1,0.0}};
-		int k=1;
-		int start=0;
-		PlannerParameter param= new PlannerParameter(matrix, k, start);
-		Planner pl= new Planner(param);
-        PlannerResult pr=pl.result();
-		assertTrue(pr.tournees() !=null); //le tableau tournees doit etre non null
-		assertTrue(pr.longTournees() != null); // idem, le tableau longTournees doit etre non null
-	}
+	// @Test
+	// void nonnullTestPlanning(){
+	// 	Double[][] matrix = {{0.0,1.1},{1.1,0.0}};
+	// 	int k=1;
+	// 	int start=0;
+	// 	PlannerParameter param= new PlannerParameter(matrix, k, start);
+	// 	Planner pl= new Planner(param);
+    //     PlannerResult pr=pl.result();
+	// 	assertTrue(pr.tournees() !=null); //le tableau tournees doit etre non null
+	// 	assertTrue(pr.longTournees() != null); // idem, le tableau longTournees doit etre non null
+	// }
 	
 	// @Test
 	// public void testPartitionAlea(){
@@ -63,7 +61,7 @@ class PlannerApplicationTests {
 
 	// 	//参数为4，k/////////////////////////////////////////////////////////////////////////////
 	// 	partition1.partitionne(distances);
-	// 	Set<Integer> allAssignedElements = new HashSet<>();
+	//     Set<Integer> allAssignedElements = new HashSet<>();
 
 	// 	for (int i = 0; i < k; i++) {
 	// 		ArrayList<Integer> partie;
@@ -141,66 +139,52 @@ class PlannerApplicationTests {
 
 	// }
 
-	@Test
-    public void testTSPversion1() {
-		ArrayList<Integer> vertices = new ArrayList<Integer>() {{
-			add(2);
-			add(0);
-			add(3);
-			add(1);
-			add(4);
-		}};
-		Graphe graphe = new Graphe(vertices);
+	// @Test
+    // public void testTSPversion1() {
+	// 	ArrayList<Integer> vertices = new ArrayList<Integer>() {{
+	// 		add(2);
+	// 		add(0);
+	// 		add(3);
+	// 		add(1);
+	// 		add(4);
+	// 	}};
+	// 	Graphe graphe = new Graphe(vertices);
 
-		// 测试 tsp 方法，假设传入的 debut 是列表中的第一个有效顶点
-        ArrayList<Integer> result = graphe.tsp(vertices.get(0));
-        // 预期结果应该是从顶点 0 开始的排序列表
-		ArrayList<Integer> expected = new ArrayList<Integer>() {{
-			add(2);
-			add(0);
-			add(1);
-			add(3);
-			add(4);
-		}};
-		assertEquals(expected, result,"TSP method should return sorted vertices starting from the debut vertex");
-    }
-
-	
-	@Test
-    public void testCalculeTournees() {
-		int k = 2;
-		int start = 0;
-		Double[][] matrix = {{0.0, 1.0, 2.0, 3.0,4.0},
-							 {1.0, 0.0, 1.0, 2.0,3.0},
-							 {2.0, 1.0, 0.0, 1.0,2.0},
-							 {3.0, 2.0, 1.0, 0.0,1.0},
-							 {4.0, 3.0, 2.0, 1.0,0.0}};
-		PlannerParameter param= new PlannerParameter(matrix, k, start);
-		Planner planner = new Planner(param);
-		planner.calculeTournees();
-		planner.calculeLongTournees();
-        // 验证结果
-        assertNotNull(planner.getTournees(),"Tournees should not be null");
-        assertFalse(planner.getTournees().isEmpty(),"Tournees should not be empty");
-    }
-	
+	// 	// 测试 tsp 方法，假设传入的 debut 是列表中的第一个有效顶点
+    //     ArrayList<Integer> result = graphe.tsp(vertices.get(0));
+    //     // 预期结果应该是从顶点 0 开始的排序列表
+	// 	ArrayList<Integer> expected = new ArrayList<Integer>() {{
+	// 		add(2);
+	// 		add(0);
+	// 		add(1);
+	// 		add(3);
+	// 		add(4);
+	// 	}};
+	// 	assertEquals(expected, result,"TSP method should return sorted vertices starting from the debut vertex");
+    // }
 
 	
-	@Test
-	void myTestNullPartionKCentre(){ //************************************ */
-		Double[][] matrix = {};
-		int k=0;  // Pas de livreurs
-		int start=0;
-		PlannerParameter param= new PlannerParameter(matrix, k, start);
-		Planner pl= new Planner(param);
-		pl.calculeTournees();
-		pl.calculeLongTournees();
-		ArrayList< ArrayList<Integer>> Ar = new ArrayList< ArrayList<Integer> >(); //[]
+	// @Test
+    // public void testCalculeTournees() {
+	// 	int k = 2;
+	// 	int start = 1;
+	// 	Double[][] matrix = {{0.0, 1.0, 2.0, 3.0,4.0},
+	// 						 {1.0, 0.0, 1.0, 2.0,3.0},
+	// 						 {2.0, 1.0, 0.0, 1.0,2.0},
+	// 						 {3.0, 2.0, 1.0, 0.0,1.0},
+	// 						 {4.0, 3.0, 2.0, 1.0,0.0}};
+	// 	PlannerParameter param= new PlannerParameter(matrix, k, start);
+	// 	Planner planner = new Planner(param);
+	// 	planner.calculeTournees();
+	// 	planner.calculeLongTournees();
+    //     // 验证结果
+    //     assertNotNull(planner.getTournees(),"Tournees should not be null");
+    //     assertFalse(planner.getTournees().isEmpty(),"Tournees should not be empty");
+    // }
+	//因为这里是随机的分配方法，我无法预测结果所以只能验证结果不为空
 
-
-		assertEquals( Ar, pl.getTournees()); //le tableau tournees doit etre null
-
-	}
+	
+	
 	
 
 

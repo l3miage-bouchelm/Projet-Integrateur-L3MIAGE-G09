@@ -7,10 +7,10 @@ public abstract class Partition {
     protected int k;//nombre de liveurs
     protected int elemSpecial;//l'inindice d'entrepot
     protected ArrayList<Integer> elems;
-    /********* protected*/ public  ArrayList<ArrayList<Integer>> parties;//Correspond à un itinéraire de livraison d'un livreur
+    protected  ArrayList<ArrayList<Integer>> parties;//Correspond à un itinéraire de livraison d'un livreur
     //l'inindice d'entrepot apparait qu'une fois, au debut de parties[i]
 
-    /*****/ public abstract void partitionne(Double[][] distances);
+    public abstract void partitionne(Double[][] distances);
 
 
     Partition(ArrayList<Integer> elems, int k, int elemSpecial){

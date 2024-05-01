@@ -28,7 +28,7 @@ public class Planner{
         }*/
          //这里暂时使用了随机分类
         //this.p = new PartitionAlea(distances.length,k,debut);//根据需求，选择对应的构造器进行初始化
-        this.p = new PartitionKCentre( distances.length, k);
+        this.p = new PartitionKCentre( distances.length, k,debut);
          //如果要使用kcentre方法进行分配则需要在这里初始化partitionkcentre的构造器
     }
 
@@ -68,7 +68,9 @@ public class Planner{
     }
 
     public void calculeTournees() {
+        System.out.println(p.parties);
         divise();
+        System.out.println(p.parties);
         //应该使用for循环逐一调用calculeUneTournee
         System.out.println("Planner: Calculating tournees...");
         for(int i = 0; i < p.parties.size(); i++) {
@@ -76,6 +78,8 @@ public class Planner{
             tournees.add(tournee);
             System.out.println("Planner: Processing partie " + i + " - Elements: " + p.getPartie(i));
         }
+        System.out.println(tournees);
+
     }
 
     public void calculeLongTournees() {
