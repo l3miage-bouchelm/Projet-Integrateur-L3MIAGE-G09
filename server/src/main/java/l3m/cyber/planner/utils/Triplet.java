@@ -3,12 +3,12 @@ package l3m.cyber.planner.utils;
 public class Triplet implements Comparable<Triplet>{
     private int c1;
     private int c2;
-    private double c3;
+    private double poids;
 
     public Triplet(int a, int b, double poids){
         this.c1 = a;
         this.c2 = b;
-        this.c3 = poids;
+        this.poids = poids;
     }
 
     public int getC1() {
@@ -20,16 +20,16 @@ public class Triplet implements Comparable<Triplet>{
     }
 
     public double getPoids() {
-        return c3;
+        return poids;
     }
 
     @Override
     public String toString() {
-        return "(" + c1 + ", " + c2 + ", " + c3 + ")";
+        return "(" + c1 + ", " + c2 + ", " + poids + ")";
     }
 
     @Override
     public int compareTo(Triplet other) {
-        return Double.compare(this.c3, other.c3);
+        return Double.compare(this.poids, other.poids);
     }
 }

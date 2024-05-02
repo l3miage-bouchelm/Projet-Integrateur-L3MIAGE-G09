@@ -112,6 +112,8 @@ public class Planner{
     
     
     public PlannerResult result(){
+        calculeTournees();
+        calculeLongTournees();
         return new PlannerResult(tournees, longTournees);
     }
 }

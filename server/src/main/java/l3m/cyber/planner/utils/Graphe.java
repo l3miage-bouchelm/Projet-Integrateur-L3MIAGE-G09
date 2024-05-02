@@ -10,7 +10,7 @@ import java.util.Stack;
 public class Graphe implements Cloneable {
     private int nbSommets;
     private int[][] adj;//Et adj est un matrix utilisé pour déterminer rapidement s'il existe une connexion directe entre deux sommets.临接矩阵
-    private double[][] poidsA;//poidsA est important car il fournit des informations sur le coût de chaque arête. 权重矩阵
+    private Double[][] poidsA;//poidsA est important car il fournit des informations sur le coût de chaque arête. 权重矩阵
     private ArrayList<Integer> nomSommets;//Points non encore ajoutés
 
     //crée un graphe avec n sommets, nommés 0 à n-1 et aucune arête
@@ -27,11 +27,11 @@ public class Graphe implements Cloneable {
                 this.adj[i][j] = 0;
             }
         }
-        //ici, on  creé la matrice d'adjacence dont l'elements sont 0, parce que la matrice poidsA est null.
+        //ici, on creé la matrice d'adjacence dont l'elements sont 0, parce que la matrice poidsA est null.
     }
     
     //Il génère des noms de sommets par défaut en fonction du nombre de sommets. Cela convient pour une matrice entièrement pondérée
-    public Graphe(double[][] poidsA,int n){
+    public Graphe(Double[][] poidsA,int n){
         this.nbSommets = n;
         this.poidsA = poidsA;
         this.adj = new int[n][n];
@@ -52,13 +52,13 @@ public class Graphe implements Cloneable {
     public Graphe(ArrayList<Integer> nomSommets){
         this.nomSommets = nomSommets;
         this.nbSommets = nomSommets.size();
-        this.poidsA = new double[nbSommets][nbSommets];
+        this.poidsA = new Double[nbSommets][nbSommets];
         this.adj = new int[nbSommets][nbSommets];
     }
 
     //Ce constructeur accepte une matrice de poids des arêtes et une liste de noms de sommets. 
     //Ceci s'applique à la création d'un graphe pondéré.
-    public Graphe(double[][] poidsA, ArrayList<Integer> nomSommets){
+    public Graphe(Double[][] poidsA, ArrayList<Integer> nomSommets){
         this.nomSommets = nomSommets;
         this.nbSommets = nomSommets.size();
         this.poidsA = poidsA;
@@ -85,7 +85,22 @@ public class Graphe implements Cloneable {
     }
 
 
-    //+pondereAretes() : void是用来干什么的
+    //将所有的非加权图（权重为null的情况）转化为加权图，所有存在的边默认权重为1
+    //确认adj[][]有哪些边存在，但是没有被赋予加权
+    public void pondereAretes(){
+        for(int i = 0;i<nbSommets;i++){
+            for(int j = 0;j<nbSommets;j++){
+                if(this.poidsA == null && adj[i][j] == 1){
+                    this.poidsA = new Double[nbSommets][nbSommets];
+                    this.poidsA[i][j] = 1.0;
+                }
+            }
+        }
+
+    }
+
+
+
     // Créer et retourner une copie profonde de l'objet Graphe. Cette implémentation garantit que toutes les structures de données - telles que les tableaux et les listes - sont copiées élément par élément, et pas seulement les références.
     @Override
     public Graphe clone() {
@@ -100,7 +115,7 @@ public class Graphe implements Cloneable {
                 }
             }
             if (this.poidsA != null) {
-                cloned.poidsA = new double[this.poidsA.length][];
+                cloned.poidsA = new Double[this.poidsA.length][];
                 for (int i = 0; i < this.poidsA.length; i++) {
                     cloned.poidsA[i] = this.poidsA[i].clone(); // Faire une copie profonde de la matrice des poids
                 }
@@ -111,7 +126,6 @@ public class Graphe implements Cloneable {
             throw new AssertionError(e);
         }
     }
-
 
 
     //ajouter l'arete dans le graphe
@@ -143,8 +157,8 @@ public class Graphe implements Cloneable {
     public void retirerArete(int i, int j){
         this.adj[i][j] = 0;
         this.adj[j][i] = 0;
-        this.poidsA[i][j] = 0;
-        this.poidsA[j][i] = 0;
+        this.poidsA[i][j] = 0.0;
+        this.poidsA[j][i] = 0.0;
     }
 
     //Déterminer si deux villes sont voisines
