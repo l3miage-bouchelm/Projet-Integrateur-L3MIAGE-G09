@@ -68,3 +68,40 @@
     position: absolute; 
   }
   
+  button {
+    padding: 10px 20px; /* 设置内边距 */
+    font-size: 16px; /* 设置字体大小 */
+    border: none; /* 移除边框 */
+    border-radius: 4px; /* 设置圆角 */
+    background-color: #007bff; /* 设置背景颜色 */
+    color: #ffffff; /* 设置文字颜色 */
+    cursor: pointer; /* 添加指针样式 */
+    transition: background-color 0.3s ease; /* 添加过渡效果 */
+  }
+  
+  button:hover {
+    background-color: #0056b3; /* 鼠标悬停时的背景颜色 */
+  }
+
+  .container {
+    display: flex; /* 设置为 Flexbox 布局 */
+  }
+  
+  .checkbox-group {
+    display: flex; /* 设置为 Flexbox 布局 */
+    flex-direction: column; /* 在垂直方向上排列 */
+    margin-right: 20px; /* 设置组之间的水平间距 */
+  }
+  
+  .checkbox-group input[type="checkbox"] {
+    margin-bottom: 10px; /* 设置复选框之间的垂直间距 */
+    flex-direction: column; /* 在垂直方向上排列 */
+  }
+
+  .describe {
+    margin-right: 10px; /* 设置 div 和 select 之间的间距 */
+    padding: 8px 12px; /* 设置内边距 */
+    font-size: 16px; /* 设置字体大小 */
+    background-color: #f9f9f9; /* 设置背景颜色 */
+  }
+  

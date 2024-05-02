@@ -1,5 +1,6 @@
 <p>journee works!</p>
 <button (click)="getCsvData()">LOAD</button>
+
 <button (click)="changeEtat()">CONFIRMER</button>
 <div>
 </div>
@@ -19,13 +20,32 @@
         </mat-list>
     </ng-container>
 </section>
-
+<hr>
 
 @for (sig of sigLists(); track sig) {
     <code>{{sig() | json}}</code>
 }
 
 
-<div>{{commande.length}}</div>
+<div>{{commandes.length}}</div>
 <div>{{commandeOuvert.length}}</div>
 <div>{{commandePrevu.length}}</div>
+<hr>
+
+<div *ngFor="let tournee of tournees; let i = index">
+  <div>tournee {{tournee.id}}</div>
+  <app-tournee [camions]="camions" [entrepots]="entrepots" [livreurs]="livreurs" [commandes]="tournee.commandes"></app-tournee>
+  <div class="container">
+    <div class="describe">Commandes :</div>
+    <div *ngFor="let commande of commandePrevu" >
+        <label class="checkbox-group">
+        <input type="checkbox" [value]="commande.commande.reference" [disabled]="commande.disabled&&i!==commande.tourneeID" (change)="toggleSelectionCommande(commande,tournee.commandes,i)"> {{ commande.commande.reference }}
+        </label>
+    </div>
+  </div>
+  <button (click)="removeTournee(i)">Remove</button>
+</div>
+<button (click)="addTournee()">Add Tournee</button>
+
+
+<hr>
