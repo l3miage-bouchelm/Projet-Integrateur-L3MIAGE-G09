@@ -32,7 +32,7 @@ export class CommandeService {
         etat:obj[headers[1]],
         dateDeCreation:obj[headers[2]],
         note:obj[headers[3]],
-        commantaire:obj[headers[4]],
+        commentaire:obj[headers[4]],
         client:obj[headers[5]],
         ligne:obj[headers[6]],
       }
@@ -52,7 +52,7 @@ interface Commande {
   etat: string;
   dateDeCreation: string;
   note: string;
-  commantaire: string;
+  commentaire: string;
   client: string;
   ligne: string;
 }

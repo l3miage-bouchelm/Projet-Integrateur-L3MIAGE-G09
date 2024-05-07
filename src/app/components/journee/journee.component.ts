@@ -32,6 +32,7 @@ export class JourneeComponent implements AfterViewInit {
   commandePrevu:Commandes[]=[];
   tournees:Tournee[]=[];
   entrepotChoisi:string='';
+  commandeSelectionnee:Commande | null = null; 
 
 
   constructor(private http:HttpClient) { }
@@ -105,7 +106,7 @@ export class JourneeComponent implements AfterViewInit {
         etat:obj[headers[1]],
         dateDeCreation:obj[headers[2]],
         note:obj[headers[3]],
-        commantaire:obj[headers[4]],
+        commentaire:obj[headers[4]],
         client:obj[headers[5]],
         ligne:obj[headers[6]],
       }
@@ -231,6 +232,20 @@ export class JourneeComponent implements AfterViewInit {
     }
   }
 
+  selectionnerCommande(event: Event) {
+    const selectedIndex = (event.target as HTMLSelectElement).selectedIndex;
+    const selectedOption = (event.target as HTMLSelectElement).options[selectedIndex];
+    const numeroCommande = selectedOption.value;
+  
+    if (numeroCommande) {
+      const commandeTrouvee = this.commandes.find(commande => commande.reference === numeroCommande);
+      this.commandeSelectionnee = commandeTrouvee ? commandeTrouvee : null;
+    }
+  }
+  
+  
+  
+
 
   addTournee() {
     this.tournees.push({id:this.tournees.length+1,commandes:[]});
@@ -265,7 +280,7 @@ interface Commande {
   etat: string;
   dateDeCreation: string;
   note: string;
-  commantaire: string;
+  commentaire: string;
   client: string;
   ligne: string;
 }

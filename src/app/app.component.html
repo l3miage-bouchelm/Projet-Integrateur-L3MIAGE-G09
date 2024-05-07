@@ -2,7 +2,13 @@
   <button mat-icon-button (click)="drawer.toggle()">
     <mat-icon>menu</mat-icon>
   </button>
-  <label>Planificateur</label>
+  <div class="dropdown">
+    <button  id="google" class="dropbtn">Connexion</button>
+     <mat-nav-list class="dropdown-content">
+       <a  mat-list-item routerLink="/connexion" routerLinkActive="active">Client</a><br>
+       <a  mat-list-item routerLink="/connexion" routerLinkActive="active">Pro</a><br>
+     </mat-nav-list>
+</div>
 </mat-toolbar>
 
 <mat-drawer-container class="example-container" autosize>

@@ -89,7 +89,7 @@ interface Commande {
   etat: string;
   dateDeCreation: string;
   note: string;
-  commantaire: string;
+  commentaire: string;
   client: string;
   ligne: string;
 }

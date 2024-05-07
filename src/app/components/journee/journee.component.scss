@@ -104,4 +104,15 @@
     font-size: 16px; /* 设置字体大小 */
     background-color: #f9f9f9; /* 设置背景颜色 */
   }
+  #commande-select {
+    color: white; 
+    background-color: dodgerblue; 
+    border: 2px solid dodgerblue;
+    padding: 5px;
+    font-family: Arial, Helvetica, sans-serif;
+  }
   
+  #commande-select option {
+    background-color: dodgerblue; 
+    color: white; 
+  }
