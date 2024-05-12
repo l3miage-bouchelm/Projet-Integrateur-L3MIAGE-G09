@@ -1,16 +1,16 @@
 <p>tournee works!</p>
 
 
-<div class="tournee-list">
-      <div>{{livreurs.length}}</div>
+<div class="tournee-list" >
+      <div>{{livreursChoisi.length}}</div>
       <div>{{camions.length}}</div>
       <div>{{entrepots.length}}</div>
       <div>{{commandes.length}}</div>
+      <div>{{id}}</div>
     <div class="container">
       <div class="describe">Entrepot :</div>
       <select [(ngModel)]="entrepotChoisi">
-        <option [value]="'default'">Choisir l'entrepot</option>
-        <option *ngFor="let entrepot of entrepots" [value]="entrepot.nom">{{ entrepot.nom }}</option>
+        <option [value]="entrepotChoisi">{{ entrepotChoisi }}</option>
       </select>
     </div>
     <br>
@@ -18,18 +18,17 @@
         <div  class="describe">Livreurs :</div>
         <div *ngFor="let livreur of livreurs">
           <label *ngIf="livreur.entrepot === entrepotChoisi" class="checkbox-group">
-            <input type="checkbox" [value]="livreur.nom" (change)="toggleSelection(livreur,livreursChoisi)"> {{ livreur.nom }}
+            <input type="checkbox" [value]="livreur.nom" (change)="toggleSelectionLivreur(livreur,livreursChoisi)" [checked]="ischeked(livreur)"> {{ livreur.nom }}
           </label>
         </div>
       </div>
       <br>
       <div class="container">
         <div  class="describe">Camions :</div>
-        <div *ngFor="let camion of camions">
-            <label *ngIf="camion.entrepot === entrepotChoisi" class="checkbox-group">
-            <input type="checkbox" [value]="camion.immatriculation" (change)="toggleSelection(camion,camionsChoisi)"> {{ camion.immatriculation }}
-            </label>
-        </div>
+        <select [(ngModel)]="camionsChoisi">
+          <option [value]="''">Choisir le Camion</option>
+          <option *ngFor="let camion of camions" [value]="camion.immatriculation">{{ camion.immatriculation }}</option>
+        </select>
       </div>
       <!--
       <br>
@@ -42,5 +41,7 @@
         </div>
       </div>
       -->
+      <button (click)="matrice()">123456789</button>
+      <button (click)="voirInfos()">123456789</button>
     </div>
     <br>

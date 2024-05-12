@@ -10,6 +10,7 @@
         <th>entrepôt</th>
         <th>tournées</th>
     </tr>-->
+    <div *ngIf="getData()">
     <tr *ngFor="let row of livreur">
         <ng-container *ngIf="row.nom.toUpperCase() === nom.toUpperCase()">
                 <div class="img-container"><img src="../assets/image.png" width="150px"></div>
@@ -29,7 +30,7 @@
                 <!--<td class="tournees">{{row.tournees}}</td>-->   
         </ng-container>
     </tr>
-    
+    </div>
 </table>
 
 

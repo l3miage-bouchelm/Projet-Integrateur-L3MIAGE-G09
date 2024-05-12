@@ -8,11 +8,12 @@
 <mat-drawer-container class="example-container" autosize>
   <mat-drawer #drawer mode="side">
     <mat-nav-list>
-      <a mat-list-item routerLink="/presentation" routerLinkActive="active" *ngIf="!isLoggedIn()">Présentation</a>
-      <a mat-list-item routerLink="/leaflet">Cartographie</a>
-      <a mat-list-item routerLink="/lists" routerLinkActive="active">Listes</a>
-      <a mat-list-item routerLink="/journee" routerLinkActive="active">Journee</a>
-      <a mat-list-item routerLink="/livreur-travail" routerLinkActive="active">Profil</a>
+      <a mat-list-item routerLink="/presentation" routerLinkActive="active" *ngIf="!getData()">Présentation</a>
+      <a mat-list-item routerLink="/leaflet" *ngIf="getData()">Cartographie</a>
+      <a mat-list-item routerLink="/lists" routerLinkActive="active" *ngIf="getData()">Listes</a>
+      <a mat-list-item routerLink="/journee" routerLinkActive="active" *ngIf="getData()">Journee</a>
+      <a mat-list-item routerLink="/livreur-travail" routerLinkActive="active" *ngIf="getData()">Profil</a>
+      <a mat-list-item routerLink="/infos-tournee" routerLinkActive="active" *ngIf="getData()">infos</a>
     </mat-nav-list>
   </mat-drawer>
 

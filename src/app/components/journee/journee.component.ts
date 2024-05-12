@@ -1,11 +1,12 @@
 import { CdkDropList, CdkDrag, CdkDragDrop } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { HttpClient,HttpClientModule } from '@angular/common/http';
-import { AfterViewInit, ChangeDetectionStrategy, Component, QueryList, ViewChildren, WritableSignal, computed, signal } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren, WritableSignal, computed, signal } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
 import { CommandeService } from '../../services/commande.service';
 import { TourneeComponent } from '../tournee/tournee.component';
 import { FormsModule } from '@angular/forms';
+import { SharedService } from '../../services/shared.service';
 
 interface ListDD_Data<T> {
   readonly sig: WritableSignal<readonly T[]>;
@@ -23,7 +24,7 @@ interface ListDD_Data<T> {
   styleUrl: './journee.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class JourneeComponent implements AfterViewInit {
+export class JourneeComponent implements AfterViewInit,OnInit {
   commandes:Commande[]=[];
   livreurs:Livreur[]=[];
   camions:Camion[]=[];
@@ -31,30 +32,46 @@ export class JourneeComponent implements AfterViewInit {
   commandeOuvert:Commande[]=[];
   commandePrevu:Commandes[]=[];
   tournees:Tournee[]=[];
+  clients:Client[]=[];
   entrepotChoisi:string='';
+  tourneeV:boolean=false;
 
 
-  constructor(private http:HttpClient) { }
+
+  constructor(private http:HttpClient,private sharedService:SharedService) { }
 
   readonly sigL1 = signal<readonly string[]>(["A", "B", "C", "D"])
   readonly sigCP = signal<readonly string[]>([])
   readonly sigCO = signal<readonly string[]>([])
 
   readonly sigLists = computed(() => [this.sigCO, this.sigCP]);
+  isViewInit = false;
 
   @ViewChildren("L") matLists!: QueryList<CdkDropList>;
   private readonly _sigDropListRefs = signal<CdkDropList<any>[]>([])
   readonly sigDropListRefs = this._sigDropListRefs.asReadonly();
 
   ngAfterViewInit(): void {
-    this.getCsvData();
-    this.lireInfos();
     const update = () => {
       const L = this.matLists.toArray();
       this._sigDropListRefs.set(L)
     };
     this.matLists.changes.subscribe(update);
+    this.isViewInit = true;
     update();
+  }
+
+  ngOnInit(): void {
+    this.getCsvData();
+    this.lireInfos();
+    //this.tournees=this.sharedService.getTournee();
+    this.tournees= this.sharedService.getTournee();
+    //this.loadTournee();
+  }
+
+  loadTournee(){
+    this.tournees= this.sharedService.getTournee();
+    this.tourneeV=true;
   }
 
   dropIntoList(sigTarget: WritableSignal<readonly string[]>, dropEvent: CdkDragDrop<unknown, unknown, ListDD_Data<string>>) {
@@ -84,9 +101,13 @@ export class JourneeComponent implements AfterViewInit {
     },
   );
     this.commandeOuvert=this.commandes.filter(commande => commande.etat === "ouverte");
+    if(this.sharedService.getCommandeOuvert().length>0){
+      this.commandeOuvert=this.sharedService.getCommandeOuvert();
+      this.commandePrevu=this.sharedService.getCommandePrevu();
+    }
     this.sigCO.set(this.commandeOuvert.map(commande => commande.reference));
-    this.sigCP.set([]);
-    this.commandePrevu=[];
+    this.sigCP.set(this.commandePrevu.map(commande => commande.commande.reference));
+    //this.commandePrevu=[];
   }
 
   lireCommande(csvData:string){
@@ -106,8 +127,8 @@ export class JourneeComponent implements AfterViewInit {
         dateDeCreation:obj[headers[2]],
         note:obj[headers[3]],
         commantaire:obj[headers[4]],
-        client:obj[headers[5]],
-        ligne:obj[headers[6]],
+        ligne:obj[headers[5]],
+        client:obj[headers[6]],
       }
       result.push(commande);
     }
@@ -115,29 +136,12 @@ export class JourneeComponent implements AfterViewInit {
   }
 
   lireLivreur(csvData:string){
-    const lines=csvData.split('\n');
     const result:Livreur[]= [];
-
-    const headers=lines[0].split(',');
-    for(let i=1;i<lines.length;i++){
-      const obj: ParsedData = {};
-      const currentLine=lines[i].split(',');
-      for(let j=0;j<headers.length;j++){
-        obj[headers[j]]=currentLine[j];
-      }
-      const livreur:Livreur={
-        trigramme:obj[headers[0]],
-        prenom:obj[headers[1]],
-        nom:obj[headers[2]],
-        photo:obj[headers[3]],
-        telephone:obj[headers[4]],
-        emploi:obj[headers[5]],
-        entrepot:obj[headers[6]],
-        tournees:obj[headers[7]],
-      }
-      if(livreur.emploi=='livreur'){
-        result.push(livreur);
-      }     
+    const jsonArray = JSON.parse(csvData);
+    for (let item of jsonArray) {
+      const livreur: Livreur = Object.assign({}, item);
+      console.log(livreur);
+      result.push(livreur);
     }
     return result;
   }
@@ -176,7 +180,7 @@ export class JourneeComponent implements AfterViewInit {
         obj[headers[j]]=currentLine[j];
       }
       const entrepot:Entrepot={
-        nom:obj[headers[0]],
+        name:obj[headers[0]],
         lettre:obj[headers[1]],
         photo:obj[headers[2]],
         adresse:obj[headers[3]],
@@ -184,10 +188,35 @@ export class JourneeComponent implements AfterViewInit {
         ville:obj[headers[5]],
         latitude:obj[headers[6]],
         longitude:obj[headers[7]],
-        camions:obj[headers[8]],
-        employés:obj[headers[9]],
       }
       result.push(entrepot);   
+    }
+    return result;
+  }
+
+  lireClient(csvData:string){
+    const lines=csvData.split('\n');
+    const result:Client[]= [];
+
+    const headers=lines[0].split(',');
+    for(let i=1;i<lines.length;i++){
+      const obj: ParsedData = {};
+      const currentLine=lines[i].split(',');
+      for(let j=0;j<headers.length;j++){
+        obj[headers[j]]=currentLine[j];
+      }
+      const client:Client={
+        email:obj[headers[0]],
+        prenom:obj[headers[1]],
+        nom:obj[headers[2]],
+        adresse:obj[headers[3]],
+        codePostal:obj[headers[4]],
+        ville:obj[headers[5]],
+        latitude:obj[headers[6]],
+        longitude:obj[headers[7]],
+        commandes:obj[headers[8]],
+      }
+      result.push(client);   
     }
     return result;
   }
@@ -208,6 +237,13 @@ export class JourneeComponent implements AfterViewInit {
       this.entrepots=this.lireEntrepot(data);
     },
   );
+  this.http.get('./assets/Export_Clients.csv',{responseType:'text'})
+    .subscribe(data=>{
+      //this.csvData=this.parseCsvData(data);
+      this.clients=this.lireClient(data);
+      console.log(this.clients)
+    },
+  );
   }
 
   changeEtat(){
@@ -215,7 +251,7 @@ export class JourneeComponent implements AfterViewInit {
       for(let j=0;j<this.commandeOuvert.length;j++){
         if(this.sigCP()[i]==this.commandeOuvert[j].reference){
           this.commandeOuvert[j].etat='prévu';
-          this.commandePrevu.push({commande:this.commandeOuvert[j],disabled:false,tourneeID:0});
+          this.commandePrevu.push({commande:this.commandeOuvert[j],disabled:false,tourneeID:-1});
           this.commandeOuvert.splice(j,1);
         }
       }
@@ -229,15 +265,35 @@ export class JourneeComponent implements AfterViewInit {
         }
       }
     }
+    this.sharedService.setCommandeOuvert(this.commandeOuvert);
+    this.sharedService.setCommandePrevu(this.commandePrevu)
   }
 
 
   addTournee() {
-    this.tournees.push({id:this.tournees.length+1,commandes:[]});
+    //this.tournees.push({id:this.tournees.length+1,journee:'',date:new Date(),entrepot:'',camion:'',liveurs:[],livraison:[],commandes:[]});
+    this.sharedService.addTournee({id:this.idTournee(),journee:'',date:new Date(),entrepot:'',camion:'',liveurs:[],livraison:[],commandes:[]})
+  }
+
+  idTournee(){
+    if(this.tournees.length==0){
+      return 1
+    }else{
+      return this.tournees[this.tournees.length-1].id+1  
+    }
   }
 
   removeTournee(index: number) {
+    //this.sharedService.removeTournee(this.tournees[index])
+    let tou=this.tournees[index]
     this.tournees.splice(index, 1);
+    for(let i=0;i<this.commandePrevu.length;i++){
+      if(this.commandePrevu[i].tourneeID==tou.id){
+        this.commandePrevu[i].tourneeID=-1;
+        this.commandePrevu[i].disabled=!this.commandePrevu[i].disabled;
+      }
+    }
+    this.sharedService.setCommandePrevu(this.commandePrevu)
   }
 
   toggleSelectionCommande(item: Commandes,itemSelected :Commande[],i:number) {
@@ -250,11 +306,19 @@ export class JourneeComponent implements AfterViewInit {
       if (index !== -1) {
         itemSelected.splice(index, 1);
         item.disabled=!item.disabled;
-        item.tourneeID=0;
+        item.tourneeID=-1;
       }
     }
+    this.sharedService.setCommandePrevu(this.commandePrevu)
   }
 
+  generateName(index: number): string {
+    return `camions_${index}`;
+  }
+
+  ischecked(c:number,i:number){
+    return i===c
+  }
 }
 
 
@@ -285,9 +349,21 @@ interface Livreur {
   tournees: string;
 }
 
-interface Tournee {
-  id:number;
-  commandes:Commande[];
+interface Tournee{
+  id:number,
+  journee:string,
+  date:Date,
+  entrepot:string,
+  camion:string,
+  liveurs:Livreur[],
+  livraison:Livraison[],
+  commandes:Commande[]
+}
+
+interface Livraison{
+  id:number,
+  client:string,
+  commandes:Commande[]
 }
 
 interface Camion{
@@ -298,7 +374,7 @@ interface Camion{
 }
 
 interface Entrepot{
-  nom:string;
+  name:string;
   lettre:string;
   photo:string;
   adresse:string;
@@ -306,12 +382,22 @@ interface Entrepot{
   ville:string;
   latitude:string;
   longitude:string;
-  camions:string;
-  employés:string;
 }
 
 interface Commandes{
   commande:Commande;
   disabled:boolean;
   tourneeID:number;
+}
+
+interface Client{
+  email:string,
+  prenom:string,
+  nom:string,
+  adresse:string,
+  codePostal:string,
+  ville:string,
+  latitude:string,
+  longitude:string,
+  commandes:string
 }

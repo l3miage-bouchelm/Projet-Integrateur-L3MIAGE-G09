@@ -1,6 +1,5 @@
 <p>journee works!</p>
 <button (click)="getCsvData()">LOAD</button>
-
 <button (click)="changeEtat()">CONFIRMER</button>
 <div>
 </div>
@@ -31,21 +30,21 @@
 <div>{{commandeOuvert.length}}</div>
 <div>{{commandePrevu.length}}</div>
 <hr>
-
+<button (click)="loadTournee()">LOAD</button>
+<div *ngIf="tourneeV">
 <div *ngFor="let tournee of tournees; let i = index">
-  <div>tournee {{tournee.id}}</div>
-  <app-tournee [camions]="camions" [entrepots]="entrepots" [livreurs]="livreurs" [commandes]="tournee.commandes"></app-tournee>
+  <div>tournee {{i}}</div>
+  <app-tournee [camions]="camions" [entrepots]="entrepots" [livreurs]="livreurs" [commandes]="tournee.commandes" [clients]="clients" [id]="i" [name]="generateName(i)"></app-tournee>
   <div class="container">
     <div class="describe">Commandes :</div>
     <div *ngFor="let commande of commandePrevu" >
         <label class="checkbox-group">
-        <input type="checkbox" [value]="commande.commande.reference" [disabled]="commande.disabled&&i!==commande.tourneeID" (change)="toggleSelectionCommande(commande,tournee.commandes,i)"> {{ commande.commande.reference }}
+        <input type="checkbox" [value]="commande.commande.reference" [disabled]="commande.disabled&&tournee.id!==commande.tourneeID" (change)="toggleSelectionCommande(commande,tournee.commandes,tournee.id)" [checked]="tournee.id===commande.tourneeID"> {{ commande.commande.reference }}
         </label>
     </div>
   </div>
   <button (click)="removeTournee(i)">Remove</button>
 </div>
 <button (click)="addTournee()">Add Tournee</button>
-
-
+</div>
 <hr>

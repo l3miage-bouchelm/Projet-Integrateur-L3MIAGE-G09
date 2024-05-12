@@ -1,0 +1,77 @@
+<p>infos-tournee works!</p>
+
+
+
+<button (click)="voirCarte()">asdguj</button>
+<div *ngIf="tournee">  
+<table *ngIf="tournee">
+    <tr>
+      <td>Journee:</td>
+      <td>{{tournee.journee}}</td>
+    </tr>
+    <tr>
+      <td>Date:</td>
+      <td>{{tournee.date | date: 'short'}}</td>
+    </tr>
+    <tr>
+      <td>Entrepot:</td>
+      <td>{{tournee.entrepot}}</td>
+    </tr>
+    <tr>
+      <td>Tournee:</td>
+      <td>{{tournee.id}}</td>
+    </tr>
+    <tr>
+        <td>Livreur:</td>
+        <td>
+            <ng-container *ngFor="let livreur of tournee.liveurs; let last = last">
+                <span>{{ livreur.trigramme }}</span>
+                <span *ngIf="!last">, </span>
+            </ng-container>
+        </td>
+    </tr>
+    <tr>
+        <td>Camion:</td>
+        <td>{{tournee.camion}}</td>
+    </tr>
+  </table>
+  <br>
+  <div class="Livraisons" style="font-weight: bold;">{{tournee.livraison.length}} livraisons</div>
+  <hr style="border-top: 1px dashed #000;">
+  <table *ngFor="let livraison of tournee.livraison">
+    <tr>
+        <td>({{livraison.id}})</td>
+    </tr>
+    <tr>
+        <td>Client:</td>
+        <td>{{livraison.client}}</td>
+    </tr>
+    <tr>
+        <td>Commandes:</td>
+        <td>
+            <ng-container *ngFor="let commande of livraison.commandes; let last = last">
+                <span>{{ commande.reference }}</span>
+                <span *ngIf="!last">, </span>
+            </ng-container>
+        </td>
+    </tr>
+    <button (click)="supprimerLivraison(livraison)">Supprimer</button>
+    <hr style="border-top: 1px dashed #000;">
+  </table>
+  <div class="container">
+    <div  class="describe">Transferer livraison :</div>
+    <select [(ngModel)]="livraisonTrans">
+      <option [value]="-1">Choisir la livraison</option>
+      <option *ngFor="let livraison of tournee.livraison" [value]="livraison.id">{{ livraison.id }}</option>
+    </select>
+    <div  class="describe">a </div>
+    <select [(ngModel)]="tourneeTrans">
+      <option [value]="-1">Choisir la tournee</option>
+      <ng-container *ngFor="let autreTournee of tousTournee">
+        <option *ngIf="tournee.id!=autreTournee.id" [value]="autreTournee.id">{{ autreTournee.id }}</option>
+      </ng-container>
+    </select>
+    <button (click)="modifierLivraison(tourneeTrans,livraisonTrans)">ok</button>
+    <div>{{livraisonTrans}},{{tourneeTrans}}</div>
+  </div>
+  </div> 

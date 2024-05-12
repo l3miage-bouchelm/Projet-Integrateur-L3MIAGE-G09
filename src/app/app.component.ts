@@ -34,9 +34,12 @@ export class AppComponent {
   constructor(private fbAuth: Auth,private sharedService: SharedService ) { } 
   
   readonly obsUser: Observable<User | null> = authState(this.fbAuth) 
-  readonly isLoggedIn=computed<boolean>(()=>this.sharedService.getData());
+  isLoggedIn=this.sharedService.getData();
   //readonly userSignal : new Signal<boolean>();
   //readonly userSignal = this.obsUser.pipe(map(user => !!user))
+  getData() {
+    return(this.sharedService.getData());
+  }
   async logout(): Promise<void> { 
 
        return signOut(this.fbAuth); 
