@@ -12,8 +12,8 @@ export const routes: Routes = [
     { path: 'presentation', title: "Présentation", component: PresentationComponent },
     { path: 'leaflet', title: "Cartographie avec les leaflet", component: CartoComponent },
     { path: 'lists', title: "Listes", component: ListsComponent },
-    { path: 'livreur-login', title:"Login des livreurs", component:LivreurLoginComponent},
-    { path: 'livreur-travail', title:"Travail des livreurs", component:LivreurTravailComponent},
+    { path: 'livreur-login', title:"Login des livreurs", component: LivreurLoginComponent},
+    { path: 'livreur-travail', title:"Travail des livreurs", component: LivreurTravailComponent},
     { path: 'journee', title:"Journee", component:JourneeComponent},
     { path: 'infos-tournee', title:"infos d'unes tournee", component:InfosTourneeComponent},
     { path: '**', redirectTo: '/livreur-login' }
