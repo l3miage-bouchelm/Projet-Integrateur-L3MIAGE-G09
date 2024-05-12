@@ -254,7 +254,7 @@ interface Commande {
   etat: string;
   dateDeCreation: string;
   note: string;
-  commentaire: string;
+  commantaire: string;
   client: string;
   ligne: string;
 }
