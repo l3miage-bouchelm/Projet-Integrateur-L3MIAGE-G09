@@ -10,6 +10,9 @@ export class SharedService {
   private tournee:Tournee[]=[];
   private commandeOuvert:Commande[]=[];
   private commandePrevu:Commandes[]=[];
+  private locations:Locations[]=[];
+  private today:number[]=[]
+  private tomorrow:number[]=[]
 
   
   setData(data: boolean) {
@@ -72,6 +75,40 @@ export class SharedService {
   setCommandePrevu(c:Commandes[]){
     this.commandePrevu=c
   }
+
+  getLocations(){
+    return this.locations;
+  }
+
+  addLocation(l:Locations){
+    this.locations.push(l);
+  }
+
+  removeLocation(i:number){
+    let loc=this.locations.find(lo=>lo.idTournee==i);
+    if(loc){
+      let index=this.locations.indexOf(loc);
+      this.locations.splice(index,1);
+    }
+  }
+
+  changeLocation(l:Locations,i:number){
+    let loc=this.locations.find(lo=>lo.idTournee==i);
+    if(loc){
+      let index=this.locations.indexOf(loc);
+      this.locations[index]=l;
+    }else{
+      this.addLocation(l);
+    }
+  }
+
+  getToday(){
+    return this.today
+  }
+
+  getTomorrow(){
+    return this.tomorrow
+  }
 }
 
 
@@ -99,7 +136,7 @@ interface Tournee{
 
 interface Livraison{
   id:number,
-  client:string,
+  client:Client,
   commandes:Commande[]
 }
 
@@ -117,4 +154,21 @@ interface Commandes{
   commande:Commande;
   disabled:boolean;
   tourneeID:number;
+}
+
+interface Locations{
+  idTournee:number,
+  location:number[][]
+}
+
+interface Client{
+  email:string,
+  prenom:string,
+  nom:string,
+  adresse:string,
+  codePostal:string,
+  ville:string,
+  latitude:string,
+  longitude:string,
+  commandes:string
 }

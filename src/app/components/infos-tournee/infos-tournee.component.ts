@@ -3,17 +3,18 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SharedService } from '../../services/shared.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-infos-tournee',
   standalone: true,
-  imports: [FormsModule,CommonModule],
+  imports: [FormsModule,CommonModule,HttpClientModule],
   templateUrl: './infos-tournee.component.html',
   styleUrl: './infos-tournee.component.scss'
 })
 export class InfosTourneeComponent  implements OnInit{
   
-  constructor(private route: ActivatedRoute,private sharedService:SharedService,private router: Router) { }
+  constructor(private route: ActivatedRoute,private sharedService:SharedService,private router: Router,private http:HttpClient) { }
 
   tournee:Tournee|undefined
   location:number[][]|undefined
@@ -21,6 +22,7 @@ export class InfosTourneeComponent  implements OnInit{
   tourneeTrans:number=-1;
   livraisonTrans:number=-1;
   tousTournee:Tournee[]|undefined
+  m:Matrice={k:0,matrix:[],start:0}
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       const tourneeString = params['tournee'];
@@ -29,7 +31,7 @@ export class InfosTourneeComponent  implements OnInit{
       this.location=JSON.parse(locationString);
       //console.log('Received tournee:', this.location);
     });
-    this.commandePrevu=this.sharedService.getCommandePrevu()
+    this.commandePrevu=this.sharedService.getCommandePrevu();
     this.tousTournee=this.sharedService.getTournee();
   }
 
@@ -113,6 +115,75 @@ export class InfosTourneeComponent  implements OnInit{
     })
     this.sharedService.changeTournee(tourneeTrans,tou)
   }
+
+  tostring(){
+    let body='{"locations":[';
+    if(this.location){
+      for(let i=0;i<this.location.length;i++){
+        body+='['+this.location[i][0]+','+this.location[i][1]+']'
+        if(i!=this.location.length-1){
+          body+=','
+        }
+      }
+      body+='],"metrics":["distance"]}';
+    }
+    console.log(body)
+    return body;
+  }
+
+  matrice(){
+    let request = new XMLHttpRequest();
+    let matrix;
+
+
+    request.open('POST', "https://api.openrouteservice.org/v2/matrix/driving-car");
+
+    request.setRequestHeader('Accept', 'application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8');
+    request.setRequestHeader('Content-Type', 'application/json');
+    request.setRequestHeader('Authorization', '5b3ce3597851110001cf6248366ddf83a2ee4d23ba9481ec85060854');
+
+    request.onreadystatechange = function () {
+      if (this.readyState === 4) {
+        console.log('Status:', this.status);
+        console.log('Headers:', this.getAllResponseHeaders());
+        console.log('Body:', this.responseText);
+        const jsonObject = JSON.parse(request.responseText);
+        const distances = jsonObject.distances;
+        matrix = jsonObject.distances;
+        handleMatrix(matrix);
+      }
+    };
+
+    const body = this.tostring();
+    request.send(body);
+    const handleMatrix = (matrix:number[][]) => {
+      if (matrix !== undefined) {
+        for(let i=0;i<matrix.length;i++){
+          for(let j=i;j<matrix[0].length;j++){
+            matrix[j][i]=matrix[i][j];
+          }
+        }
+          //console.log('matrix 已被赋值:', matrix);
+          if(this.tournee){
+            this.m.k=this.tournee?.liveurs.length;
+          }
+          this.m.matrix=matrix;
+          this.m.start=matrix.length;
+          console.log('matrix 已被赋值:', this.m);
+          this.http.post('http://localhost:4201/planner/planif', this.m)
+              .subscribe(
+                  (response) => {
+                      console.log('Post request successful:', response);
+                  },
+                  (error) => {
+                      console.error('Error in post request:', error);
+                  }
+              );
+      } else {
+          console.log('matrix 尚未被赋值');
+      }
+  };
+  }
 }
 
 
@@ -129,7 +200,7 @@ interface Tournee{
 
 interface Livraison{
   id:number,
-  client:string,
+  client:Client,
   commandes:Commande[]
 }
 
@@ -199,4 +270,10 @@ interface Commandes{
   commande:Commande;
   disabled:boolean;
   tourneeID:number;
+}
+
+interface Matrice{
+  k:number;
+  matrix:number[][];
+  start:number;
 }

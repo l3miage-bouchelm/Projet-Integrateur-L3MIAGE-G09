@@ -6,6 +6,7 @@ import { LivreurLoginComponent } from './components/livreur-login/livreur-login.
 import { LivreurTravailComponent } from './components/livreur-travail/livreur-travail.component';
 import { JourneeComponent } from './components/journee/journee.component';
 import { InfosTourneeComponent } from './components/infos-tournee/infos-tournee.component';
+import { InfosTourneeLivreursComponent } from './components/infos-tournee-livreurs/infos-tournee-livreurs.component';
 
 
 export const routes: Routes = [
@@ -16,5 +17,6 @@ export const routes: Routes = [
     { path: 'livreur-travail', title:"Travail des livreurs", component: LivreurTravailComponent},
     { path: 'journee', title:"Journee", component:JourneeComponent},
     { path: 'infos-tournee', title:"infos d'unes tournee", component:InfosTourneeComponent},
+    { path: 'infos-tournee-livreurs', title:"infos d'unes tournee pour livreurs", component:InfosTourneeLivreursComponent},
     { path: '**', redirectTo: '/livreur-login' }
 ];

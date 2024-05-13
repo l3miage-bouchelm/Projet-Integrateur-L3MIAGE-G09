@@ -202,20 +202,40 @@ export class TourneeComponent implements OnInit{
   voirInfos(){
     let livraisons:Livraison[]=[];
     this.commandes.forEach(commande=>{
-      const livraison = livraisons.find(l => l.client === commande.client);
+      const livraison = livraisons.find(l => l.client.email === commande.client);
       if(livraison){
         livraison.commandes.push(commande);
       }else{
         livraisons.push({
           id: livraisons.length + 1, // 这里可以根据需要生成唯一ID
-          client: commande.client,
+          client: this.getClient(commande.client),
           commandes: [commande]
         });
       }
     })
-    this.tournee={id:this.tournee.id,journee:'',date:this.tournee.date,entrepot:this.entrepotChoisi,camion:this.camionsChoisi,liveurs:this.livreursChoisi,livraison:livraisons,commandes:this.commandes};
+    this.tournee={id:this.tournee.id,journee:this.tournee.journee,date:this.tournee.date,entrepot:this.entrepotChoisi,camion:this.camionsChoisi,liveurs:this.livreursChoisi,livraison:livraisons,commandes:this.commandes};
     this.sharedService.addTournee(this.tournee);
     this.router.navigate(['/infos-tournee'], { queryParams: {tournee: JSON.stringify(this.tournee),location:JSON.stringify(this.location)} });
+  }
+
+  getClient(data:string){
+    let cli=this.clients.find(c=>c.email==data)
+    let cliVide:Client={
+      email:'',
+      prenom:'',
+      nom:'',
+      adresse:'',
+      codePostal:'',
+      ville:'',
+      latitude:'',
+      longitude:'',
+      commandes:''
+    };
+    if(cli){
+      return cli;
+    }else{
+      return cliVide;
+    }
   }
 
 }
@@ -299,6 +319,6 @@ interface Tournee{
 
 interface Livraison{
   id:number,
-  client:string,
+  client:Client,
   commandes:Commande[]
 }

@@ -30,7 +30,15 @@
 <hr>
 <button (click)="loadTournee()">LOAD</button>
 <div *ngIf="tourneeV">
+  <div class="container">
+    <div  class="describe">Jour :</div>
+    <select [(ngModel)]="day">
+      <option [value]="'today'">Aujourd'hui</option>
+      <option [value]="'tomorrow'">Demain</option>
+    </select>
+  </div>
 <div *ngFor="let tournee of tournees; let i = index">
+  <div *ngIf="isToday(tournee.id)">
   <div>tournee {{i}}</div>
   <app-tournee [camions]="camions" [entrepots]="entrepots" [livreurs]="livreurs" [commandes]="tournee.commandes" [clients]="clients" [id]="i" [name]="generateName(i)"></app-tournee>
   <div class="container">
@@ -42,6 +50,7 @@
     </div>
   </div>
   <button (click)="removeTournee(i)">Remove</button>
+  </div>
 </div>
 <button (click)="addTournee()">Add Tournee</button>
 </div>

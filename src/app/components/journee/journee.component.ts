@@ -35,6 +35,9 @@ export class JourneeComponent implements AfterViewInit,OnInit {
   clients:Client[]=[];
   entrepotChoisi:string='';
   tourneeV:boolean=false;
+  day:string='today'
+  today:number[]=[]
+  tomorrow:number[]=[]
 
 
 
@@ -66,6 +69,8 @@ export class JourneeComponent implements AfterViewInit,OnInit {
     this.lireInfos();
     //this.tournees=this.sharedService.getTournee();
     this.tournees= this.sharedService.getTournee();
+    this.today=this.sharedService.getToday();
+    this.tomorrow=this.sharedService.getTomorrow()
     //this.loadTournee();
   }
 
@@ -271,8 +276,24 @@ export class JourneeComponent implements AfterViewInit,OnInit {
 
 
   addTournee() {
+    let idt=this.idTournee()
     //this.tournees.push({id:this.tournees.length+1,journee:'',date:new Date(),entrepot:'',camion:'',liveurs:[],livraison:[],commandes:[]});
-    this.sharedService.addTournee({id:this.idTournee(),journee:'',date:new Date(),entrepot:'',camion:'',liveurs:[],livraison:[],commandes:[]})
+    this.sharedService.addTournee({id:idt,journee:this.getNomJournee(),date:new Date(),entrepot:'',camion:'',liveurs:[],livraison:[],commandes:[]})
+    if(this.day=='today'){
+      this.today.push(idt);
+    }else if(this.day=='tomorrow'){
+      this.tomorrow.push(idt);
+    }
+  }
+
+  isToday(i:number){
+    if(this.day=='today'){
+      return this.today.includes(i);
+    }else if(this.day=='tomorrow'){
+      return this.tomorrow.includes(i);
+    }else{
+      return false
+    }
   }
 
   idTournee(){
@@ -293,7 +314,16 @@ export class JourneeComponent implements AfterViewInit,OnInit {
         this.commandePrevu[i].disabled=!this.commandePrevu[i].disabled;
       }
     }
-    this.sharedService.setCommandePrevu(this.commandePrevu)
+    this.sharedService.setCommandePrevu(this.commandePrevu);
+    if(this.day='today'){
+      if(this.today.includes(tou.id)){
+        this.today.splice(this.today.indexOf(tou.id),1)
+      }
+    }else if(this.day='tomorrow'){
+      if(this.tomorrow.includes(tou.id)){
+        this.tomorrow.splice(this.tomorrow.indexOf(tou.id),1)
+      }
+    }
   }
 
   toggleSelectionCommande(item: Commandes,itemSelected :Commande[],i:number) {
@@ -318,6 +348,23 @@ export class JourneeComponent implements AfterViewInit,OnInit {
 
   ischecked(c:number,i:number){
     return i===c
+  }
+
+  getNomJournee(){
+    if(this.day=='today'){
+      const currentDate = new Date();
+      const date = currentDate.getDate().toString();
+      let entrepot=this.entrepots.find(c=>c.name==this.sharedService.getEmploye().entrepot)
+      return 'J0'+date+entrepot?.lettre;
+    }else if(this.day=='tomorrow'){
+      const currentDate = new Date(); // 获取当前日期和时间
+      const nextDate = new Date(currentDate); // 创建一个新的 Date 对象，以便修改日期
+      nextDate.setDate(currentDate.getDate() + 1); // 设置日期为当前日期加一天
+      const date=nextDate.getDate().toString();
+      return date;
+    }else{
+      return 'nmsl'
+    }
   }
 }
 
@@ -362,7 +409,7 @@ interface Tournee{
 
 interface Livraison{
   id:number,
-  client:string,
+  client:Client,
   commandes:Commande[]
 }
 
