@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Auth, User, authState, signOut, signInWithPopup, GoogleAuthProvider } from '@angular/fire/auth';
+import { Auth, User, authState, signOut, signInWithPopup, GoogleAuthProvider, ActionCodeSettings } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { getAuth } from '@angular/fire/auth';
+
 
 @Injectable({
   providedIn: 'root'
@@ -38,7 +41,37 @@ export class ConnexionService {
         ) 
       
         } 
-  }
+
+
+       
+        livreurs : Livreur[]=[];
+         livreur: Livreur = {
+          trigramme: '',
+          prenom: '',
+          nom: '',
+          photo: '',
+          telephone: '',
+          emploi: '',
+          entrepot: '',
+          tournees: ''
+        };   
+     
+    
+      }
+      interface Livreur {
+        trigramme: string;
+        prenom: string;
+        nom: string;
+        photo: string;
+        telephone: string;
+        emploi: string;
+        entrepot: string;
+        tournees: string;
+      }    
+      interface ParsedData {
+        [key: string]: string;
+      }
+  
   
 
 

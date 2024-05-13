@@ -39,6 +39,7 @@ export class JourneeComponent implements AfterViewInit,OnInit {
   today:number[]=[]
   tomorrow:number[]=[]
 
+  
 
 
   constructor(private http:HttpClient,private sharedService:SharedService) { }
@@ -270,6 +271,23 @@ export class JourneeComponent implements AfterViewInit,OnInit {
         }
       }
     }
+  }
+
+  selectionnerCommande(event: Event) {
+    const selectedIndex = (event.target as HTMLSelectElement).selectedIndex;
+    const selectedOption = (event.target as HTMLSelectElement).options[selectedIndex];
+    const numeroCommande = selectedOption.value;
+  
+    if (numeroCommande) {
+      const commandeTrouvee = this.commandes.find(commande => commande.reference === numeroCommande);
+      this.commandeSelectionnee = commandeTrouvee ? commandeTrouvee : null;
+    }
+  }
+  
+  
+  
+  addTournee() {
+    this.tournees.push({id:this.tournees.length+1,commandes:[]});
     this.sharedService.setCommandeOuvert(this.commandeOuvert);
     this.sharedService.setCommandePrevu(this.commandePrevu)
   }
