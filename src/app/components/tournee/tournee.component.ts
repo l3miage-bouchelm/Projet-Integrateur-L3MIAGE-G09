@@ -163,7 +163,7 @@ export class TourneeComponent implements OnInit{
           //console.log('matrix 已被赋值:', matrix);
           this.m.k=this.livreursChoisi.length;
           this.m.matrix=matrix;
-          this.m.start=matrix.length;
+          this.m.start=matrix.length-1;
           console.log('matrix 已被赋值:', this.m);
           this.http.post('http://localhost:4201/planner/planif', this.m)
               .subscribe(
@@ -213,9 +213,14 @@ export class TourneeComponent implements OnInit{
         });
       }
     })
+    let data:Trajets={trajets:[[0,5,4,6],[0,2,3],[0,1]],longTrajets: [
+      35645.37,
+      42178.82000000001,
+      34414.46
+    ]}
     this.tournee={id:this.tournee.id,journee:this.tournee.journee,date:this.tournee.date,entrepot:this.entrepotChoisi,camion:this.camionsChoisi,liveurs:this.livreursChoisi,livraison:livraisons,commandes:this.commandes};
     this.sharedService.addTournee(this.tournee);
-    this.router.navigate(['/infos-tournee'], { queryParams: {tournee: JSON.stringify(this.tournee),location:JSON.stringify(this.location)} });
+    this.router.navigate(['/infos-tournee'], { queryParams: {tournee: JSON.stringify(this.tournee),location:JSON.stringify(this.location),trajets:JSON.stringify(data)} });
   }
 
   getClient(data:string){
@@ -321,4 +326,9 @@ interface Livraison{
   id:number,
   client:Client,
   commandes:Commande[]
+}
+
+interface Trajets{
+  trajets:number[][],
+  longTrajets:number[]
 }
