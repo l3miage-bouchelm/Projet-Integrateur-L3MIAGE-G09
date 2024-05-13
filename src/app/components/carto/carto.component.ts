@@ -109,7 +109,7 @@ export class CartoComponent implements OnDestroy {
   loc:Location[][]=[]
   num=0;
   constructor(private geoAPI: GeoapiService,private route: ActivatedRoute) {
-    /*this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe(params => {
       const locationString=params['location'];
       this.location=JSON.parse(locationString);
       const trajetsString=params['trajets']
@@ -118,7 +118,7 @@ export class CartoComponent implements OnDestroy {
         this.locations=this.toLocation(this.location)
       }
       console.log('Received trajets:', this.trajets);
-    });*/
+    });
     let prevLongitude: number | undefined;
     let prevLatitude: number | undefined;
     const numLocations = this.locations.length;

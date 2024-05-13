@@ -36,6 +36,7 @@ export class TourneeComponent implements OnInit{
   location:number[][]=[];
   m:Matrice={k:0,matrix:[],start:0}
   ngOnInitCompleted: boolean = false;
+  trajets:Trajets|undefined
 
 
   ngOnInit(): void {
@@ -165,10 +166,11 @@ export class TourneeComponent implements OnInit{
           this.m.matrix=matrix;
           this.m.start=matrix.length-1;
           console.log('matrix 已被赋值:', this.m);
-          this.http.post('http://localhost:4201/planner/planif', this.m)
+          this.http.post<Trajets>('http://localhost:4201/planner/planif', this.m)
               .subscribe(
                   (response) => {
                       console.log('Post request successful:', response);
+                      this.trajets=response;
                   },
                   (error) => {
                       console.error('Error in post request:', error);
@@ -213,14 +215,14 @@ export class TourneeComponent implements OnInit{
         });
       }
     })
-    let data:Trajets={trajets:[[0,5,4,6],[0,2,3],[0,1]],longTrajets: [
+    /*let data:Trajets={trajets:[[0,5,4,6],[0,2,3],[0,1]],longTrajets: [
       35645.37,
       42178.82000000001,
       34414.46
-    ]}
+    ]}*/
     this.tournee={id:this.tournee.id,journee:this.tournee.journee,date:this.tournee.date,entrepot:this.entrepotChoisi,camion:this.camionsChoisi,liveurs:this.livreursChoisi,livraison:livraisons,commandes:this.commandes};
     this.sharedService.addTournee(this.tournee);
-    this.router.navigate(['/infos-tournee'], { queryParams: {tournee: JSON.stringify(this.tournee),location:JSON.stringify(this.location),trajets:JSON.stringify(data)} });
+    this.router.navigate(['/infos-tournee'], { queryParams: {tournee: JSON.stringify(this.tournee),location:JSON.stringify(this.location),trajets:JSON.stringify(this.trajets)} });
   }
 
   getClient(data:string){
