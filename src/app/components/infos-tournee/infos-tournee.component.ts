@@ -76,6 +76,7 @@ export class InfosTourneeComponent  implements OnInit{
         this.sharedService.changeTournee(l,this.tournee)
       }
     }
+    this.matrice();
   }
 
   modifierLivraison(tourneeTrans:number,livraisonTrans:number){
@@ -173,10 +174,11 @@ export class InfosTourneeComponent  implements OnInit{
           this.m.matrix=matrix;
           this.m.start=matrix.length;
           console.log('matrix 已被赋值:', this.m);
-          this.http.post('http://localhost:4201/planner/planif', this.m)
+          this.http.post<Trajets>('http://localhost:4201/planner/planif', this.m)
               .subscribe(
                   (response) => {
                       console.log('Post request successful:', response);
+                      this.trajets=response;
                   },
                   (error) => {
                       console.error('Error in post request:', error);
