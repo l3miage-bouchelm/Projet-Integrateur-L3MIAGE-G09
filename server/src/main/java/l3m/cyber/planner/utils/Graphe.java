@@ -84,16 +84,16 @@ public class Graphe implements Cloneable {
     }
 
     // 打印矩阵的方法
-    public void printMatrices() {
-        System.out.println("Weight Matrix (poidsA):");
-        for (Double[] row : poidsA) {
-            System.out.println(Arrays.toString(row));
-        }
-        System.out.println("\nAdjacency Matrix (adj):");
-        for (int[] row : adj) {
-            System.out.println(Arrays.toString(row));
-        }
-    }
+//    public void printMatrices() {
+//        System.out.println("Weight Matrix (poidsA):");
+//        for (Double[] row : poidsA) {
+//            System.out.println(Arrays.toString(row));
+//        }
+//        System.out.println("\nAdjacency Matrix (adj):");
+//        for (int[] row : adj) {
+//            System.out.println(Arrays.toString(row));
+//        }
+//    }
 
 
     ///Convient pour créer un graphe non pondéré ou un graphe dont les poids sont traités séparément,
@@ -315,6 +315,27 @@ public class Graphe implements Cloneable {
         return T;
     }
 
+    public Graphe Kruskal() {
+        // 创建一个空的图 T，其实是复制当前图的结构但不复制边
+        //所以这里没有用到克隆
+        Graphe T = new Graphe(this.nbSommets);
+        List<Triplet> sortedEdges = this.aretesTriees(true); // 将当前图的边按权重升序排序
+        UnionFind uf = new UnionFind(this.nbSommets);
+
+        for (Triplet edge : sortedEdges) {
+            int u = edge.getC1();
+            int v = edge.getC2();
+            if (uf.find(u) != uf.find(v)) { // 检查这两个顶点是否已经在同一个连通分量中
+                T.ajouterArete(u, v, edge.getPoids()); // 将边添加到 T 中
+                uf.union(u, v); // 在 Union-Find 结构中合并这两个顶点的连通分量
+            }
+            // 一旦加入足够的边就停止，即边数等于顶点数减一
+            if (T.listeAretes().size() == this.nbSommets - 1) {
+                break;
+            }
+        }
+        return T;
+    }
 
     public double getPoids(int i, int j) {
         return poidsA[i][j];
@@ -323,7 +344,7 @@ public class Graphe implements Cloneable {
 
     // Version un pour permettre l'intégration de cette partie avec les autres parties du projet sans causer d'erreurs, triez et produisez les sorties dans l'ordre croissant des numéros
     public ArrayList<Integer> tsp(int debut) {
-        Graphe minT = this.KruskalInverse();  // 获取最小生成树
+        Graphe minT = this.Kruskal();  // 获取最小生成树
         return minT.parcoursProfondeur(debut);  // 从指定的起点开始DFS遍历
         //返回的是一个tournne
     }

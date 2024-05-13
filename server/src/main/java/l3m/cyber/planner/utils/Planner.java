@@ -22,8 +22,8 @@ public class Planner{
         this.tournees = new ArrayList<>();
         this.longTournees = new ArrayList<>();
          //La méthode de classification aléatoire est utilisée ici pour l'instant
-        this.p = new PartitionAlea(distances.length,k,debut);///choisir le constructeur correspondant pour l'initialiser si nécessaire
-        //this.p = new PartitionKCentre( distances.length, k,debut);
+        //this.p = new PartitionAlea(distances.length,k,debut);///choisir le constructeur correspondant pour l'initialiser si nécessaire
+        this.p = new PartitionKCentre( distances.length, k,debut);
         // le constructeur partitionkcentre .
     }
 
@@ -58,7 +58,7 @@ public class Planner{
         //Calcul d'itinéraires individuels
         //en fait une optimisation pour chaque partie (route) de p, en utilisant ce qui se trouve dans la classe de graphe
         Graphe graphe = new Graphe(this.distances,selec);
-        graphe.printMatrices();
+        //graphe.printMatrices();
         ArrayList<Integer> uneTournee = graphe.tsp(debut);
         return uneTournee;
     }

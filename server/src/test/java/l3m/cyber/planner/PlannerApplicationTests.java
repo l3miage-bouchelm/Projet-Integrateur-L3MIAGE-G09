@@ -229,7 +229,7 @@ class PlannerApplicationTests {
 
 		// 验证权重是否符合预期，假设您已知最小生成树的权重
 		double mstPondre = 0.0;
-		Graphe MST = graph.KruskalInverse();
+		Graphe MST = graph.Kruskal();
 		List<Triplet> listeMST = MST.listeAretes();
 		assertTrue(listeMST.size() != 0);
 		//算法前最小生成树的权重
@@ -250,43 +250,83 @@ class PlannerApplicationTests {
 
 
 
-//	@Test
-//	void myTestn2PartionKCentre(){ //************************************ */
-//		Double[][] matrix = {{0.0, 1.1, 2.0,  2.0}, {1.1, 0.0, 2.0, 2.0},
-//				{2.0, 2.0, 0.0, 1.0}, {2.0, 2.0, 1.1, 0.0}};
-//		int k=2;
-//		int start=3;
-//		PlannerParameter param= new PlannerParameter(matrix, k, start);
-//		Planner pl= new Planner(param);
-//		pl.calculeTournees();
-//		pl.calculeLongTournees();
-//		ArrayList< ArrayList<Integer>> Ar = new ArrayList< ArrayList<Integer> >(); //({{3, 0, 1}, {3, 2}} )
-//		Ar.add(new ArrayList<>(List.of(3, 0, 1)));
-//		Ar.add(new ArrayList<>(List.of(start, 2)));
-//
-//		assertEquals( Ar, pl.getTournees()); //le tableau tournees doit etre non null
-//
-//	}
-//
-//	@Test
-//	void myTestn3PartionKCentre(){ //************************************ */
-//		Double[][] matrix = {{0.0, 1.1, 1.0,  3.0, 4.0, 4.0}, {1.1, 0.0, 2.0, 2.0, 3.0, 3.0},
-//				{1.0, 2.0, 0.0, 2.0, 3.0, 3.0}, {3.0, 2.0, 2.0, 0.0, 1.1, 1.1}
-//				,{4.0, 3.0, 3.0, 1.0, 0.0, 2.0},{4.0, 3.0, 3.0, 1.0, 2.0, 0.0}};
-//		int k=2;
-//		int start=3;
-//		PlannerParameter param= new PlannerParameter(matrix, k, start);
-//		Planner pl= new Planner(param);
-//		pl.calculeTournees();
-//		pl.calculeLongTournees();
-//		ArrayList< ArrayList<Integer>> Ar = new ArrayList< ArrayList<Integer> >(); //({{3, 0, 1, 2}, {3, 4, 5}} )
-//		Ar.add(new ArrayList<>(List.of(start, 0, 1, 2)));
-//		Ar.add(new ArrayList<>(List.of(start, 4, 5)));
-//
-//		assertEquals( Ar, pl.getTournees()); //le tableau tournees doit etre non null
-//	}
+	@Test
+	void myTestn2PartionKCentre(){ //************************************ */
+		Double[][] matrix = {{0.0, 1.1, 2.0,  2.0}, {1.1, 0.0, 2.0, 2.0},
+				{2.0, 2.0, 0.0, 1.0}, {2.0, 2.0, 1.1, 0.0}};
+		int k=2;
+		int start=3;
+		PlannerParameter param= new PlannerParameter(matrix, k, start);
+		Planner pl= new Planner(param);
+		pl.result();
+		ArrayList< ArrayList<Integer>> Ar = new ArrayList< ArrayList<Integer> >(); //({{3, 0, 1}, {3, 2}} )
+		Ar.add(new ArrayList<>(List.of(start, 2)));
+		Ar.add(new ArrayList<>(List.of(3, 0, 1)));
+
+		assertEquals( Ar, pl.getTournees()); //le tableau tournees doit etre non null
+
+	}
+
+	@Test
+	void myTestn3PartionKCentre(){ //************************************ */
+		Double[][] matrix = {{0.0, 30.0, 40.0, 41.2, 22.4, 28.3},
+				{30.0, 0.0, 10.0, 44.8, 44.8, 22.4},
+				{40.0, 10.0, 0.0, 50.0, 53.9, 28.3},
+				{41.2, 44.8, 50.0, 0.0, 28.3, 22.4},
+				{22.4, 44.8, 53.9, 28.3, 0.0, 30.0},
+				{28.3, 22.4, 28.3, 22.4, 30.0, 0.0}};
+		int k=2;
+		int start=0;
+		PlannerParameter param= new PlannerParameter(matrix, k, start);
+		Planner pl= new Planner(param);
+		pl.result();
+		ArrayList< ArrayList<Integer>> Ar = new ArrayList< ArrayList<Integer> >(); //({{3, 0, 1, 2}, {3, 4, 5}} )
+		Ar.add(new ArrayList<>(List.of(start, 1, 2,4)));
+		Ar.add(new ArrayList<>(List.of(start, 5, 3)));
+
+		assertEquals( Ar, pl.getTournees()); //le tableau tournees doit etre non null
+	}
 ////Il y a encore quelques problèmes avec la méthode kcentre, donc pour ne pas signaler d'erreurs, commentez d'abord ces deux tests.
 
+	@Test
+	void myTestn4PartionKCentre() {
+		Double[][] matrix = {
+				{0.0, 2.0, 3.0, 1.0, 4.0},
+				{2.0, 0.0, 1.0, 2.5, 3.0},
+				{3.0, 1.0, 0.0, 3.5, 2.0},
+				{1.0, 2.5, 3.5, 0.0, 5.0},
+				{4.0, 3.0, 2.0, 5.0, 0.0}
+		};
+		int k = 2;
+		int start = 3; // assuming 3 is the index for V3
+		PlannerParameter param = new PlannerParameter(matrix, k, start);
+		Planner pl = new Planner(param);
+		pl.result();
+		ArrayList<ArrayList<Integer>> Ar = new ArrayList<>();
+		Ar.add(new ArrayList<>(List.of(3, 0, 1))); // Group 1 centered around V3
+		Ar.add(new ArrayList<>(List.of(3,2, 4)));    // Group 2 centered around V2
+
+		assertEquals(Ar, pl.getTournees());
+	}
+
+	@Test
+	void myTestn5PartionKCentre(){ //************************************ */
+		Double[][] matrix = {{0.0, 1.1, 1.0,  3.0, 4.0, 4.0}, {1.1, 0.0, 2.0, 2.0, 3.0, 3.0},
+				{1.0, 2.0, 0.0, 2.0, 3.0, 3.0}, {3.0, 2.0, 2.0, 0.0, 1.1, 1.1}
+				,{4.0, 3.0, 3.0, 1.0, 0.0, 2.0},{4.0, 3.0, 3.0, 1.0, 2.0, 0.0}};
+		int k=2;
+		int start=3;
+		PlannerParameter param= new PlannerParameter(matrix, k, start);
+		Planner pl= new Planner(param);
+		pl.calculeTournees();
+		pl.calculeLongTournees();
+
+		ArrayList< ArrayList<Integer>> Ar = new ArrayList< ArrayList<Integer> >(); //({{3, 0, 1, 2}, {3, 4, 5}} )
+		Ar.add(new ArrayList<>(List.of(start, 5, 4)));
+		Ar.add(new ArrayList<>(List.of(start, 1, 0, 2)));
+
+		assertEquals( Ar, pl.getTournees()); //le tableau tournees doit etre non null
+	}
 
 
 }
