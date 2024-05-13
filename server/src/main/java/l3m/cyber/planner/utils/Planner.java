@@ -1,12 +1,12 @@
 package l3m.cyber.planner.utils;
 
-import java.util.ArrayList;
-
 import l3m.cyber.planner.requests.PlannerParameter;
 import l3m.cyber.planner.responses.PlannerResult;
 
+import java.util.ArrayList;
 
-public class Planner{
+
+public class Planner {
     Double[][] distances;
     int k;
     int debut;
@@ -51,13 +51,14 @@ public class Planner{
     }
 
     public void divise(){
-        p.partitionne(distances);//ici,on utilise la method de partitionAlea
-    }
+        p.partitionne(distances);}//ici,on utilise la method de partitionAlea
+
 
     public ArrayList<Integer> calculeUneTournee(ArrayList<Integer> selec) {
         //Calcul d'itinéraires individuels
         //en fait une optimisation pour chaque partie (route) de p, en utilisant ce qui se trouve dans la classe de graphe
-        Graphe graphe = new Graphe(selec);
+        Graphe graphe = new Graphe(this.distances,selec);
+        //graphe.printMatrices();
         ArrayList<Integer> uneTournee = graphe.tsp(debut);
         return uneTournee;
     }
@@ -77,8 +78,6 @@ public class Planner{
     }
 
     public void calculeLongTournees() {
-        longTournees.clear();  // Videz les résultats des calculs précédents
-
         for (ArrayList<Integer> tournee : this.tournees) {
             double length = 0.0;
             if (tournee.size() > 1) {
@@ -112,6 +111,9 @@ public class Planner{
     
     
     public PlannerResult result(){
+        if(!Auxiliaire.estCarreeSym(this.distances)){
+            System.out.println("La matrice n'est ni carrée, ni symétrique.");
+        }
         calculeTournees();
         calculeLongTournees();
         return new PlannerResult(tournees, longTournees);

@@ -20,6 +20,7 @@ public class Triplet implements Comparable<Triplet>{
     }
 
     public double getPoids() {
+
         return poids;
     }
 

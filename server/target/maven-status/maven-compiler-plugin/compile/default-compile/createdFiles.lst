@@ -1,9 +1,12 @@
+l3m/cyber/planner/utils/Triplet.class
+l3m/cyber/planner/services/PlannerService.class
+l3m/cyber/planner/utils/Auxiliaire.class
+l3m/cyber/planner/controllers/PlannerController.class
+l3m/cyber/planner/utils/Graphe.class
 l3m/cyber/planner/utils/UnionFind.class
 l3m/cyber/planner/utils/Planner.class
-l3m/cyber/planner/utils/Triplet.class
+l3m/cyber/planner/utils/PartitionAlea.class
 l3m/cyber/planner/utils/Partition.class
-l3m/cyber/planner/services/PlannerService.class
-l3m/cyber/planner/controllers/PlannerController.class
-l3m/cyber/planner/utils/Auxiliaire.class
 l3m/cyber/planner/PlannerApplication.class
+l3m/cyber/planner/utils/PartitionKCentre.class
 l3m/cyber/planner/utils/methodesUtiles.class

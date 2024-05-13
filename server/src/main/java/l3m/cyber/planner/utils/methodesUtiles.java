@@ -31,7 +31,7 @@ public class methodesUtiles {
     // Trouve le point dont la distance entre lui et sa caserne est la plus grande
     public static int PlusEloigneDeCaserneRef(int[] ListeCasernes , int nbElm, Double[][] distances){
         int c=0;
-        double dmax = Double.MIN_VALUE;
+        double dmax = 0;
         for(int i=0; i < nbElm; i++ ){
             if( dmax < distances[i][ ListeCasernes[i]] ){
                 dmax = distances[i][ ListeCasernes[i]];

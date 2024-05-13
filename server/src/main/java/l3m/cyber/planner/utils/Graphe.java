@@ -1,11 +1,6 @@
 package l3m.cyber.planner.utils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Stack;
+import java.util.*;
 
 public class Graphe implements Cloneable {
     private int nbSommets;
@@ -16,7 +11,12 @@ public class Graphe implements Cloneable {
     //crée un graphe avec n sommets, nommés 0 à n-1 et aucune arête
     public Graphe(int n){
         this.nbSommets = n;
-        this.poidsA = null;
+        this.poidsA = new Double[nbSommets][nbSommets];////////////无权图定义为数值为0的权重矩阵
+        for (int i = 0; i < nbSommets; i++) {
+            for (int j = 0; j < nbSommets; j++) {
+                poidsA[i][j] = 0.0;
+            }
+        }
         this.nomSommets = new ArrayList<>();
         for(int i = 0; i<n; i++){
             this.nomSommets.add(i);
@@ -31,7 +31,7 @@ public class Graphe implements Cloneable {
     }
     
     //Il génère des noms de sommets par défaut en fonction du nombre de sommets. Cela convient pour une matrice entièrement pondérée
-    public Graphe(Double[][] poidsA,int n){
+    public Graphe(Double[][] poidsA, int n){
         this.nbSommets = n;
         this.poidsA = poidsA;
         this.adj = new int[n][n];
@@ -58,21 +58,42 @@ public class Graphe implements Cloneable {
 
     //Ce constructeur accepte une matrice de poids des arêtes et une liste de noms de sommets. 
     //Ceci s'applique à la création d'un graphe pondéré.
-    public Graphe(Double[][] poidsA, ArrayList<Integer> nomSommets){
-        this.nomSommets = nomSommets;
-        this.nbSommets = nomSommets.size();
-        this.poidsA = poidsA;
+    //相当于这里，除开第二个参数顶点列表中的顶点，其余的都应在权重矩阵中去掉，从而构成一个新的图，方便调用tsp
+    public Graphe(Double[][] poidsA_0, ArrayList<Integer> nomSommets) {
+        this.nbSommets = poidsA_0.length;  // 使用originalPoidsA的大小作为新图的顶点数
+        this.poidsA = new Double[nbSommets][nbSommets];
         this.adj = new int[nbSommets][nbSommets];
-        for(int i=0;i<nbSommets;i++){
-            for(int j=0;j<nbSommets;j++){
-                if(this.poidsA[i][j] != 0){
-                    adj[i][j] = 1;
-                }else{
-                    adj[i][j] = 0;
+        this.nomSommets = nomSommets;
+
+        // 初始化权重矩阵和邻接矩阵
+        for (int i = 0; i < nbSommets; i++) {
+            for (int j = 0; j < nbSommets; j++) {
+                if (nomSommets.contains(i) && nomSommets.contains(j)) {  // 只在nomSommets列表中的顶点之间设置权重
+                    this.poidsA[i][j] = poidsA_0[i][j];
+                    if (poidsA_0[i][j] != null && poidsA_0[i][j] != 0) {
+                        this.adj[i][j] = 1;
+                    } else {
+                        this.adj[i][j] = 0;
+                    }
+                } else {
+                    this.poidsA[i][j] = 0.0;  // 对不在nomSommets中的顶点，设置为无连接
+                    this.adj[i][j] = 0;
                 }
             }
         }
     }
+
+    // 打印矩阵的方法
+//    public void printMatrices() {
+//        System.out.println("Weight Matrix (poidsA):");
+//        for (Double[] row : poidsA) {
+//            System.out.println(Arrays.toString(row));
+//        }
+//        System.out.println("\nAdjacency Matrix (adj):");
+//        for (int[] row : adj) {
+//            System.out.println(Arrays.toString(row));
+//        }
+//    }
 
 
     ///Convient pour créer un graphe non pondéré ou un graphe dont les poids sont traités séparément,
@@ -90,8 +111,7 @@ public class Graphe implements Cloneable {
     public void pondereAretes(){
         for(int i = 0;i<nbSommets;i++){
             for(int j = 0;j<nbSommets;j++){
-                if(this.poidsA == null && adj[i][j] == 1){
-                    this.poidsA = new Double[nbSommets][nbSommets];
+                if(this.poidsA[i][j] == 0.0 && adj[i][j] == 1){
                     this.poidsA[i][j] = 1.0;
                 }
             }
@@ -212,23 +232,37 @@ public class Graphe implements Cloneable {
     //les piles suivent le principe LIFO
     //La recherche en profondeur d'abord (DFS) est souvent mise en œuvre à l'aide de piles car leur nature Last-In-First-Out (LIFO) est bien adaptée à la manière dont la recherche en profondeur d'abord est explorée.
     public ArrayList<Integer> parcoursProfondeur(int debut) {
-        ArrayList<Integer> visited = new ArrayList<>();  // Créez une liste pour stocker les sommets visités
-        Stack<Integer> stack = new Stack<>();            // Utilisez une pile pour prendre en charge la recherche en profondeur
-        stack.push(debut);                               // Empilez le sommet de départ
+        ArrayList<Integer> visited = new ArrayList<>();  // 存储访问过的节点
+        Stack<Integer> stack = new Stack<>();            // 支持DFS的栈
+        stack.push(debut);                               // 将起始节点压入栈
 
-        while (!stack.isEmpty()) {                       // Continuez tant que la pile n'est pas vide
-            int vertex = stack.pop();                    // Récupérez un sommet de la pile
-            if (!visited.contains(vertex)) {             // Si ce sommet n'a pas encore été visité
-                visited.add(vertex);                     // Marquez-le comme visité
-                for (int i = nbSommets - 1; i >= 0; i--) {  // Parcourez les voisins de ce sommet dans l'ordre inverse
-                    if (adj[vertex][i] == 1 && !visited.contains(i)) {  // Si le voisin est connecté et non visité
-                        stack.push(i);                   // Empilez le voisin
+        while (!stack.isEmpty()) {
+            int vertex = stack.pop();                    // 弹出栈顶元素
+            if (!visited.contains(vertex)) {
+                visited.add(vertex);                     // 标记为已访问，在这里防止重复
+                // 获取与vertex相连的所有边，按权重排序
+                List<Triplet> connectedEdges = new ArrayList<>();
+                for (int i = 0; i < nbSommets; i++) {
+                    if (adj[vertex][i] == 1 && !visited.contains(i)) {
+                        connectedEdges.add(new Triplet(vertex, i, poidsA[vertex][i]));
                     }
+                }
+                // 按权重排序
+                Collections.sort(connectedEdges);
+                // 将排序后的节点压入栈
+                for (Triplet edge : connectedEdges) {
+                    stack.push(edge.getC2());
                 }
             }
         }
-        return visited;                                  // Retournez la liste des sommets visités
+        // 确保路径是闭环
+        ////但是没有必要闭环，毕竟最后输出的时候，每个点只能出现一次。即使不加，在计算路径的时候已经手动加上了
+//        if (visited.size() == nbSommets && adj[visited.getLast()][debut] == 1) {
+//            visited.add(debut);
+//        }
+        return visited;  // 返回访问顺序
     }
+
 
 
 
@@ -243,7 +277,7 @@ public class Graphe implements Cloneable {
     public List<Triplet> listeAretes(){
         List<Triplet> list = new ArrayList<>();
         for(int i=0;i<this.nbSommets;i++){
-            for(int j=0;j<this.nbSommets;j++){
+            for (int j = i + 1; j < this.nbSommets; j++) { // 注意这里的修改，只有当 j > i 时才添加边。避免出现一条边添加两次的情况
                 if(this.poidsA[i][j] != 0){
                     Triplet edge = new Triplet(i, j, this.poidsA[i][j]);
                     list.add(edge);
@@ -264,14 +298,55 @@ public class Graphe implements Cloneable {
         return list;
     }
 
+    //tsp version2 KruskalInverse
+    public Graphe KruskalInverse() {
+        Graphe T = this.clone(); // Clone the graph
+        List<Triplet> sortedEdges = T.aretesTriees(false); // Get edges sorted by decreasing weight
+        UnionFind uf = new UnionFind(T.nbSommets);
+
+        for (Triplet edge : sortedEdges) {
+            T.retirerArete(edge.getC1(), edge.getC2());
+            if (!T.estConnexe()) {
+                T.ajouterArete(edge.getC1(), edge.getC2(), edge.getPoids());
+            } else {
+                uf.union(edge.getC1(), edge.getC2());
+            }
+        }
+        return T;
+    }
+
+    public Graphe Kruskal() {
+        // 创建一个空的图 T，其实是复制当前图的结构但不复制边
+        //所以这里没有用到克隆
+        Graphe T = new Graphe(this.nbSommets);
+        List<Triplet> sortedEdges = this.aretesTriees(true); // 将当前图的边按权重升序排序
+        UnionFind uf = new UnionFind(this.nbSommets);
+
+        for (Triplet edge : sortedEdges) {
+            int u = edge.getC1();
+            int v = edge.getC2();
+            if (uf.find(u) != uf.find(v)) { // 检查这两个顶点是否已经在同一个连通分量中
+                T.ajouterArete(u, v, edge.getPoids()); // 将边添加到 T 中
+                uf.union(u, v); // 在 Union-Find 结构中合并这两个顶点的连通分量
+            }
+            // 一旦加入足够的边就停止，即边数等于顶点数减一
+            if (T.listeAretes().size() == this.nbSommets - 1) {
+                break;
+            }
+        }
+        return T;
+    }
+
+    public double getPoids(int i, int j) {
+        return poidsA[i][j];
+    }/////diagramme中没有的方法
+
 
     // Version un pour permettre l'intégration de cette partie avec les autres parties du projet sans causer d'erreurs, triez et produisez les sorties dans l'ordre croissant des numéros
     public ArrayList<Integer> tsp(int debut) {
-        ArrayList<Integer> tour = new ArrayList<>(nomSommets);  // Créez une copie de nomSommets pour éviter de modifier la liste originale
-        tour.remove(Integer.valueOf(debut));  // Supprimez l'élément debut
-        Collections.sort(tour);  // Triez les éléments restants
-        tour.add(0, debut);  // Ajoutez l'élément debut au début de la liste
-        return tour;
+        Graphe minT = this.Kruskal();  // 获取最小生成树
+        return minT.parcoursProfondeur(debut);  // 从指定的起点开始DFS遍历
+        //返回的是一个tournne
     }
 
 }

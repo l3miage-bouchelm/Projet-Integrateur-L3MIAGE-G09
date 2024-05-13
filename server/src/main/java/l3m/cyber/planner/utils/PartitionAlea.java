@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class PartitionAlea extends Partition {
-    public PartitionAlea(int n,int k) {
+    public PartitionAlea(int n, int k) {
         super(n, k);
     }
 
@@ -11,7 +11,7 @@ public class PartitionAlea extends Partition {
         super(n, k, elemSpecial);
     }
 
-    public PartitionAlea(ArrayList<Integer>elems,int k,int elemSpecial){
+    public PartitionAlea(ArrayList<Integer>elems, int k, int elemSpecial){
         super(elems,k,elemSpecial);
     }
 
