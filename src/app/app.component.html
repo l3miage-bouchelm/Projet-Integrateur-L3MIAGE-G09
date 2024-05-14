@@ -2,13 +2,20 @@
   <button mat-icon-button (click)="drawer.toggle()">
     <mat-icon>menu</mat-icon>
   </button>
-  <div class="dropdown">
-    <button  id="google" class="dropbtn">Connexion</button>
+  <div class="dropdown" *ngIf="!getData()">
+    <button  id="google" class="dropbtn" >Connexion</button>
      <mat-nav-list class="dropdown-content">
        <a  mat-list-item routerLink="/connexion" routerLinkActive="active">Client</a><br>
        <a  mat-list-item routerLink="/connexion" routerLinkActive="active">Pro</a><br>
-     </mat-nav-list>
+       
+     </mat-nav-list>  
+     
 </div>
+<div class="dropdown">
+<button  id="google" class="dropbtn" *ngIf="getData()">Bonjour {{getEmploye().nom}}</button>
+ </div> 
+
+
 </mat-toolbar>
 
 <mat-drawer-container class="example-container" autosize>

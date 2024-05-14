@@ -40,6 +40,11 @@ export class AppComponent {
   getData() {
     return(this.sharedService.getData());
   }
+
+  getEmploye(){
+    return this.sharedService.getEmploye();
+  }
+
   async logout(): Promise<void> { 
 
        return signOut(this.fbAuth); 
@@ -56,6 +61,8 @@ export class AppComponent {
     
       }
 
+
+      
 
 
 }
