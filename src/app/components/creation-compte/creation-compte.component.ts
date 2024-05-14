@@ -1,11 +1,12 @@
 import { Component, signal } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-creation-compte',
   standalone: true,
-  imports: [HttpClientModule, FormsModule],
+  imports: [HttpClientModule, FormsModule, CommonModule],
   templateUrl: './creation-compte.component.html',
   styleUrl: './creation-compte.component.scss'
 })
@@ -21,6 +22,7 @@ export class CreationCompteComponent {
       entrepot: '',
       tournees: ''
     }) ;
+    public message : String|null ='faire la connexion avec la BDD';
 
     selectedEmploi: string = '';
 
@@ -43,9 +45,11 @@ export class CreationCompteComponent {
       };
       this.http.post<any>('http://localhost:8080/employes', livreurData).subscribe(
         (response) => {
+          this.message = 'Compte créé avec succès !';
           console.log('Données envoyées avec succès:', response);
         },
         (error) => {
+          this.message ='erreur lors de l\'envoi des donnees';
           console.error('Erreur lors de l\'envoi des données:', error);
         }
       );

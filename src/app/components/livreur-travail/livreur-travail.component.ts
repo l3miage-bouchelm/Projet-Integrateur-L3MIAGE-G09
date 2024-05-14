@@ -16,6 +16,7 @@ export class LivreurTravailComponent implements OnInit{
   csvData:any[]=[];
   livreur:Livreur[]=[];
   nom: string = localStorage.getItem('livreurNom') || '';;
+  trigramme : string = localStorage.getItem('livreurTrigramme') || '';
 
   constructor(private http:HttpClient,private route: ActivatedRoute,private sharedService: SharedService) {}
   
@@ -28,6 +29,7 @@ export class LivreurTravailComponent implements OnInit{
     .subscribe(data=>{
       //this.csvData=this.parseCsvData(data);
       this.livreur=this.parseCsvData(data);
+      this.sharedService.setLivreurs(this.livreur);
       let liv:Livreur|undefined;
     liv=this.livreur.find(liv=>liv.nom.toUpperCase()===this.nom.toUpperCase())
     if(liv){
@@ -49,9 +51,11 @@ export class LivreurTravailComponent implements OnInit{
     }
     return result;
   }
+
   isLoggedIn(livreur:Livreur[]){
     const filteredLivreur = livreur.filter(item => item.nom === this.nom);
-    if (filteredLivreur.length >= 0) {
+    const filteredTrigramme = livreur.filter(item =>item.trigramme === this.trigramme);
+    if (filteredLivreur.length >= 0 && filteredTrigramme.length >= 0) {
         this.sharedService.setData(true);
         return filteredLivreur.length;
     } else {

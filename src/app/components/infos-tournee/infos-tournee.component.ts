@@ -23,13 +23,16 @@ export class InfosTourneeComponent  implements OnInit{
   livraisonTrans:number=-1;
   tousTournee:Tournee[]|undefined
   m:Matrice={k:0,matrix:[],start:0}
+  trajets:Trajets|undefined;
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       const tourneeString = params['tournee'];
       const locationString=params['location'];
+      const trajetsString=params['trajets'];
       this.tournee = JSON.parse(tourneeString); // 将字符串转换为对象
       this.location=JSON.parse(locationString);
-      //console.log('Received tournee:', this.location);
+      this.trajets=JSON.parse(trajetsString);
+      console.log('Received tournee:', this.trajets);
     });
     this.commandePrevu=this.sharedService.getCommandePrevu();
     this.tousTournee=this.sharedService.getTournee();
@@ -41,7 +44,7 @@ export class InfosTourneeComponent  implements OnInit{
   }
 
   voirCarte(){
-    this.router.navigate(['/leaflet'], { queryParams: {location:JSON.stringify(this.location)} });
+    this.router.navigate(['/leaflet'], { queryParams: {location:JSON.stringify(this.location),trajets:JSON.stringify(this.trajets)} });
   }
 
   supprimerLivraison(livraison:Livraison){
@@ -73,6 +76,7 @@ export class InfosTourneeComponent  implements OnInit{
         this.sharedService.changeTournee(l,this.tournee)
       }
     }
+    this.matrice();
   }
 
   modifierLivraison(tourneeTrans:number,livraisonTrans:number){
@@ -170,10 +174,11 @@ export class InfosTourneeComponent  implements OnInit{
           this.m.matrix=matrix;
           this.m.start=matrix.length;
           console.log('matrix 已被赋值:', this.m);
-          this.http.post('http://localhost:4201/planner/planif', this.m)
+          this.http.post<Trajets>('http://localhost:4201/planner/planif', this.m)
               .subscribe(
                   (response) => {
                       console.log('Post request successful:', response);
+                      this.trajets=response;
                   },
                   (error) => {
                       console.error('Error in post request:', error);
@@ -191,7 +196,7 @@ interface Tournee{
   id:number,
   journee:string,
   date:Date,
-  entrepot:string,
+  entrepot:Entrepot,
   camion:string,
   liveurs:Livreur[],
   livraison:Livraison[],
@@ -276,4 +281,9 @@ interface Matrice{
   k:number;
   matrix:number[][];
   start:number;
+}
+
+interface Trajets{
+  trajets:number[][],
+  longTrajets:number[]
 }

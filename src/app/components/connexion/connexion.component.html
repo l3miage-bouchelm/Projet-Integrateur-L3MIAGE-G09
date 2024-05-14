@@ -3,17 +3,17 @@
 <button id="googleCo" (click)="logGoogle()">Connexion Google</button>
 <h3>Email</h3>
 <div>
-<form action="/action_page.php">
+<form action="/action_page.php"  (ngSubmit)="login()">
 <label for="employé">Employé :</label>
 <select name="employés" id="emp-select">
- <option value="">Type Employé</option>
+ <option value="" disabled>Type Employé</option>
  <option value="Plan">Planificateur</option>
  <option value="Liv">Livreur</option>
 </select>
       <label for="Email">Identifiant</label>
-      <input type="text" id="fname" name="email" placeholder="Votre Identifiant..."><br>
+      <input type="text" id="fname" name="email" placeholder="Votre Identifiant..." [(ngModel)]="nom" required><br>
       <label for="password">Mot de Passe</label>
-      <input type="text" id="lname" name="motDePasse" placeholder="Votre Mot de Passe...">
+      <input type="text" id="lname" name="Trigramme" placeholder="Votre Trigramme..." [(ngModel)]="trigramme" required>
       <input type="submit" value="Connexion" >
     </form>
    <button id="googleCo" routerLink="/creation-compte" routerLinkActive="active">PAS ENCORE DE COMPTE ?</button>

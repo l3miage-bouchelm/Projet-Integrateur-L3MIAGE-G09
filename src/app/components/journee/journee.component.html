@@ -56,3 +56,31 @@
 <button (click)="addTournee()">Add Tournee</button>
 </div>
 <hr>
+<select (click)="selectionnerCommande($event)" id="commande-select">
+<option [value]=""> Commandes</option>
+<option *ngFor="let commande of commandes" id="commande-select">{{commande.reference}}</option>
+</select>
+<table *ngIf="commandeSelectionnee" >
+    <tr *ngIf="commandeSelectionnee.reference">
+      <td>Reference :{{commandeSelectionnee.reference }}</td>
+    </tr>
+    <tr *ngIf="commandeSelectionnee.dateDeCreation">
+      <td>Date de Creation : {{commandeSelectionnee.dateDeCreation}}</td>
+    </tr>
+    <tr *ngIf="commandeSelectionnee.client">
+      <td>Client :{{commandeSelectionnee.client }}</td>
+    </tr>
+    <tr *ngIf="commandeSelectionnee.etat">
+      <td>Etat :{{commandeSelectionnee.etat }}</td>
+    </tr>
+    <tr *ngIf="commandeSelectionnee.ligne">
+      <td>ligne :{{commandeSelectionnee.ligne }}</td>
+    </tr>
+    <tr *ngIf="commandeSelectionnee.note">
+      <td>note :{{commandeSelectionnee.note }}</td>
+    </tr>
+    <tr *ngIf="commandeSelectionnee.note">
+      <td>commentaire :{{commandeSelectionnee.commantaire }}</td>
+    </tr>
+
+</table>

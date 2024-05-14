@@ -1,1 +1,48 @@
 <p>infos-tournee-livreurs works!</p>
+<div *ngFor="let tournee of tournees">  
+    <table *ngIf="tournee">
+        <tr>
+          <td>Journee:</td>
+          <td>{{tournee.journee}}</td>
+        </tr>
+        <tr>
+          <td>Date:</td>
+          <td>{{tournee.date | date: 'short'}}</td>
+        </tr>
+        <tr>
+          <td>Entrepot:</td>
+          <td>{{tournee.entrepot.name}}</td>
+        </tr>
+        <tr>
+          <td>Tournee:</td>
+          <td>{{tournee.id}}</td>
+        </tr>
+        <tr>
+            <td>Camion:</td>
+            <td>{{tournee.camion}}</td>
+        </tr>
+      </table>
+      <br>
+      <div class="Livraisons" style="font-weight: bold;">{{tournee.livraison.length}} livraisons</div>
+      <hr style="border-top: 1px dashed #000;">
+      <table *ngFor="let livraison of tournee.livraison">
+        <tr>
+            <td>({{livraison.id}})</td>
+        </tr>
+        <tr>
+            <td>Client:</td>
+            <td>{{livraison.client.prenom}} {{livraison.client.nom}} {{livraison.client.adresse}} {{livraison.client.codePostal}}</td>
+        </tr>
+        <tr>
+            <td>Commandes:</td>
+            <td>
+                <ng-container *ngFor="let commande of livraison.commandes; let last = last">
+                    <span>{{ commande.reference }}</span>
+                    <span *ngIf="!last">, </span>
+                </ng-container>
+            </td>
+        </tr>
+        <hr style="border-top: 1px dashed #000;">
+      </table>
+      <br>
+      </div> 

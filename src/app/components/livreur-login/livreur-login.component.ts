@@ -13,9 +13,12 @@ import { LivreurTravailComponent } from '../livreur-travail/livreur-travail.comp
 export class LivreurLoginComponent {
   constructor(private router: Router) {}
   nom: string = '';
+  trigramme: string = '';
+
 
   login() {
   localStorage.setItem('livreurNom', this.nom);
+  localStorage.setItem('livreurTrigramme', this.trigramme);
   this.router.navigate(['/livreur-travail']);
   }
 }

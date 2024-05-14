@@ -116,3 +116,6 @@
     background-color: dodgerblue; 
     color: white; 
   }
+  td {
+    white-space: nowrap; /* Empêche le contenu de se propager sur plusieurs lignes */
+  }

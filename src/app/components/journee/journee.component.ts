@@ -38,7 +38,17 @@ export class JourneeComponent implements AfterViewInit,OnInit {
   day:string='today'
   today:number[]=[]
   tomorrow:number[]=[]
+  commandeSelectionnee : Commande | null = ({
+    reference: '',
+    etat: '',
+    dateDeCreation: '',
+    note: '',
+    commantaire: '',
+    client: '',
+    ligne: ''
+  });
 
+  
   
 
 
@@ -271,7 +281,11 @@ export class JourneeComponent implements AfterViewInit,OnInit {
         }
       }
     }
+    this.sharedService.setCommandeOuvert(this.commandeOuvert);
+    this.sharedService.setCommandePrevu(this.commandePrevu)
   }
+
+
 
   selectionnerCommande(event: Event) {
     const selectedIndex = (event.target as HTMLSelectElement).selectedIndex;
@@ -285,18 +299,20 @@ export class JourneeComponent implements AfterViewInit,OnInit {
   }
   
   
-  
-  addTournee() {
-    this.tournees.push({id:this.tournees.length+1,commandes:[]});
-    this.sharedService.setCommandeOuvert(this.commandeOuvert);
-    this.sharedService.setCommandePrevu(this.commandePrevu)
-  }
+ 
 
 
-  addTournee() {
+ addTournee() {
     let idt=this.idTournee()
     //this.tournees.push({id:this.tournees.length+1,journee:'',date:new Date(),entrepot:'',camion:'',liveurs:[],livraison:[],commandes:[]});
-    this.sharedService.addTournee({id:idt,journee:this.getNomJournee(),date:new Date(),entrepot:'',camion:'',liveurs:[],livraison:[],commandes:[]})
+    this.sharedService.addTournee({id:idt,journee:this.getNomJournee(),date:new Date(),entrepot:{name:'',
+      lettre:'',
+      photo:'',
+      adresse:'',
+      codePostal:'',
+      ville:'',
+      latitude:'',
+      longitude:''},camion:'',liveurs:[],livraison:[],commandes:[]})
     if(this.day=='today'){
       this.today.push(idt);
     }else if(this.day=='tomorrow'){
@@ -418,7 +434,7 @@ interface Tournee{
   id:number,
   journee:string,
   date:Date,
-  entrepot:string,
+  entrepot:Entrepot,
   camion:string,
   liveurs:Livreur[],
   livraison:Livraison[],

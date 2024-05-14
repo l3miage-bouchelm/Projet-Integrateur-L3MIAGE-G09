@@ -2,7 +2,7 @@
     <div class="text">
     Création de Compte
    </div>
-    <form action="#">
+    <form (ngSubmit)="creerCompte()" #form="ngForm" action="#">
        <div class="form-row">
           <div class="input-data">
              <input type="text" required [(ngModel)]="livreur().nom">
@@ -36,8 +36,9 @@
          <div class="input-data">
             <div class="input-data">
                <select name="livreurs" id="emp-select" >
-                  <option [value]="">Emploi</option>
-                 <option *ngFor="let option of empOptions" [value]="option">{{ option }}</option>
+                  <option value="">Emploi</option>
+                 <option value ="livreur">Livreur</option>
+                 <option value="planificateur">Planificateur</option>
                </select>
              </div>
              
@@ -46,8 +47,11 @@
           <div class="form-row submit-btn">
              <div class="input-data">
                 <div class="inner"></div>
-                <input type="submit" value="Creer Compte">
+                <input type="submit" value="Creer Compte" (click)="creerCompte()">
              </div>
           </div>
+          <div *ngIf="message" class="success-message">
+            {{ message }}
+        </div>
     </form>
     </div>

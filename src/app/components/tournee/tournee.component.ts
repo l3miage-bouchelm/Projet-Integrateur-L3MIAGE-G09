@@ -28,14 +28,30 @@ export class TourneeComponent implements OnInit{
   @Input() name: string = '';
 
   constructor(private http:HttpClient,private router: Router,private sharedService:SharedService) { }
-  tournee:Tournee={id:-1,journee:'',date:new Date(),entrepot:'',camion:'',liveurs:[],livraison:[],commandes:[]}
+  tournee:Tournee={id:-1,journee:'',date:new Date(),entrepot:{name:'',
+  lettre:'',
+  photo:'',
+  adresse:'',
+  codePostal:'',
+  ville:'',
+  latitude:'',
+  longitude:''},camion:'',liveurs:[],livraison:[],commandes:[]}
   entrepotChoisi:string='';
+  entrepot:Entrepot={name:'',
+  lettre:'',
+  photo:'',
+  adresse:'',
+  codePostal:'',
+  ville:'',
+  latitude:'',
+  longitude:''};
   camionsChoisi:string='';
   livreursChoisi:Livreur[]=[];
   martix:number[][]=[];
   location:number[][]=[];
   m:Matrice={k:0,matrix:[],start:0}
   ngOnInitCompleted: boolean = false;
+  trajets:Trajets|undefined
 
 
   ngOnInit(): void {
@@ -49,7 +65,12 @@ export class TourneeComponent implements OnInit{
       this.tournee = this.sharedService.getTournee()[this.id];
       this.camionsChoisi=this.tournee.camion;
       this.livreursChoisi=this.tournee.liveurs;
-      this.camions=this.camions.filter(camion=>camion.entrepot===this.entrepotChoisi)
+      this.camions=this.camions.filter(camion=>camion.entrepot===this.entrepotChoisi);
+      let e:Entrepot|undefined
+      e=this.entrepots.find(en=>en.name==this.entrepotChoisi);
+      if(e){
+        this.entrepot=e;
+      }
     }
   }
 
@@ -163,12 +184,13 @@ export class TourneeComponent implements OnInit{
           //console.log('matrix 已被赋值:', matrix);
           this.m.k=this.livreursChoisi.length;
           this.m.matrix=matrix;
-          this.m.start=matrix.length;
+          this.m.start=matrix.length-1;
           console.log('matrix 已被赋值:', this.m);
-          this.http.post('http://localhost:4201/planner/planif', this.m)
+          this.http.post<Trajets>('http://localhost:4201/planner/planif', this.m)
               .subscribe(
                   (response) => {
                       console.log('Post request successful:', response);
+                      this.trajets=response;
                   },
                   (error) => {
                       console.error('Error in post request:', error);
@@ -213,9 +235,14 @@ export class TourneeComponent implements OnInit{
         });
       }
     })
-    this.tournee={id:this.tournee.id,journee:this.tournee.journee,date:this.tournee.date,entrepot:this.entrepotChoisi,camion:this.camionsChoisi,liveurs:this.livreursChoisi,livraison:livraisons,commandes:this.commandes};
+    /*let data:Trajets={trajets:[[0,5,4,6],[0,2,3],[0,1]],longTrajets: [
+      35645.37,
+      42178.82000000001,
+      34414.46
+    ]}*/
+    this.tournee={id:this.tournee.id,journee:this.tournee.journee,date:this.tournee.date,entrepot:this.entrepot,camion:this.camionsChoisi,liveurs:this.livreursChoisi,livraison:livraisons,commandes:this.commandes};
     this.sharedService.addTournee(this.tournee);
-    this.router.navigate(['/infos-tournee'], { queryParams: {tournee: JSON.stringify(this.tournee),location:JSON.stringify(this.location)} });
+    this.router.navigate(['/infos-tournee'], { queryParams: {tournee: JSON.stringify(this.tournee),location:JSON.stringify(this.location),trajets:JSON.stringify(this.trajets)} });
   }
 
   getClient(data:string){
@@ -310,7 +337,7 @@ interface Tournee{
   id:number,
   journee:string,
   date:Date,
-  entrepot:string,
+  entrepot:Entrepot,
   camion:string,
   liveurs:Livreur[],
   livraison:Livraison[],
@@ -321,4 +348,9 @@ interface Livraison{
   id:number,
   client:Client,
   commandes:Commande[]
+}
+
+interface Trajets{
+  trajets:number[][],
+  longTrajets:number[]
 }
