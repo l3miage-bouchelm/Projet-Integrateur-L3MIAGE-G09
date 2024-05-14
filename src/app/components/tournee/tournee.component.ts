@@ -28,8 +28,23 @@ export class TourneeComponent implements OnInit{
   @Input() name: string = '';
 
   constructor(private http:HttpClient,private router: Router,private sharedService:SharedService) { }
-  tournee:Tournee={id:-1,journee:'',date:new Date(),entrepot:'',camion:'',liveurs:[],livraison:[],commandes:[]}
+  tournee:Tournee={id:-1,journee:'',date:new Date(),entrepot:{name:'',
+  lettre:'',
+  photo:'',
+  adresse:'',
+  codePostal:'',
+  ville:'',
+  latitude:'',
+  longitude:''},camion:'',liveurs:[],livraison:[],commandes:[]}
   entrepotChoisi:string='';
+  entrepot:Entrepot={name:'',
+  lettre:'',
+  photo:'',
+  adresse:'',
+  codePostal:'',
+  ville:'',
+  latitude:'',
+  longitude:''};
   camionsChoisi:string='';
   livreursChoisi:Livreur[]=[];
   martix:number[][]=[];
@@ -50,7 +65,12 @@ export class TourneeComponent implements OnInit{
       this.tournee = this.sharedService.getTournee()[this.id];
       this.camionsChoisi=this.tournee.camion;
       this.livreursChoisi=this.tournee.liveurs;
-      this.camions=this.camions.filter(camion=>camion.entrepot===this.entrepotChoisi)
+      this.camions=this.camions.filter(camion=>camion.entrepot===this.entrepotChoisi);
+      let e:Entrepot|undefined
+      e=this.entrepots.find(en=>en.name==this.entrepotChoisi);
+      if(e){
+        this.entrepot=e;
+      }
     }
   }
 
@@ -220,7 +240,7 @@ export class TourneeComponent implements OnInit{
       42178.82000000001,
       34414.46
     ]}*/
-    this.tournee={id:this.tournee.id,journee:this.tournee.journee,date:this.tournee.date,entrepot:this.entrepotChoisi,camion:this.camionsChoisi,liveurs:this.livreursChoisi,livraison:livraisons,commandes:this.commandes};
+    this.tournee={id:this.tournee.id,journee:this.tournee.journee,date:this.tournee.date,entrepot:this.entrepot,camion:this.camionsChoisi,liveurs:this.livreursChoisi,livraison:livraisons,commandes:this.commandes};
     this.sharedService.addTournee(this.tournee);
     this.router.navigate(['/infos-tournee'], { queryParams: {tournee: JSON.stringify(this.tournee),location:JSON.stringify(this.location),trajets:JSON.stringify(this.trajets)} });
   }
@@ -317,7 +337,7 @@ interface Tournee{
   id:number,
   journee:string,
   date:Date,
-  entrepot:string,
+  entrepot:Entrepot,
   camion:string,
   liveurs:Livreur[],
   livraison:Livraison[],

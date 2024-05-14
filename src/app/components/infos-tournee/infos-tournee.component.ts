@@ -196,7 +196,7 @@ interface Tournee{
   id:number,
   journee:string,
   date:Date,
-  entrepot:string,
+  entrepot:Entrepot,
   camion:string,
   liveurs:Livreur[],
   livraison:Livraison[],

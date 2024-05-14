@@ -28,6 +28,7 @@ export class LivreurTravailComponent implements OnInit{
     .subscribe(data=>{
       //this.csvData=this.parseCsvData(data);
       this.livreur=this.parseCsvData(data);
+      this.sharedService.setLivreurs(this.livreur);
       let liv:Livreur|undefined;
     liv=this.livreur.find(liv=>liv.nom.toUpperCase()===this.nom.toUpperCase())
     if(liv){

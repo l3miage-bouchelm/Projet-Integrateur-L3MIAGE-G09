@@ -13,6 +13,7 @@ export class SharedService {
   private locations:Locations[]=[];
   private today:number[]=[]
   private tomorrow:number[]=[]
+  private livreurs:Livreur[]=[]
 
   
   setData(data: boolean) {
@@ -109,6 +110,11 @@ export class SharedService {
   getTomorrow(){
     return this.tomorrow
   }
+
+  setLivreurs(liv:Livreur[]){
+    this.livreurs=liv;
+  }
+
 }
 
 
@@ -127,7 +133,7 @@ interface Tournee{
   id:number,
   journee:string,
   date:Date,
-  entrepot:string,
+  entrepot:Entrepot,
   camion:string,
   liveurs:Livreur[],
   livraison:Livraison[],
@@ -171,4 +177,15 @@ interface Client{
   latitude:string,
   longitude:string,
   commandes:string
+}
+
+interface Entrepot{
+  name:string;
+  lettre:string;
+  photo:string;
+  adresse:string;
+  codePostal:string;
+  ville:string;
+  latitude:string;
+  longitude:string;
 }
