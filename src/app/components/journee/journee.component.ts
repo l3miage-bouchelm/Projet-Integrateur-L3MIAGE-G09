@@ -157,7 +157,7 @@ export class JourneeComponent implements AfterViewInit,OnInit {
         dateDeCreation:obj[headers[2]],
         note:obj[headers[3]],
         commantaire:obj[headers[4]],
-        ligne:obj[headers[7]],
+        ligne:obj[headers[5]],
         client:obj[headers[6]],
       }
       result.push(commande);
