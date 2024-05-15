@@ -25,7 +25,11 @@ export class LivreurTravailComponent implements OnInit{
   }
   //readonly isLoggedIn1=computed<number>(()=>this.isLoggedIn(this.livreur));
   getCsvData(){
+<<<<<<< HEAD
     this.http.get('http://localhost:8080/employes',{responseType:'text'})
+=======
+    this.http.get('./assets/Export_Employés.csv',{responseType:'text'})
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
     .subscribe(data=>{
       //this.csvData=this.parseCsvData(data);
       this.livreur=this.parseCsvData(data);
@@ -52,15 +56,24 @@ export class LivreurTravailComponent implements OnInit{
     return result;
   }
 
+<<<<<<< HEAD
   isLoggedIn(livreur:Livreur[]){
+=======
+  isLoggedIn(livreur:Livreur[]) : void{
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
     const filteredLivreur = livreur.filter(item => item.nom === this.nom);
     const filteredTrigramme = livreur.filter(item =>item.trigramme === this.trigramme);
     if (filteredLivreur.length >= 0 && filteredTrigramme.length >= 0) {
         this.sharedService.setData(true);
+<<<<<<< HEAD
         return filteredLivreur.length;
     } else {
         this.sharedService.setData(false);
         return filteredLivreur.length;
+=======
+    } else {
+        this.sharedService.setData(false);
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
     }
 
   }

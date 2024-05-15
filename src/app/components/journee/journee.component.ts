@@ -33,17 +33,26 @@ export class JourneeComponent implements AfterViewInit,OnInit {
   commandePrevu:Commandes[]=[];
   tournees:Tournee[]=[];
   clients:Client[]=[];
+<<<<<<< HEAD
+=======
+  produits : Produit[]=[];
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
   entrepotChoisi:string='';
   tourneeV:boolean=false;
   day:string='today'
   today:number[]=[]
   tomorrow:number[]=[]
+<<<<<<< HEAD
   commandeSelectionnee : Commande | null = ({
+=======
+  commandeSelectionnee : Commande | null ={
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
     reference: '',
     etat: '',
     dateDeCreation: '',
     note: '',
     commantaire: '',
+<<<<<<< HEAD
     client: {
       email: '',
       prenom: '',
@@ -65,6 +74,27 @@ export class JourneeComponent implements AfterViewInit,OnInit {
   
   
 
+=======
+    client: '',
+    ligne: '',
+  };
+  nomClient : Client | null ={
+    email: '',
+    prenom:'',
+    nom:'',
+    adresse:'',
+    codePostal:'',
+    ville:'',
+    latitude:'',
+    longitude:'',
+    commandes:''
+  };
+  
+  
+
+  
+
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
 
   constructor(private http:HttpClient,private sharedService:SharedService) { }
 
@@ -125,6 +155,7 @@ export class JourneeComponent implements AfterViewInit,OnInit {
     console.log( sigTarget() )
   }
   getCsvData(){
+<<<<<<< HEAD
     this.http.get('http://localhost:8080/commandes',{responseType:'text'})
     .subscribe(data=>{
       this.commandes=this.lireCommande(data);
@@ -136,6 +167,15 @@ export class JourneeComponent implements AfterViewInit,OnInit {
     for(let i=0;i<cmdp.length;i++){
       this.commandePrevu.push({commande:cmdp[i],disabled:false,tourneeID:-1});
     }*/
+=======
+    this.http.get('./assets/Export_Commandes.csv',{responseType:'text'})
+    .subscribe(data=>{
+      this.commandes=this.lireCommande(data);
+      this.clients = this.lireClient(data);
+    },
+  );
+    this.commandeOuvert=this.commandes.filter(commande => commande.etat === "ouverte");
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
     if(this.sharedService.getCommandeOuvert().length>0){
       this.commandeOuvert=this.sharedService.getCommandeOuvert();
       this.commandePrevu=this.sharedService.getCommandePrevu();
@@ -145,7 +185,11 @@ export class JourneeComponent implements AfterViewInit,OnInit {
     //this.commandePrevu=[];
   }
 
+<<<<<<< HEAD
  /* lireCommande(csvData:string){
+=======
+  lireCommande(csvData:string){
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
     const lines=csvData.split('\n');
     const result:Commande[]= [];
 
@@ -169,6 +213,31 @@ export class JourneeComponent implements AfterViewInit,OnInit {
     }
     return result;
   }
+<<<<<<< HEAD
+=======
+  lireProduit(csvData:string){
+    const lines=csvData.split('\n');
+    const result:Produit[]= [];
+
+    const headers=lines[0].split(',');
+    for(let i=1;i<lines.length;i++){
+      const obj: ParsedData = {};
+      const currentLine=lines[i].split(',');
+      for(let j=0;j<headers.length;j++){
+        obj[headers[j]]=currentLine[j];
+      }
+      const produits:Produit={
+        reference:obj[headers[0]],
+        photo:obj[headers[1]],
+        titre:obj[headers[2]],
+        description:obj[headers[3]],
+      
+      }
+      result.push(produits);
+    }
+    return result;
+  }
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
 
   lireLivreur(csvData:string){
     const result:Livreur[]= [];
@@ -279,6 +348,7 @@ export class JourneeComponent implements AfterViewInit,OnInit {
       console.log(this.clients)
     },
   );
+<<<<<<< HEAD
   }*/
   lireCommande(csvData:string){
     const result:Commande[]= [];
@@ -364,12 +434,20 @@ export class JourneeComponent implements AfterViewInit,OnInit {
       console.log('error',error);
     }
   );
+=======
+  this.http.get('./assets/Export_Employés.csv',{responseType:'text'})
+  .subscribe(data=>{
+    this.produits=this.lireProduit(data);
+  },
+);
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
   }
 
   changeEtat(){
     for(let i=0;i<this.sigCP().length;i++){
       for(let j=0;j<this.commandeOuvert.length;j++){
         if(this.sigCP()[i]==this.commandeOuvert[j].reference){
+<<<<<<< HEAD
           this.commandeOuvert[j].etat='PLANIFIEE';
           this.commandePrevu.push({commande:this.commandeOuvert[j],disabled:false,tourneeID:-1});
           console.log(this.commandeOuvert[j].reference);
@@ -380,6 +458,11 @@ export class JourneeComponent implements AfterViewInit,OnInit {
   );
           this.commandeOuvert.splice(j,1);
     
+=======
+          this.commandeOuvert[j].etat='prévu';
+          this.commandePrevu.push({commande:this.commandeOuvert[j],disabled:false,tourneeID:-1});
+          this.commandeOuvert.splice(j,1);
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
         }
       }
     }
@@ -396,13 +479,21 @@ export class JourneeComponent implements AfterViewInit,OnInit {
     this.sharedService.setCommandePrevu(this.commandePrevu)
   }
 
+<<<<<<< HEAD
 
+=======
+  getNomClient(email: string): Client | null {
+    const clientTrouve = this.clients.find(client => client.email === email);
+    return clientTrouve ? clientTrouve : null;
+  }
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
 
   selectionnerCommande(event: Event) {
     const selectedIndex = (event.target as HTMLSelectElement).selectedIndex;
     const selectedOption = (event.target as HTMLSelectElement).options[selectedIndex];
     const numeroCommande = selectedOption.value;
   
+<<<<<<< HEAD
     if (numeroCommande) {
       const commandeTrouvee = this.commandes.find(commande => commande.reference === numeroCommande);
       this.commandeSelectionnee = commandeTrouvee ? commandeTrouvee : null;
@@ -429,11 +520,43 @@ export class JourneeComponent implements AfterViewInit,OnInit {
         latitude:0,
         longitude:0
       }},camion:'',liveurs:[],livraison:[],commandes:[]})
+=======
+    /* if (numeroCommande) {
+      const commandeTrouvee = this.commandes.find(commande => commande.reference === numeroCommande);
+      this.commandeSelectionnee = commandeTrouvee ? commandeTrouvee : null;
+    }*/
+  
+    if (numeroCommande) {
+      const commandeTrouvee = this.commandes.find(commande => commande.reference === numeroCommande);
+      if (commandeTrouvee) {
+        this.commandeSelectionnee = commandeTrouvee;
+        const nomClient = this.getNomClient(commandeTrouvee.client);
+        this.nomClient = nomClient ? nomClient : null;
+      } 
+    }
+  }
+ 
+
+
+
+  addTournee() {
+    let idt=this.idTournee()
+    //this.tournees.push({id:this.tournees.length+1,journee:'',date:new Date(),entrepot:'',camion:'',liveurs:[],livraison:[],commandes:[]});
+    this.sharedService.addTournee({id:idt,journee:this.getNomJournee(),date:new Date(),entrepot:{name:'',
+      lettre:'',
+      photo:'',
+      adresse:'',
+      codePostal:'',
+      ville:'',
+      latitude:'',
+      longitude:''},camion:'',liveurs:[],livraison:[],commandes:[]})
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
     if(this.day=='today'){
       this.today.push(idt);
     }else if(this.day=='tomorrow'){
       this.tomorrow.push(idt);
     }
+<<<<<<< HEAD
     /*this.http.post('http://localhost:8080/tournees/create',{reference:idt})
     .subscribe(data=>{
       console.log(data);
@@ -448,6 +571,8 @@ export class JourneeComponent implements AfterViewInit,OnInit {
     },
   );
       //);
+=======
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
   }
 
   isToday(i:number){
@@ -541,7 +666,11 @@ interface Commande {
   dateDeCreation: string;
   note: string;
   commantaire: string;
+<<<<<<< HEAD
   client: Client;
+=======
+  client: string;
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
   ligne: string;
 }
 
@@ -579,16 +708,37 @@ interface Livraison{
 
 interface Camion{
   immatriculation:string;
+<<<<<<< HEAD
   position:Position;
   entrepotName:string;
+=======
+  latitude:string;
+  longitude:string;
+  entrepot:string;
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
 }
 
 interface Entrepot{
   name:string;
   lettre:string;
   photo:string;
+<<<<<<< HEAD
   adresse: Adresse,
   position: Position,
+=======
+  adresse:string;
+  codePostal:string;
+  ville:string;
+  latitude:string;
+  longitude:string;
+}
+interface Produit{
+  reference : string;
+  photo : string;
+  titre : string;
+  description : string;
+
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
 }
 
 interface Commandes{
@@ -601,6 +751,7 @@ interface Client{
   email:string,
   prenom:string,
   nom:string,
+<<<<<<< HEAD
   //adresse:string,
   //codePostal:string,
   //ville:string,
@@ -619,4 +770,12 @@ interface Adresse {
   adresse: string;
   codePostal: string;
   ville: string;
+=======
+  adresse:string,
+  codePostal:string,
+  ville:string,
+  latitude:string,
+  longitude:string,
+  commandes:string
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
 }

@@ -1,5 +1,9 @@
 <p>infos-tournee-livreurs works!</p>
+<<<<<<< HEAD
 <div *ngFor="let tournee of tournees let i=index">
+=======
+<div *ngFor="let tournee of tournees">  
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
     <table *ngIf="tournee">
         <tr>
           <td>Journee:</td>
@@ -31,7 +35,11 @@
         </tr>
         <tr>
             <td>Client:</td>
+<<<<<<< HEAD
             <td>{{livraison.client.prenom}} {{livraison.client.nom}} {{livraison.client.adresse}}</td>
+=======
+            <td>{{livraison.client.prenom}} {{livraison.client.nom}} {{livraison.client.adresse}} {{livraison.client.codePostal}}</td>
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
         </tr>
         <tr>
             <td>Commandes:</td>
@@ -43,7 +51,13 @@
             </td>
         </tr>
         <hr style="border-top: 1px dashed #000;">
+<<<<<<< HEAD
 
       </table>
       <br>
       </div>
+=======
+      </table>
+      <br>
+      </div> 
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191

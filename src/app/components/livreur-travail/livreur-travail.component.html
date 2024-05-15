@@ -12,8 +12,13 @@
     </tr>-->
     <div *ngIf="getData()">
     <tr *ngFor="let row of livreur">
+<<<<<<< HEAD
         <ng-container *ngIf="row.nom.toUpperCase() === nom.toUpperCase()">
                 <div class="img-container"><img src="../assets/image.png" width="150px"></div>
+=======
+        <ng-container *ngIf="row.nom.toUpperCase() === nom.toUpperCase() && row.trigramme.toUpperCase() === trigramme.toUpperCase()">
+                <div class="img-container"><img src="../assets/PhotosEmployes/{{row.photo}}" width="150px"></div>
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
                 <td>trigramme:</td>
                 <th>{{row.trigramme}}</th>
                 <td>nom:</td>

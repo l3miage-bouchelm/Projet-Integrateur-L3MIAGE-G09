@@ -82,7 +82,11 @@ export class CartoComponent implements OnDestroy {
 
   //location:number[][]=[[5.67959,45.112876],[5.672983,45.187277],[5.804502,45.233075],[5.687907,45.182207],[5.7369725,45.14852]];
   locations:Location[]=[{longitude:5.67959,latitude:45.112876},{longitude:5.672983,latitude:45.187277},{longitude:5.804502,latitude:45.233075},{longitude:5.687907,latitude:45.182207},{longitude:5.7369725,latitude:45.14852},{longitude:5.674091,latitude:45.213553},{longitude:5.630015,latitude:45.165433}];
+<<<<<<< HEAD
   trajet:Trajets={tournees:[
+=======
+  trajet:Trajets={trajets:[
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
     [
       0,
       5,
@@ -98,7 +102,11 @@ export class CartoComponent implements OnDestroy {
       0,
       1
     ]
+<<<<<<< HEAD
   ],longTournees:[
+=======
+  ],longTrajets:[
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
     35645.37,
     42178.82000000001,
     34414.46
@@ -113,6 +121,7 @@ export class CartoComponent implements OnDestroy {
       const locationString=params['location'];
       this.location=JSON.parse(locationString);
       const trajetsString=params['trajets']
+<<<<<<< HEAD
       console.log('Received trajets:', trajetsString);
       this.trajet=JSON.parse(trajetsString);
       if(this.location){
@@ -120,21 +129,38 @@ export class CartoComponent implements OnDestroy {
       }
       console.log('Received trajets:', this.trajet);
       console.log('Received trajets:', this.locations);
+=======
+      this.trajets=JSON.parse(trajetsString);
+      if(this.location){
+        this.locations=this.toLocation(this.location)
+      }
+      console.log('Received trajets:', this.trajets);
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
     });
     let prevLongitude: number | undefined;
     let prevLatitude: number | undefined;
     const numLocations = this.locations.length;
     let index=0;
     if(this.trajet&&this.locations){
+<<<<<<< HEAD
       for(let i=0;i<this.trajet.tournees.length;i++){
         let l:Location[]=[]
         this.trajet.tournees[i].forEach(t=>{
+=======
+      for(let i=0;i<this.trajet.trajets.length;i++){
+        let l:Location[]=[]
+        this.trajet.trajets[i].forEach(t=>{
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
           l.push(this.locations[t])
         });
         this.loc.push(l);
       }
     }
+<<<<<<< HEAD
     console.log(this.trajet.tournees)
+=======
+    console.log(this.trajet.trajets)
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
     console.log("nmsl",this.loc);
     this.loc.forEach(l=>l.forEach
     ( async ({ longitude, latitude }) => {
@@ -143,15 +169,24 @@ export class CartoComponent implements OnDestroy {
         fp.geometry.coordinates.map(L => L.map(PositionToLatLng)),
         {color: "black", fillColor: color, fillOpacity: 0.5}
       );*/
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
       const m = getMarker( PositionToLatLng([longitude,latitude]) );
       if (index === 0) {
         m.setIcon(this.greenIcon)
       }else{
         m.setIcon(this.blueIcon)
       }
+<<<<<<< HEAD
 
 
+=======
+      
+      
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
       // 创建线条
       if (prevLongitude !== undefined && prevLatitude !== undefined) {
         const lineCoordinates = [
@@ -173,12 +208,21 @@ export class CartoComponent implements OnDestroy {
         index=0;
         this.num++;
       }
+<<<<<<< HEAD
 
 
 
     }))
     geoAPI.getCommune('38000').then(console.log);
 
+=======
+      
+      
+      
+    }))
+    geoAPI.getCommune('38000').then(console.log);
+    
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
   }
 
   ngOnDestroy(): void {
@@ -192,13 +236,22 @@ interface Location{
 }
 
 interface Trajets{
+<<<<<<< HEAD
   tournees:number[][],
   longTournees:number[]
+=======
+  trajets:number[][],
+  longTrajets:number[]
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
 }
 
 
 
+<<<<<<< HEAD
 //prend les commande
+=======
+//prend les commande 
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
 //fqit les equipes de  livraison
 // tournees
 
@@ -218,7 +271,11 @@ constructor(private geoAPI: GeoapiService) {
     );
     const m = getMarker( PositionToLatLng(fm.geometry.coordinates) );
     m.setIcon(this.greenIcon)
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
     // 创建线条
     const lineCoordinates = [
       L.latLng(45.166672, 5.71667), // 起点坐标
@@ -226,12 +283,23 @@ constructor(private geoAPI: GeoapiService) {
     ];
     const polyline = new Polyline(lineCoordinates, { color: 'red' });
     this.communes.update(LC => [...LC, m, polyline]);
+<<<<<<< HEAD
 
   })
   geoAPI.getCommune('38000').then(console.log);
 
+=======
+    
+  })
+  geoAPI.getCommune('38000').then(console.log);
+  
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
 }
 
 ngOnDestroy(): void {
   this.subResize?.unsubscribe();
+<<<<<<< HEAD
 }*/
+=======
+}*/
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191

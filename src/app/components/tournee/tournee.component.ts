@@ -31,14 +31,30 @@ export class TourneeComponent implements OnInit{
   tournee:Tournee={id:-1,journee:'',date:new Date(),entrepot:{name:'',
   lettre:'',
   photo:'',
+<<<<<<< HEAD
   adresse:{adresse:'',codePostal:'',ville:''},
   position:{latitude:0,longitude:0}},camion:'',liveurs:[],livraison:[],commandes:[]}
+=======
+  adresse:'',
+  codePostal:'',
+  ville:'',
+  latitude:'',
+  longitude:''},camion:'',liveurs:[],livraison:[],commandes:[]}
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
   entrepotChoisi:string='';
   entrepot:Entrepot={name:'',
   lettre:'',
   photo:'',
+<<<<<<< HEAD
   adresse:{adresse:'',codePostal:'',ville:''},
   position:{latitude:0,longitude:0}};
+=======
+  adresse:'',
+  codePostal:'',
+  ville:'',
+  latitude:'',
+  longitude:''};
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
   camionsChoisi:string='';
   livreursChoisi:Livreur[]=[];
   martix:number[][]=[];
@@ -51,7 +67,10 @@ export class TourneeComponent implements OnInit{
   ngOnInit(): void {
     this.loadTournee();
     this.ngOnInitCompleted = true;
+<<<<<<< HEAD
     console.log(this.clients)
+=======
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
   }
 
   private loadTournee(): void {
@@ -60,7 +79,11 @@ export class TourneeComponent implements OnInit{
       this.tournee = this.sharedService.getTournee()[this.id];
       this.camionsChoisi=this.tournee.camion;
       this.livreursChoisi=this.tournee.liveurs;
+<<<<<<< HEAD
       this.camions=this.camions.filter(camion=>camion.entrepotName===this.entrepotChoisi);
+=======
+      this.camions=this.camions.filter(camion=>camion.entrepot===this.entrepotChoisi);
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
       let e:Entrepot|undefined
       e=this.entrepots.find(en=>en.name==this.entrepotChoisi);
       if(e){
@@ -105,6 +128,7 @@ export class TourneeComponent implements OnInit{
   }
 
   findAdr(commande:Commande){
+<<<<<<< HEAD
     const client= this.clients.find(c=>c.email==commande.client.email);
     console.log(client,'123')
     //console.log('['+client?.latitude+','+client?.longitude+']');
@@ -114,6 +138,17 @@ export class TourneeComponent implements OnInit{
       if(!this.location.some(loc => loc[0] === longitude && loc[1] === latitude)){
         this.location.push([longitude, latitude]);
         return '['+client.position.longitude+','+client.position.latitude+']';
+=======
+    const client= this.clients.find(c=>c.email===commande.client);
+    //console.log(commande)
+    //console.log('['+client?.latitude+','+client?.longitude+']');
+    if(client!==undefined){
+      const longitude = parseFloat(client.longitude);
+      const latitude = parseFloat(client.latitude);
+      if(!this.location.some(loc => loc[0] === longitude && loc[1] === latitude)){
+        this.location.push([longitude, latitude]);
+        return '['+client.longitude+','+client.latitude+']';
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
       }
        
     }
@@ -131,8 +166,13 @@ export class TourneeComponent implements OnInit{
       }
     }
     if(entrepotChoisi!==undefined){
+<<<<<<< HEAD
       this.location.push([entrepotChoisi.position.longitude,entrepotChoisi.position.latitude]);
       body=body+'['+entrepotChoisi?.position.longitude+','+entrepotChoisi?.position.latitude+']';
+=======
+      this.location.push([parseFloat(entrepotChoisi.longitude),parseFloat(entrepotChoisi.latitude)]);
+      body=body+'['+entrepotChoisi?.longitude+','+entrepotChoisi?.latitude+']';
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
       body+='],"metrics":["distance"]}';
       console.log(body);
       console.log(this.location);
@@ -219,13 +259,21 @@ export class TourneeComponent implements OnInit{
   voirInfos(){
     let livraisons:Livraison[]=[];
     this.commandes.forEach(commande=>{
+<<<<<<< HEAD
       const livraison = livraisons.find(l => l.client.email === commande.client.email);
+=======
+      const livraison = livraisons.find(l => l.client.email === commande.client);
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
       if(livraison){
         livraison.commandes.push(commande);
       }else{
         livraisons.push({
           id: livraisons.length + 1, // 这里可以根据需要生成唯一ID
+<<<<<<< HEAD
           client: commande.client,
+=======
+          client: this.getClient(commande.client),
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
           commandes: [commande]
         });
       }
@@ -246,8 +294,16 @@ export class TourneeComponent implements OnInit{
       email:'',
       prenom:'',
       nom:'',
+<<<<<<< HEAD
       adresse:{adresse:'',codePostal:'',ville:''},
       position:{latitude:0,longitude:0},
+=======
+      adresse:'',
+      codePostal:'',
+      ville:'',
+      latitude:'',
+      longitude:'',
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
       commandes:''
     };
     if(cli){
@@ -272,16 +328,30 @@ interface Livreur {
 
 interface Camion{
   immatriculation:string;
+<<<<<<< HEAD
   position:Position;
   entrepotName:string;
+=======
+  latitude:string;
+  longitude:string;
+  entrepot:string;
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
 }
 
 interface Entrepot{
   name:string;
   lettre:string;
   photo:string;
+<<<<<<< HEAD
   adresse: Adresse,
   position: Position,
+=======
+  adresse:string;
+  codePostal:string;
+  ville:string;
+  latitude:string;
+  longitude:string;
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
 }
 
 interface Commande {
@@ -290,7 +360,11 @@ interface Commande {
   dateDeCreation: string;
   note: string;
   commantaire: string;
+<<<<<<< HEAD
   client: Client;
+=======
+  client: string;
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
   ligne: string;
 }
 
@@ -309,6 +383,7 @@ interface Client{
   email:string,
   prenom:string,
   nom:string,
+<<<<<<< HEAD
   //adresse:string,
   //codePostal:string,
   //ville:string,
@@ -329,6 +404,16 @@ interface Adresse {
   ville: string;
 }
 
+=======
+  adresse:string,
+  codePostal:string,
+  ville:string,
+  latitude:string,
+  longitude:string,
+  commandes:string
+}
+
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
 interface ParsedData {
   [key: string]: string;
 }
@@ -353,9 +438,12 @@ interface Livraison{
 interface Trajets{
   trajets:number[][],
   longTrajets:number[]
+<<<<<<< HEAD
 }
 
 interface Position{
   latitude:number,
   longitude:number
+=======
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
 }

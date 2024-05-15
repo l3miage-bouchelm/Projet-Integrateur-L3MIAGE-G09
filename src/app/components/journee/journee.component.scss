@@ -117,5 +117,48 @@
     color: white; 
   }
   td {
+<<<<<<< HEAD
     white-space: nowrap; /* Empêche le contenu de se propager sur plusieurs lignes */
   }
+=======
+    white-space: nowrap;
+  }
+
+  #commandeSelection {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  #commandeSelection td, #commande h3 {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  #commandeSelection tr:nth-child(even){background-color: #f2f2f2;}
+  
+  #commandeSelection tr:hover {background-color: #ddd;}
+  
+  #commandeSelection td {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: dodgerblue;
+    color: white;
+  }
+
+  #instruction {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    border: 1px solid #ddd;
+    padding: 8px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    text-align: left;
+    background-color: dodgerblue;
+    color: white;
+  }
+  
+ 
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
