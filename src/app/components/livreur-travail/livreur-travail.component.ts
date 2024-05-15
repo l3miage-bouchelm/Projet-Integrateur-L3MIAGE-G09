@@ -52,15 +52,13 @@ export class LivreurTravailComponent implements OnInit{
     return result;
   }
 
-  isLoggedIn(livreur:Livreur[]){
+  isLoggedIn(livreur:Livreur[]) : void{
     const filteredLivreur = livreur.filter(item => item.nom === this.nom);
     const filteredTrigramme = livreur.filter(item =>item.trigramme === this.trigramme);
     if (filteredLivreur.length >= 0 && filteredTrigramme.length >= 0) {
         this.sharedService.setData(true);
-        return filteredLivreur.length;
     } else {
         this.sharedService.setData(false);
-        return filteredLivreur.length;
     }
 
   }

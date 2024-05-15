@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class SharedService {
-  private isLoggedIn: boolean = false;
+  public isLoggedIn: boolean = false;
   private employe:Livreur={trigramme:'',prenom:'',nom:'',photo:'',telephone:'',emploi:'',entrepot:'',tournees:''}
   private tournee:Tournee[]=[];
   private commandeOuvert:Commande[]=[];
