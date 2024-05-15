@@ -1,0 +1,40 @@
+
+<table>
+    <!--<tr>
+        <th>trigramme</th>
+        <th>nom</th>
+        <th>prénom</th>
+        <th>photo</th>
+        <th>téléphone</th>
+        <th>emploi</th>
+        <th>entrepôt</th>
+        <th>tournées</th>
+    </tr>-->
+    <div *ngIf="getData()">
+    <tr *ngFor="let row of livreur">
+        <ng-container *ngIf="row.nom.toUpperCase() === nom.toUpperCase()">
+                <div class="img-container"><img src="../assets/image.png" width="150px"></div>
+                <td>trigramme:</td>
+                <th>{{row.trigramme}}</th>
+                <td>nom:</td>
+                <th>{{row.nom}}</th>
+                <td>prénom:</td>
+                <th>{{row.prenom}}</th>     
+                <!--<td class="photo">{{row.photo}}</td>-->
+                <td>téléphone:</td>
+                <th>{{row.telephone}}</th>
+                <td>emploi:</td>
+                <th>{{row.emploi}}</th>
+                <td>entrepôt:</td>
+                <th>{{row.entrepot}}</th>
+                <!--<td class="tournees">{{row.tournees}}</td>-->   
+        </ng-container>
+    </tr>
+    </div>
+</table>
+
+
+
+
+
+

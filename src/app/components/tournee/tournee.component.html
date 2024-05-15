@@ -1,0 +1,47 @@
+<p>tournee works!</p>
+
+
+<div class="tournee-list" >
+      <div>{{livreursChoisi.length}}</div>
+      <div>{{camions.length}}</div>
+      <div>{{entrepots.length}}</div>
+      <div>{{commandes.length}}</div>
+      <div>{{id}}</div>
+    <div class="container">
+      <div class="describe">Entrepot :</div>
+      <select [(ngModel)]="entrepotChoisi">
+        <option [value]="entrepotChoisi">{{ entrepotChoisi }}</option>
+      </select>
+    </div>
+    <br>
+      <div class="container">
+        <div  class="describe">Livreurs :</div>
+        <div *ngFor="let livreur of livreurs">
+          <label *ngIf="livreur.entrepot === entrepotChoisi" class="checkbox-group">
+            <input type="checkbox" [value]="livreur.nom" (change)="toggleSelectionLivreur(livreur,livreursChoisi)" [checked]="ischeked(livreur)"> {{ livreur.nom }}
+          </label>
+        </div>
+      </div>
+      <br>
+      <div class="container">
+        <div  class="describe">Camions :</div>
+        <select [(ngModel)]="camionsChoisi">
+          <option [value]="''">Choisir le Camion</option>
+          <option *ngFor="let camion of camions" [value]="camion.immatriculation">{{ camion.immatriculation }}</option>
+        </select>
+      </div>
+      <!--
+      <br>
+      <div class="container">
+        <div class="describe">Commandes :</div>
+        <div *ngFor="let commande of commandes">
+            <label class="checkbox-group">
+            <input type="checkbox" [value]="commande.commande.reference" [checked]="commande.disabled" (change)="toggleSelectionCommande(commande,commandesChoisi)"> {{ commande.commande.reference }}
+            </label>
+        </div>
+      </div>
+      -->
+      <button (click)="matrice()">calculer matrice</button>
+      <button (click)="voirInfos()">voir infos</button>
+    </div>
+    <br>

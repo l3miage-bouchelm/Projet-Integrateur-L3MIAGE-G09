@@ -1,0 +1,121 @@
+:host {
+    display: block;
+  
+    > section.listes {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 5em;
+      position: relative;
+    }
+  
+    // Style pour les listes
+    mat-list {
+      min-height: 1em;
+      min-width: 10em;
+      margin-top: 20px; /* 添加顶部间距 */
+      padding: 10px; /* 添加内边距 */
+      border: solid black 1px; /* 设置边框 */
+      border-radius: 4px;
+      background-color: #f9f9f9; /* 设置背景颜色 */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加阴影 */
+    }
+  
+    mat-list-item {
+      min-width: 10em;
+      border: solid black 1px;
+      padding: 5px; /* 添加内边距 */
+      margin-bottom: 5px; /* 添加底部间距 */
+      background-color: #fff; /* 设置背景颜色 */
+      cursor: pointer; /* 添加指针样式 */
+    }
+  
+    mat-list-item:hover {
+      background-color: hsl(113, 82%, 47%); /* 鼠标悬停时的背景颜色 */
+    }
+  
+    mat-list-item:last-child {
+      margin-bottom: 0; /* 去除最后一个元素的底部间距 */
+    }
+  }
+  
+  .cdk-drag-preview {
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+      0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  }
+  
+  .cdk-drag-placeholder {
+    opacity: 0;
+  }
+  
+  .cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+  
+  .left {
+    margin-left: 560px;
+  }
+  
+  .middle {
+    margin-left: 110px;
+  }
+  
+  .left, .middle {
+    display: inline-block;
+    position: absolute; 
+  }
+  
+  button {
+    padding: 10px 20px; /* 设置内边距 */
+    font-size: 16px; /* 设置字体大小 */
+    border: none; /* 移除边框 */
+    border-radius: 4px; /* 设置圆角 */
+    background-color: #007bff; /* 设置背景颜色 */
+    color: #ffffff; /* 设置文字颜色 */
+    cursor: pointer; /* 添加指针样式 */
+    transition: background-color 0.3s ease; /* 添加过渡效果 */
+  }
+  
+  button:hover {
+    background-color: #0056b3; /* 鼠标悬停时的背景颜色 */
+  }
+
+  .container {
+    display: flex; /* 设置为 Flexbox 布局 */
+  }
+  
+  .checkbox-group {
+    display: flex; /* 设置为 Flexbox 布局 */
+    flex-direction: column; /* 在垂直方向上排列 */
+    margin-right: 20px; /* 设置组之间的水平间距 */
+  }
+  
+  .checkbox-group input[type="checkbox"] {
+    margin-bottom: 10px; /* 设置复选框之间的垂直间距 */
+    flex-direction: column; /* 在垂直方向上排列 */
+  }
+
+  .describe {
+    margin-right: 10px; /* 设置 div 和 select 之间的间距 */
+    padding: 8px 12px; /* 设置内边距 */
+    font-size: 16px; /* 设置字体大小 */
+    background-color: #f9f9f9; /* 设置背景颜色 */
+  }
+  #commande-select {
+    color: white; 
+    background-color: dodgerblue; 
+    border: 2px solid dodgerblue;
+    padding: 5px;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  
+  #commande-select option {
+    background-color: dodgerblue; 
+    color: white; 
+  }
+  td {
+    white-space: nowrap; /* Empêche le contenu de se propager sur plusieurs lignes */
+  }
