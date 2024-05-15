@@ -22,5 +22,5 @@ export const routes: Routes = [
     { path: 'creation-compte', title:"creationCompte", component: CreationCompteComponent},
     { path: 'infos-tournee', title:"infos d'unes tournee", component:InfosTourneeComponent},
     { path: 'infos-tournee-livreurs', title:"infos d'unes tournee pour livreurs", component:InfosTourneeLivreursComponent},
-    { path: '**', redirectTo: '/connexion' }
+    { path: '**', redirectTo: '/livreur-login' }
 ];
