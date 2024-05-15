@@ -5,11 +5,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class SharedService {
-<<<<<<< HEAD
   private isLoggedIn: boolean = false;
-=======
-  public isLoggedIn: boolean = false;
->>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
   private employe:Livreur={trigramme:'',prenom:'',nom:'',photo:'',telephone:'',emploi:'',entrepot:'',tournees:''}
   private tournee:Tournee[]=[];
   private commandeOuvert:Commande[]=[];
@@ -156,11 +152,7 @@ interface Commande {
   dateDeCreation: string;
   note: string;
   commantaire: string;
-<<<<<<< HEAD
   client: Client;
-=======
-  client: string;
->>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
   ligne: string;
 }
 
@@ -179,7 +171,6 @@ interface Client{
   email:string,
   prenom:string,
   nom:string,
-<<<<<<< HEAD
   //adresse:string,
   //codePostal:string,
   //ville:string,
@@ -200,28 +191,10 @@ interface Adresse {
   ville: string;
 }
 
-=======
-  adresse:string,
-  codePostal:string,
-  ville:string,
-  latitude:string,
-  longitude:string,
-  commandes:string
-}
-
->>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
 interface Entrepot{
   name:string;
   lettre:string;
   photo:string;
-<<<<<<< HEAD
   adresse: Adresse,
   position: Position,
-=======
-  adresse:string;
-  codePostal:string;
-  ville:string;
-  latitude:string;
-  longitude:string;
->>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
 }

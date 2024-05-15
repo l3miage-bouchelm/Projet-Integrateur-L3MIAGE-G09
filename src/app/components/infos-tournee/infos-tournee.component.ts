@@ -13,11 +13,6 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
   styleUrl: './infos-tournee.component.scss'
 })
 export class InfosTourneeComponent  implements OnInit{
-<<<<<<< HEAD
-
-=======
-  
->>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
   constructor(private route: ActivatedRoute,private sharedService:SharedService,private router: Router,private http:HttpClient) { }
 
   tournee:Tournee|undefined
@@ -36,11 +31,7 @@ export class InfosTourneeComponent  implements OnInit{
       this.tournee = JSON.parse(tourneeString); // 将字符串转换为对象
       this.location=JSON.parse(locationString);
       this.trajets=JSON.parse(trajetsString);
-<<<<<<< HEAD
       console.log('Received :', this.trajets);
-=======
-      console.log('Received tournee:', this.trajets);
->>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
     });
     this.commandePrevu=this.sharedService.getCommandePrevu();
     this.tousTournee=this.sharedService.getTournee();
@@ -52,10 +43,7 @@ export class InfosTourneeComponent  implements OnInit{
   }
 
   voirCarte(){
-<<<<<<< HEAD
     console.log('Received :', this.trajets);
-=======
->>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
     this.router.navigate(['/leaflet'], { queryParams: {location:JSON.stringify(this.location),trajets:JSON.stringify(this.trajets)} });
   }
 
@@ -82,11 +70,6 @@ export class InfosTourneeComponent  implements OnInit{
               }
             }
           }
-<<<<<<< HEAD
-
-=======
-          
->>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
         }
         console.log(this.tournee)
         this.sharedService.changeTournee(l,this.tournee)
@@ -115,11 +98,7 @@ export class InfosTourneeComponent  implements OnInit{
       let i=tourneeTrans.livraison.indexOf(liv);
       livraisonTrans.commandes.forEach(c=>{
         tourneeTrans.livraison[i].commandes.push(c)
-<<<<<<< HEAD
       })
-=======
-      })          
->>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
     }else{
       tou.livraison.push(livraisonTrans);
     }
@@ -131,15 +110,9 @@ export class InfosTourneeComponent  implements OnInit{
               this.commandePrevu[k].disabled=true;
             }
           }
-<<<<<<< HEAD
         }
     }
 
-=======
-        }  
-    }
-    
->>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
     livraisonTrans.commandes.forEach(l=>{
       tou.commandes.push(l)
     })
@@ -257,16 +230,8 @@ interface Entrepot{
   name:string;
   lettre:string;
   photo:string;
-<<<<<<< HEAD
   adresse: Adresse,
   position: Position,
-=======
-  adresse:string;
-  codePostal:string;
-  ville:string;
-  latitude:string;
-  longitude:string;
->>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
 }
 
 interface Commande {
@@ -275,11 +240,7 @@ interface Commande {
   dateDeCreation: string;
   note: string;
   commantaire: string;
-<<<<<<< HEAD
   client: Client;
-=======
-  client: string;
->>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
   ligne: string;
 }
 
@@ -298,7 +259,6 @@ interface Client{
   email:string,
   prenom:string,
   nom:string,
-<<<<<<< HEAD
   //adresse:string,
   //codePostal:string,
   //ville:string,
@@ -319,16 +279,6 @@ interface Adresse {
   ville: string;
 }
 
-=======
-  adresse:string,
-  codePostal:string,
-  ville:string,
-  latitude:string,
-  longitude:string,
-  commandes:string
-}
-
->>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
 interface Commandes{
   commande:Commande;
   disabled:boolean;

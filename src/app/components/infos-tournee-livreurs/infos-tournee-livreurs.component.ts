@@ -25,15 +25,9 @@ export class InfosTourneeLivreursComponent implements OnInit{
     console.log(this.tournees.length)
     this.tournees.forEach(t=>{
       t.livraison.forEach(l=>{
-<<<<<<< HEAD
         this.location.push([l.client.position.longitude,l.client.position.latitude])
       })
       this.location.push([t.entrepot.position.longitude,t.entrepot.position.latitude])
-=======
-        this.location.push([parseFloat(l.client.longitude),parseFloat(l.client.latitude)])
-      })
-      this.location.push([parseFloat(t.entrepot.longitude),parseFloat(t.entrepot.latitude)])
->>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
 
     })
     
@@ -160,16 +154,8 @@ interface Entrepot{
   name:string;
   lettre:string;
   photo:string;
-<<<<<<< HEAD
   adresse: Adresse,
   position: Position,
-=======
-  adresse:string;
-  codePostal:string;
-  ville:string;
-  latitude:string;
-  longitude:string;
->>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
 }
 
 interface Commande {
@@ -178,11 +164,7 @@ interface Commande {
   dateDeCreation: string;
   note: string;
   commantaire: string;
-<<<<<<< HEAD
   client: Client;
-=======
-  client: string;
->>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
   ligne: string;
 }
 
@@ -201,7 +183,6 @@ interface Client{
   email:string,
   prenom:string,
   nom:string,
-<<<<<<< HEAD
   adresse: Adresse,
   position: Position,
   commandes:string
@@ -217,16 +198,6 @@ interface Adresse {
   ville: string;
 }
 
-=======
-  adresse:string,
-  codePostal:string,
-  ville:string,
-  latitude:string,
-  longitude:string,
-  commandes:string
-}
-
->>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
 interface Commandes{
   commande:Commande;
   disabled:boolean;

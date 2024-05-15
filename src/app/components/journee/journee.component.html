@@ -1,14 +1,8 @@
 
-<<<<<<< HEAD
-<button (click)="getCsvData()">Charger</button>
-
-<button (click)="changeEtat()">CONFIRMER</button>
-=======
 <button (click)="getCsvData()">CHARGER COMMANDES</button>
 
 <button (click)="changeEtat()">CONFIRMER</button>
 <table id="instruction"><td><h3>Pour Changer l'état d'une commande : Glssez un bloc représentant une commande vers la section voulue puis cliquez sur CONFIRMER </h3></td></table>
->>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
 <section class="listes">
     <ng-container *ngFor="let sig of sigLists(); track sig; let i = index">
         <mat-list role="list" 
@@ -27,25 +21,12 @@
 </section>
 <hr>
 
-<<<<<<< HEAD
-@for (sig of sigLists(); track sig) {
-    <code>{{sig() | json}}</code>
-}
-
-
-<div>{{commandes.length}}</div>
-<div>{{commandeOuvert.length}}</div>
-<div>{{commandePrevu.length}}</div>
-<hr>
-<button (click)="loadTournee()">LOAD</button>
-=======
 
 <div>Nombre total de commandes : {{commandes.length}}</div>
 <div >Commandes Ouvertes : {{commandeOuvert.length}}</div>
 <div >Commandes Prévues : {{commandePrevu.length}}</div>
 <hr>
 <button (click)="loadTournee()">CHARGER TOURNEE</button>
->>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
 <div *ngIf="tourneeV">
   <div class="container">
     <div  class="describe">Jour :</div>
@@ -73,34 +54,6 @@
 </div>
 <hr>
 <select (click)="selectionnerCommande($event)" id="commande-select">
-<<<<<<< HEAD
-<option [value]=""> Commandes</option>
-<option *ngFor="let commande of commandes" id="commande-select">{{commande.reference}}</option>
-</select>
-<table *ngIf="commandeSelectionnee" >
-    <tr *ngIf="commandeSelectionnee.reference">
-      <td>Reference :{{commandeSelectionnee.reference }}</td>
-    </tr>
-    <tr *ngIf="commandeSelectionnee.dateDeCreation">
-      <td>Date de Creation : {{commandeSelectionnee.dateDeCreation}}</td>
-    </tr>
-    <tr *ngIf="commandeSelectionnee.client">
-      <td>Client :{{commandeSelectionnee.client }}</td>
-    </tr>
-    <tr *ngIf="commandeSelectionnee.etat">
-      <td>Etat :{{commandeSelectionnee.etat }}</td>
-    </tr>
-    <tr *ngIf="commandeSelectionnee.ligne">
-      <td>ligne :{{commandeSelectionnee.ligne }}</td>
-    </tr>
-    <tr *ngIf="commandeSelectionnee.note">
-      <td>note :{{commandeSelectionnee.note }}</td>
-    </tr>
-    <tr *ngIf="commandeSelectionnee.note">
-      <td>commentaire :{{commandeSelectionnee.commantaire }}</td>
-    </tr>
-
-=======
 <option [value]="">Détails Commande</option>
 <option *ngFor="let commande of commandes" id="commande-select">{{commande.reference}}</option>
 </select>
@@ -112,10 +65,10 @@
       <td>Date de Creation : </td><td>{{commandeSelectionnee.dateDeCreation}}</td>
     </tr>
     <tr *ngIf="commandeSelectionnee.client">
-      <td>Client :</td><td>{{nomClient?.prenom}} {{nomClient?.nom}}</td>
+      <td>Client :</td><td>{{commandeSelectionnee.client.prenom}} {{commandeSelectionnee.client.nom}}</td>
     </tr>
     <tr *ngIf="commandeSelectionnee.client">
-      <td>Adresse :</td><td>{{nomClient?.adresse}} </td>
+      <td>Adresse :</td><td>{{commandeSelectionnee.client.adresse}} </td>
     </tr>
     <tr *ngIf="commandeSelectionnee.etat">
       <td>Etat :</td><td>{{commandeSelectionnee.etat }}</td>
@@ -129,5 +82,4 @@
     <tr *ngIf="commandeSelectionnee.commantaire">
       <td>commentaire :</td><td>{{commandeSelectionnee.commantaire }}</td>
     </tr>
->>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
 </table>
