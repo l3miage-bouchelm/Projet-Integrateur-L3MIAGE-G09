@@ -1,3 +1,4 @@
+
 <mat-toolbar color="primary">
   <button mat-icon-button (click)="drawer.toggle()">
     <mat-icon>menu</mat-icon>
@@ -12,11 +13,7 @@
      
 </div>
 <div class="dropdown">
-<<<<<<< HEAD
-<button  id="google" class="dropbtn" *ngIf="getData()">Bonjour {{getEmploye().nom}}</button>
-=======
 <button  id="google" class="dropbtn" *ngIf="getData()">{{getEmploye().prenom}} {{getEmploye().nom}}</button>
->>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
  </div> 
 
 
@@ -27,18 +24,10 @@
     <mat-nav-list>
       <a mat-list-item routerLink="/connexion" routerLinkActive="active" *ngIf="!getData()">Présentation</a>
       <a mat-list-item routerLink="/leaflet" *ngIf="getData()">Cartographie</a>
-<<<<<<< HEAD
-      <a mat-list-item routerLink="/lists" routerLinkActive="active" *ngIf="getData()">Listes</a>
-      <a mat-list-item routerLink="/journee" routerLinkActive="active" *ngIf="getData()">Journee</a>
-      <a mat-list-item routerLink="/livreur-travail" routerLinkActive="active" *ngIf="getData()">Profil</a>
-      <a mat-list-item routerLink="/infos-tournee" routerLinkActive="active" *ngIf="getData()">infos</a>
-      <a mat-list-item routerLink="/infos-tournee-livreurs" routerLinkActive="active" *ngIf="getData()">infos liv</a>
-=======
       <a mat-list-item routerLink="/journee" routerLinkActive="active" *ngIf="getData()">Journee</a>
       <a mat-list-item routerLink="/livreur-travail" routerLinkActive="active" *ngIf="getData()">Profil</a>
       <a mat-list-item routerLink="/infos-tournee" routerLinkActive="active" *ngIf="getData()">infos</a>
       <a mat-list-item routerLink="/infos-tournee-livreurs" routerLinkActive="active" *ngIf="getData()">infos livreur</a>
->>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
     </mat-nav-list>
   </mat-drawer>
 
@@ -46,4 +35,42 @@
     <router-outlet></router-outlet>
   </section>
   
+=======
+<mat-toolbar color="primary">
+  <button mat-icon-button (click)="drawer.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <div class="dropdown" *ngIf="!getData()">
+    <button  id="google" class="dropbtn" >Connexion</button>
+     <mat-nav-list class="dropdown-content">
+       <a  mat-list-item routerLink="/connexion" routerLinkActive="active">Client</a><br>
+       <a  mat-list-item routerLink="/connexion" routerLinkActive="active">Pro</a><br>
+       
+     </mat-nav-list>  
+     
+</div>
+<div class="dropdown">
+<button  id="google" class="dropbtn" *ngIf="getData()">{{getEmploye().prenom}} {{getEmploye().nom}}</button>
+ </div> 
+
+
+</mat-toolbar>
+
+<mat-drawer-container class="example-container" autosize>
+  <mat-drawer #drawer mode="side">
+    <mat-nav-list>
+      <a mat-list-item routerLink="/connexion" routerLinkActive="active" *ngIf="!getData()">Présentation</a>
+      <a mat-list-item routerLink="/leaflet" *ngIf="getData()">Cartographie</a>
+      <a mat-list-item routerLink="/journee" routerLinkActive="active" *ngIf="getData()">Journee</a>
+      <a mat-list-item routerLink="/livreur-travail" routerLinkActive="active" *ngIf="getData()">Profil</a>
+      <a mat-list-item routerLink="/infos-tournee" routerLinkActive="active" *ngIf="getData()">infos</a>
+      <a mat-list-item routerLink="/infos-tournee-livreurs" routerLinkActive="active" *ngIf="getData()">infos livreur</a>
+    </mat-nav-list>
+  </mat-drawer>
+
+  <section class="content">
+    <router-outlet></router-outlet>
+  </section>
+  
+>>>>>>> 4d93b5eaad341077ba9d9163750d2e71240d4191
 </mat-drawer-container>

@@ -24,6 +24,7 @@ export class ConnexionComponent {
     localStorage.setItem('livreurNom', this.nom);
     localStorage.setItem('livreurTrigramme', this.trigramme);
     this.router.navigate(['/livreur-travail']);
+
     }
 
  
