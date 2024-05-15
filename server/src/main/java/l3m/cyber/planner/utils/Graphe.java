@@ -337,6 +337,22 @@ public class Graphe implements Cloneable {
         return T;
     }
 
+    public ArrayList<Integer> generateHamiltonianCycle(ArrayList<Integer> dfsPath) {
+        Set<Integer> visited = new HashSet<>();
+        ArrayList<Integer> hamiltonianPath = new ArrayList<>();
+
+        for (int v : dfsPath) {
+            if (!visited.contains(v)) {
+                visited.add(v);
+                hamiltonianPath.add(v);
+            }
+        }
+        hamiltonianPath.add(hamiltonianPath.get(0)); // 回到起点
+
+        return hamiltonianPath;
+    }
+
+
     public double getPoids(int i, int j) {
         return poidsA[i][j];
     }/////diagramme中没有的方法
@@ -345,7 +361,8 @@ public class Graphe implements Cloneable {
     // Version un pour permettre l'intégration de cette partie avec les autres parties du projet sans causer d'erreurs, triez et produisez les sorties dans l'ordre croissant des numéros
     public ArrayList<Integer> tsp(int debut) {
         Graphe minT = this.Kruskal();  // 获取最小生成树
-        return minT.parcoursProfondeur(debut);  // 从指定的起点开始DFS遍历
+        ArrayList<Integer> dfspath = minT.parcoursProfondeur(debut);
+        return generateHamiltonianCycle(dfspath);  // 从指定的起点开始DFS遍历
         //返回的是一个tournne
     }
 

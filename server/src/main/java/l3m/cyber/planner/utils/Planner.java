@@ -60,6 +60,7 @@ public class Planner{
         Graphe graphe = new Graphe(this.distances,selec);
         //graphe.printMatrices();
         ArrayList<Integer> uneTournee = graphe.tsp(debut);
+        uneTournee.remove(uneTournee.size() - 1);
         return uneTournee;
     }
 
