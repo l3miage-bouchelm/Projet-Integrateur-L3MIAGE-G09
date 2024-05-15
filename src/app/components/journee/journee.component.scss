@@ -117,5 +117,28 @@
     color: white; 
   }
   td {
-    white-space: nowrap; /* Empêche le contenu de se propager sur plusieurs lignes */
+    white-space: nowrap;
+  }
+
+  #commandeSelection {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  #commandeSelection td, #commande h3 {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  #commandeSelection tr:nth-child(even){background-color: #f2f2f2;}
+  
+  #commandeSelection tr:hover {background-color: #ddd;}
+  
+  #commandeSelection td {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: dodgerblue;
+    color: white;
   }

@@ -60,27 +60,32 @@
 <option [value]=""> Commandes</option>
 <option *ngFor="let commande of commandes" id="commande-select">{{commande.reference}}</option>
 </select>
-<table *ngIf="commandeSelectionnee" >
+<table *ngIf="commandeSelectionnee"  id="commandeSelection">
     <tr *ngIf="commandeSelectionnee.reference">
-      <td>Reference :{{commandeSelectionnee.reference }}</td>
+      <td>Reference :</td><td>{{commandeSelectionnee.reference }}</td>
     </tr>
     <tr *ngIf="commandeSelectionnee.dateDeCreation">
-      <td>Date de Creation : {{commandeSelectionnee.dateDeCreation}}</td>
+      <td>Date de Creation : </td><td>{{commandeSelectionnee.dateDeCreation}}</td>
     </tr>
     <tr *ngIf="commandeSelectionnee.client">
-      <td>Client :{{commandeSelectionnee.client }}</td>
+      <td>Client :</td><td>{{nomClient?.prenom}} {{nomClient?.nom}}</td>
+    </tr>
+    <tr *ngIf="commandeSelectionnee.client">
+      <td>Adresse :</td><td>{{nomClient?.adresse}} </td>
     </tr>
     <tr *ngIf="commandeSelectionnee.etat">
-      <td>Etat :{{commandeSelectionnee.etat }}</td>
+      <td>Etat :</td><td>{{commandeSelectionnee.etat }}</td>
     </tr>
     <tr *ngIf="commandeSelectionnee.ligne">
-      <td>ligne :{{commandeSelectionnee.ligne }}</td>
+      <td>ligne :</td><td>{{commandeSelectionnee.ligne }}</td>
     </tr>
     <tr *ngIf="commandeSelectionnee.note">
-      <td>note :{{commandeSelectionnee.note }}</td>
+      <td>heure :</td><td>{{commandeSelectionnee.note }}</td>
     </tr>
-    <tr *ngIf="commandeSelectionnee.note">
-      <td>commentaire :{{commandeSelectionnee.commantaire }}</td>
+    <tr *ngIf="commandeSelectionnee.commantaire">
+      <td>commentaire :</td><td>{{commandeSelectionnee.commantaire }}</td>
     </tr>
-
+    <tr *ngIf="commandeSelectionnee.ligne">
+      <td>commentaire :</td><td>{{commandeSelectionnee.ligne }}</td>
+    </tr>
 </table>

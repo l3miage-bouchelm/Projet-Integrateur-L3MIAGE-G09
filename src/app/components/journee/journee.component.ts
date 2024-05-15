@@ -33,22 +33,35 @@ export class JourneeComponent implements AfterViewInit,OnInit {
   commandePrevu:Commandes[]=[];
   tournees:Tournee[]=[];
   clients:Client[]=[];
+  produits : Produit[]=[];
   entrepotChoisi:string='';
   tourneeV:boolean=false;
   day:string='today'
   today:number[]=[]
   tomorrow:number[]=[]
-  commandeSelectionnee : Commande | null = ({
+  commandeSelectionnee : Commande | null ={
     reference: '',
     etat: '',
     dateDeCreation: '',
     note: '',
     commantaire: '',
     client: '',
-    ligne: ''
-  });
-
+    ligne: '',
+  };
+  nomClient : Client | null ={
+    email: '',
+    prenom:'',
+    nom:'',
+    adresse:'',
+    codePostal:'',
+    ville:'',
+    latitude:'',
+    longitude:'',
+    commandes:''
+  };
   
+  
+
   
 
 
@@ -114,6 +127,7 @@ export class JourneeComponent implements AfterViewInit,OnInit {
     this.http.get('./assets/Export_Commandes.csv',{responseType:'text'})
     .subscribe(data=>{
       this.commandes=this.lireCommande(data);
+      this.clients = this.lireClient(data);
     },
   );
     this.commandeOuvert=this.commandes.filter(commande => commande.etat === "ouverte");
@@ -143,10 +157,32 @@ export class JourneeComponent implements AfterViewInit,OnInit {
         dateDeCreation:obj[headers[2]],
         note:obj[headers[3]],
         commantaire:obj[headers[4]],
-        ligne:obj[headers[5]],
+        ligne:obj[headers[7]],
         client:obj[headers[6]],
       }
       result.push(commande);
+    }
+    return result;
+  }
+  lireProduit(csvData:string){
+    const lines=csvData.split('\n');
+    const result:Produit[]= [];
+
+    const headers=lines[0].split(',');
+    for(let i=1;i<lines.length;i++){
+      const obj: ParsedData = {};
+      const currentLine=lines[i].split(',');
+      for(let j=0;j<headers.length;j++){
+        obj[headers[j]]=currentLine[j];
+      }
+      const produits:Produit={
+        reference:obj[headers[0]],
+        photo:obj[headers[1]],
+        titre:obj[headers[2]],
+        description:obj[headers[3]],
+      
+      }
+      result.push(produits);
     }
     return result;
   }
@@ -260,6 +296,11 @@ export class JourneeComponent implements AfterViewInit,OnInit {
       console.log(this.clients)
     },
   );
+  this.http.get('./assets/Export_Employés.csv',{responseType:'text'})
+  .subscribe(data=>{
+    this.produits=this.lireProduit(data);
+  },
+);
   }
 
   changeEtat(){
@@ -285,24 +326,35 @@ export class JourneeComponent implements AfterViewInit,OnInit {
     this.sharedService.setCommandePrevu(this.commandePrevu)
   }
 
-
+  getNomClient(email: string): Client | null {
+    const clientTrouve = this.clients.find(client => client.email === email);
+    return clientTrouve ? clientTrouve : null;
+  }
 
   selectionnerCommande(event: Event) {
     const selectedIndex = (event.target as HTMLSelectElement).selectedIndex;
     const selectedOption = (event.target as HTMLSelectElement).options[selectedIndex];
     const numeroCommande = selectedOption.value;
   
-    if (numeroCommande) {
+    /* if (numeroCommande) {
       const commandeTrouvee = this.commandes.find(commande => commande.reference === numeroCommande);
       this.commandeSelectionnee = commandeTrouvee ? commandeTrouvee : null;
+    }*/
+  
+    if (numeroCommande) {
+      const commandeTrouvee = this.commandes.find(commande => commande.reference === numeroCommande);
+      if (commandeTrouvee) {
+        this.commandeSelectionnee = commandeTrouvee;
+        const nomClient = this.getNomClient(commandeTrouvee.client);
+        this.nomClient = nomClient ? nomClient : null;
+      } 
     }
   }
-  
-  
  
 
 
- addTournee() {
+
+  addTournee() {
     let idt=this.idTournee()
     //this.tournees.push({id:this.tournees.length+1,journee:'',date:new Date(),entrepot:'',camion:'',liveurs:[],livraison:[],commandes:[]});
     this.sharedService.addTournee({id:idt,journee:this.getNomJournee(),date:new Date(),entrepot:{name:'',
@@ -463,6 +515,13 @@ interface Entrepot{
   ville:string;
   latitude:string;
   longitude:string;
+}
+interface Produit{
+  reference : string;
+  photo : string;
+  titre : string;
+  description : string;
+
 }
 
 interface Commandes{
