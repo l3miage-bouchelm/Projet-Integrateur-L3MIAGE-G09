@@ -31,7 +31,7 @@ public class Graphe implements Cloneable {
     }
     
     //Il génère des noms de sommets par défaut en fonction du nombre de sommets. Cela convient pour une matrice entièrement pondérée
-    public Graphe(Double[][] poidsA,int n){
+    public Graphe(Double[][] poidsA, int n){
         this.nbSommets = n;
         this.poidsA = poidsA;
         this.adj = new int[n][n];
@@ -65,6 +65,7 @@ public class Graphe implements Cloneable {
         this.nomSommets = nomSommets;
 
         // Initialiser la matrice de poids et la matrice d'adjacence
+
         for (int i = 0; i < nbSommets; i++) {
             for (int j = 0; j < nbSommets; j++) {
                 if (nomSommets.contains(i) && nomSommets.contains(j)) {  // 只在nomSommets列表中的顶点之间设置权重
@@ -81,6 +82,18 @@ public class Graphe implements Cloneable {
             }
         }
     }
+
+    // 打印矩阵的方法
+//    public void printMatrices() {
+//        System.out.println("Weight Matrix (poidsA):");
+//        for (Double[] row : poidsA) {
+//            System.out.println(Arrays.toString(row));
+//        }
+//        System.out.println("\nAdjacency Matrix (adj):");
+//        for (int[] row : adj) {
+//            System.out.println(Arrays.toString(row));
+//        }
+//    }
 
 
     ///Convient pour créer un graphe non pondéré ou un graphe dont les poids sont traités séparément,
@@ -240,14 +253,16 @@ public class Graphe implements Cloneable {
                 Collections.sort(connectedEdges, Comparator.comparingDouble(Triplet::getPoids));
 
                 // Presser les nœuds triés sur la pile
+
                 for (Triplet edge : connectedEdges) {
                     stack.push(edge.getC2());
                 }
             }
         }
-
         return path;
+
     }
+
 
 
 
@@ -262,6 +277,7 @@ public class Graphe implements Cloneable {
     public List<Triplet> listeAretes(){
         List<Triplet> list = new ArrayList<>();
         for(int i=0;i<this.nbSommets;i++){
+
             for (int j = i + 1; j < this.nbSommets; j++) { // // Notez le changement qui consiste à n'ajouter des arêtes que lorsque j > i. Cela permet d'éviter qu'une arête soit ajoutée deux fois.
                 if(this.poidsA[i][j] != 0){
                     Triplet edge = new Triplet(i, j, this.poidsA[i][j]);
@@ -301,15 +317,18 @@ public class Graphe implements Cloneable {
     }
 
     public Graphe Kruskal() {
+
         // Créer un graphe vide T, en copiant la structure du graphe actuel mais sans copier les arêtes
         // Donc ici, on n'utilise pas le clonage
         Graphe T = new Graphe(this.nbSommets);
         List<Triplet> sortedEdges = this.aretesTriees(true); // Trier les arêtes du graphe actuel par ordre croissant de poids
+
         UnionFind uf = new UnionFind(this.nbSommets);
 
         for (Triplet edge : sortedEdges) {
             int u = edge.getC1();
             int v = edge.getC2();
+
             if (uf.find(u) != uf.find(v)) { // Vérifier si ces deux sommets sont déjà dans la même composante connexe
                 T.ajouterArete(u, v, edge.getPoids()); // Ajouter l'arête à T
                 uf.union(u, v); // Fusionner les deux composantes connexes dans la structure Union-Find
@@ -321,6 +340,7 @@ public class Graphe implements Cloneable {
         }
         return T;
     }
+
 
     public ArrayList<Integer> generateHamiltonianCycle(ArrayList<Integer> dfsPath) {
         Set<Integer> visited = new HashSet<>();
@@ -338,9 +358,11 @@ public class Graphe implements Cloneable {
     }
 
 
+
     public double getPoids(int i, int j) {
         return poidsA[i][j];
     }/////diagramme中没有的方法
+
 
     // Générer des graphes aléatoires qui satisfont l'inégalité triangulaire
     public static Graphe generateRandomGraphWithTriangleInequality(int n) {
@@ -382,6 +404,7 @@ public class Graphe implements Cloneable {
         Graphe minT = this.Kruskal();
         ArrayList<Integer> dfspath = minT.parcoursProfondeur(debut);
         return generateHamiltonianCycle(dfspath);
+
 
     }
 

@@ -1,12 +1,12 @@
 package l3m.cyber.planner.utils;
 
-import java.util.ArrayList;
-
 import l3m.cyber.planner.requests.PlannerParameter;
 import l3m.cyber.planner.responses.PlannerResult;
 
+import java.util.ArrayList;
 
-public class Planner{
+
+public class Planner {
     Double[][] distances;
     int k;
     int debut;

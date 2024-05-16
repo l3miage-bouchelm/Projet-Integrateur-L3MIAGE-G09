@@ -8,12 +8,20 @@ import java.util.*;
 import l3m.cyber.planner.responses.PlannerResult;
 import l3m.cyber.planner.utils.Graphe;
 import l3m.cyber.planner.utils.PartitionAlea;
+import l3m.cyber.planner.requests.PlannerParameter;
+import l3m.cyber.planner.utils.Graphe;
+import l3m.cyber.planner.utils.PartitionAlea;
+import l3m.cyber.planner.utils.Planner;
 import l3m.cyber.planner.utils.Triplet;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import l3m.cyber.planner.requests.PlannerParameter;
-import l3m.cyber.planner.utils.Planner;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -162,11 +170,14 @@ class PlannerApplicationTests {
 	 //En raison de la méthode aléatoire utilisée ici, je ne peux pas prédire le résultat et je ne peux donc que vérifier qu'il n'est pas nul.
 
 
+	//由于构造器的问题，权重矩阵为null，所以tsp没法顺利调用，那么测试也没法通过
 	@Test
 	public void testUniquePointGraphe() {
 		Graphe UniquePointGraphe = new Graphe(1);
 		ArrayList<Integer> resultat = UniquePointGraphe.tsp(0);
+
 		assertEquals( 1, resultat.size()-1);
+
 		assertEquals( Integer.valueOf(0), resultat.get(0));
 	}
 
@@ -267,7 +278,10 @@ class PlannerApplicationTests {
 
 		System.out.println("Poids total du TSP: " + tspWeight);
 		assertTrue(tspWeight <= 2 * totalWeight, "Le poids du TSP devrait être inférieur ou égal à deux fois le poids du MST");
+
 	}
+
+
 
 
 
@@ -398,6 +412,7 @@ class PlannerApplicationTests {
 		Planner pl= new Planner(param);
 		pl.result();
 		ArrayList< ArrayList<Integer>> Ar = new ArrayList< ArrayList<Integer> >();
+
 		Ar.add(new ArrayList<>(List.of(start, 1, 2,4)));
 		Ar.add(new ArrayList<>(List.of(start, 5, 3)));
 
@@ -416,6 +431,7 @@ class PlannerApplicationTests {
 		};
 		int k = 2;
 		int start = 3;
+
 		PlannerParameter param = new PlannerParameter(matrix, k, start);
 		Planner pl = new Planner(param);
 		pl.result();

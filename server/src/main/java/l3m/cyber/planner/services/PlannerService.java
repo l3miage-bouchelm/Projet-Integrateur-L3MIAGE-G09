@@ -1,8 +1,8 @@
 package l3m.cyber.planner.services;
 
-import l3m.cyber.planner.utils.Planner;
 import l3m.cyber.planner.requests.PlannerParameter;
 import l3m.cyber.planner.responses.PlannerResult;
+import l3m.cyber.planner.utils.Planner;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
