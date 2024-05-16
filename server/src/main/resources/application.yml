@@ -2,4 +2,5 @@ spring:
   application:
     name: "planer"
 server:
+  address: 130.190.78.146
   port: 4201
