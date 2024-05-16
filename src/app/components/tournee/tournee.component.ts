@@ -181,7 +181,7 @@ export class TourneeComponent implements OnInit{
           this.m.matrix=matrix;
           this.m.start=matrix.length-1;
           console.log('matrix 已被赋值:', this.m);
-          this.http.post<Trajets>('http://localhost:4201/planner/planif', this.m)
+          this.http.post<Trajets>('http://130.190.78.146:4201/planner/planif', this.m)
               .subscribe(
                   (response) => {
                       console.log('Post request successful:', response);

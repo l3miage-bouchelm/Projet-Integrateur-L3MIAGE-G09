@@ -1,6 +1,7 @@
 <p>infos-tournee-livreurs works!</p>
 <div *ngFor="let tournee of tournees let i=index">
     <table *ngIf="tournee">
+      <button (click)="voirinfos(i)" >Voir La Carte</button>
         <tr>
           <td>Journee:</td>
           <td>{{tournee.journee}}</td>

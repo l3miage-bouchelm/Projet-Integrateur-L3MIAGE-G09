@@ -1,43 +1,42 @@
 .container {
-    display: flex; /* 设置为 Flexbox 布局 */
-  }
-  
-  .checkbox-group {
-    display: flex; /* 设置为 Flexbox 布局 */
-    flex-direction: column; /* 在垂直方向上排列 */
-    margin-right: 20px; /* 设置组之间的水平间距 */
-  }
-  
-  .checkbox-group input[type="checkbox"] {
-    margin-bottom: 10px; /* 设置复选框之间的垂直间距 */
-    flex-direction: column; /* 在垂直方向上排列 */
-  }
+  display: flex; /* 设置为 Flexbox 布局 */
+}
 
-  .describe {
-    margin-right: 10px; /* 设置 div 和 select 之间的间距 */
-    padding: 8px 12px; /* 设置内边距 */
-    font-size: 16px; /* 设置字体大小 */
-    background-color: #f9f9f9; /* 设置背景颜色 */
-  }
+.checkbox-group {
+  display: flex; /* 设置为 Flexbox 布局 */
+  flex-direction: column; /* 在垂直方向上排列 */
+  margin-right: 20px; /* 设置组之间的水平间距 */
+}
 
-  select {
-    padding: 8px 12px; /* 设置内边距 */
-    font-size: 16px; /* 设置字体大小 */
-    border: 1px solid #ccc; /* 设置边框 */
-    border-radius: 4px; /* 设置边框圆角 */
-    background-color: #f9f9f9; /* 设置背景颜色 */
-    cursor: pointer; /* 设置鼠标样式 */
-  }
-  
-  select:focus {
-    outline: none; /* 去除选中时的外边框 */
-    border-color: #007bff; /* 修改选中时的边框颜色 */
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* 添加选中时的阴影效果 */
-  }
-  
-  option {
-    padding: 8px 12px; /* 设置内边距 */
-    font-size: 16px; /* 设置字体大小 */
-    cursor: pointer; /* 设置鼠标样式 */
-  }
-  
+.checkbox-group input[type="checkbox"] {
+  margin-bottom: 10px; /* 设置复选框之间的垂直间距 */
+  flex-direction: column; /* 在垂直方向上排列 */
+}
+
+.describe {
+  margin-right: 10px; /* 设置 div 和 select 之间的间距 */
+  padding: 8px 12px; /* 设置内边距 */
+  font-size: 16px; /* 设置字体大小 */
+  background-color: #f9f9f9; /* 设置背景颜色 */
+}
+
+select {
+  padding: 8px 12px; /* 设置内边距 */
+  font-size: 16px; /* 设置字体大小 */
+  border: 1px solid #ccc; /* 设置边框 */
+  border-radius: 4px; /* 设置边框圆角 */
+  background-color: #f9f9f9; /* 设置背景颜色 */
+  cursor: pointer; /* 设置鼠标样式 */
+}
+
+select:focus {
+  outline: none; /* 去除选中时的外边框 */
+  border-color: #007bff; /* 修改选中时的边框颜色 */
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* 添加选中时的阴影效果 */
+}
+
+option {
+  padding: 8px 12px; /* 设置内边距 */
+  font-size: 16px; /* 设置字体大小 */
+  cursor: pointer; /* 设置鼠标样式 */
+}

@@ -31,7 +31,7 @@ export class InfosTourneeComponent  implements OnInit{
       this.tournee = JSON.parse(tourneeString); // 将字符串转换为对象
       this.location=JSON.parse(locationString);
       this.trajets=JSON.parse(trajetsString);
-      console.log('Received :', this.trajets);
+      console.log('Received :', trajetsString);
     });
     this.commandePrevu=this.sharedService.getCommandePrevu();
     this.tousTournee=this.sharedService.getTournee();

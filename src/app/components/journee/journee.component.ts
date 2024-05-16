@@ -125,7 +125,7 @@ export class JourneeComponent implements AfterViewInit,OnInit {
     console.log( sigTarget() )
   }
   getCsvData(){
-    this.http.get('http://localhost:8080/commandes',{responseType:'text'})
+    this.http.get('http://130.190.78.146:8080/commandes',{responseType:'text'})
     .subscribe(data=>{
       this.commandes=this.lireCommande(data);
     },
@@ -339,24 +339,24 @@ export class JourneeComponent implements AfterViewInit,OnInit {
   }
 
   lireInfos(){
-    this.http.get('http://localhost:8080/employes/livreurs',{responseType:'text'})
+    this.http.get('http://130.190.78.146:8080/employes/livreurs',{responseType:'text'})
     .subscribe(data=>{
       this.livreurs=this.lireLivreur(data);
     },
   );
-  this.http.get('http://localhost:8080/camions',{responseType:'text'})
+  this.http.get('http://130.190.78.146:8080/camions',{responseType:'text'})
     .subscribe(data=>{
       this.camions=this.lireCamion(data);
     },
   );
-  this.http.get('http://localhost:8080/entrepots',{responseType:'text'})
+  this.http.get('http://130.190.78.146:8080/entrepots',{responseType:'text'})
     .subscribe(data=>{
       //console.log(data);
       this.entrepots=this.lireEntrepot(data);
       //console.log(this.entrepots);
     },
   );
-  this.http.get('http://localhost:8080/clients',{responseType:'text'})
+  this.http.get('http://130.190.78.146:8080/clients',{responseType:'text'})
     .subscribe(data=>{
       this.clients=this.lireClient(data);
     },
@@ -373,7 +373,7 @@ export class JourneeComponent implements AfterViewInit,OnInit {
           this.commandeOuvert[j].etat='PLANIFIEE';
           this.commandePrevu.push({commande:this.commandeOuvert[j],disabled:false,tourneeID:-1});
           console.log(this.commandeOuvert[j].reference);
-                this.http.put('http://localhost:8080/commandes/'+this.commandeOuvert[j].reference,this.commandeOuvert[j])
+                this.http.put('http://130.190.78.146:8080/commandes/'+this.commandeOuvert[j].reference,this.commandeOuvert[j])
     .subscribe(data=>{
       console.log(data);
     },
@@ -437,7 +437,7 @@ export class JourneeComponent implements AfterViewInit,OnInit {
     .subscribe(data=>{
       console.log(data);
     },*/
-    this.http.post('http://localhost:8080/api/v1/tournees/create', {
+    this.http.post('http://130.190.78.146:8080/api/v1/tournees/create', {
       reference: 'idtt',
       etat: 'PLANIFIEE', // replace with actual value
       lettre: 'asss', // replace with actual value

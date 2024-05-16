@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../../services/shared.service';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-infos-tournee-livreurs',
@@ -23,25 +24,19 @@ export class InfosTourneeLivreursComponent implements OnInit{
       }
     })
     console.log(this.tournees.length)
-    this.tournees.forEach(t=>{
-      t.livraison.forEach(l=>{
-        this.location.push([l.client.position.longitude,l.client.position.latitude])
-      })
-      this.location.push([t.entrepot.position.longitude,t.entrepot.position.latitude])
 
-    })
-    
+
     console.log(this.location)
   }
 
 
-  constructor(private sharedService:SharedService,private http:HttpClient){}
+  constructor(private sharedService:SharedService,private http:HttpClient,private router: Router){}
 
   tournees:Tournee[]=[];
   tousTournee:Tournee[]=[];
   location:number[][]=[]
   m:Matrice={k:0,matrix:[],start:0}
-  trajet:Trajets[]=[]
+  trajet:Trajets|undefined
 
   tostring(){
     let body='{"locations":[';
@@ -58,60 +53,92 @@ export class InfosTourneeLivreursComponent implements OnInit{
     return body;
   }
 
-  matrice(tournee:Tournee){
-    let request = new XMLHttpRequest();
-    let matrix;
+  setLocation(index: number): Promise<void> {
+    return new Promise((resolve) => {
+      this.location = [];
+      this.tournees[index].livraison.forEach(l => {
+        this.location.push([l.client.position.longitude,l.client.position.latitude]);
+      });
+      this.location.push([this.tournees[index].entrepot.position.longitude,this.tournees[index].entrepot.position.latitude]);
+      resolve();
+    });
+  }
 
+  getnum(index:number){
+    let i=this.tournees[index].liveurs.find(l=>l.trigramme==this.sharedService.getEmploye().trigramme)
+    if(i){
+      console.log(this.tournees[index].liveurs.indexOf(i))
+      return this.tournees[index].liveurs.indexOf(i)
+    }
+    return -1
+  }
 
-    request.open('POST', "https://api.openrouteservice.org/v2/matrix/driving-car");
+  async voirinfos(index: number) {
+    try {
+      await this.setLocation(index);
+      await this.matrice(this.tournees[index]);
+      this.router.navigate(['/leaflet'], { queryParams: { location: JSON.stringify(this.location), trajets: JSON.stringify(this.trajet) } });
+    } catch (error) {
+      console.error('Error in voirinfos:', error);
+    }
+  }
 
-    request.setRequestHeader('Accept', 'application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8');
-    request.setRequestHeader('Content-Type', 'application/json');
-    request.setRequestHeader('Authorization', '5b3ce3597851110001cf6248366ddf83a2ee4d23ba9481ec85060854');
+  matrice(tournee: Tournee): Promise<void> {
+    return new Promise((resolve, reject) => {
+      let request = new XMLHttpRequest();
+      let matrix;
 
-    request.onreadystatechange = function () {
-      if (this.readyState === 4) {
-        console.log('Status:', this.status);
-        console.log('Headers:', this.getAllResponseHeaders());
-        console.log('Body:', this.responseText);
-        const jsonObject = JSON.parse(request.responseText);
-        const distances = jsonObject.distances;
-        matrix = jsonObject.distances;
-        handleMatrix(matrix);
-      }
-    };
+      request.open('POST', "https://api.openrouteservice.org/v2/matrix/driving-car");
 
-    const body = this.tostring();
-    request.send(body);
-    const handleMatrix = (matrix:number[][]) => {
-      if (matrix !== undefined) {
-        for(let i=0;i<matrix.length;i++){
-          for(let j=i;j<matrix[0].length;j++){
-            matrix[j][i]=matrix[i][j];
+      request.setRequestHeader('Accept', 'application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8');
+      request.setRequestHeader('Content-Type', 'application/json');
+      request.setRequestHeader('Authorization', '5b3ce3597851110001cf6248366ddf83a2ee4d23ba9481ec85060854');
+
+      request.onreadystatechange = () => {
+        if (request.readyState === 4) {
+          if (request.status === 200) {
+            const jsonObject = JSON.parse(request.responseText);
+            const distances = jsonObject.distances;
+            matrix = jsonObject.distances;
+            handleMatrix(matrix);
+          } else {
+            reject(new Error(`Request failed with status ${request.status}`));
           }
         }
-          //console.log('matrix 已被赋值:', matrix);
-          if(tournee){
-            this.m.k=tournee.liveurs.length;
+      };
+
+      const body = this.tostring();
+      request.send(body);
+
+      const handleMatrix = (matrix: number[][]) => {
+        if (matrix !== undefined) {
+          for (let i = 0; i < matrix.length; i++) {
+            for (let j = i; j < matrix[0].length; j++) {
+              matrix[j][i] = matrix[i][j];
+            }
           }
-          this.m.matrix=matrix;
-          this.m.start=matrix.length;
-          console.log('matrix 已被赋值:', this.m);
-          this.http.post<Trajets>('http://localhost:4201/planner/planif', this.m)
-              .subscribe(
-                  (response) => {
-                      console.log('Post request successful:', response);
-                      this.trajet.push(response);
-                  },
-                  (error) => {
-                      console.error('Error in post request:', error);
-                  }
-              );
-      } else {
-          console.log('matrix 尚未被赋值');
-      }
-  };
+          if (tournee) {
+            this.m.k = tournee.liveurs.length;
+          }
+          this.m.matrix = matrix;
+          this.m.start = matrix.length - 1;
+          this.http.post<Trajets>('http://130.190.78.146:4201/planner/planif', this.m)
+            .subscribe(
+              (response) => {
+                this.trajet = response;
+                resolve();
+              },
+              (error) => {
+                reject(error);
+              }
+            );
+        } else {
+          reject(new Error('Matrix is undefined'));
+        }
+      };
+    });
   }
+
 }
 
 

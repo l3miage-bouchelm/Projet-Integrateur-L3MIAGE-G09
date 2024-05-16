@@ -25,7 +25,7 @@ export class LivreurTravailComponent implements OnInit{
   }
   //readonly isLoggedIn1=computed<number>(()=>this.isLoggedIn(this.livreur));
   getCsvData(){
-    this.http.get('http://localhost:8080/employes',{responseType:'text'})
+    this.http.get('http://130.190.78.146:8080/employes',{responseType:'text'})
     .subscribe(data=>{
       //this.csvData=this.parseCsvData(data);
       this.livreur=this.parseCsvData(data);
