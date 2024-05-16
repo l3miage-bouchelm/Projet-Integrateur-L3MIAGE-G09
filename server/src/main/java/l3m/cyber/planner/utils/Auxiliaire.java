@@ -25,7 +25,7 @@ public class Auxiliaire {
         if (!estCarree(matrice)) {
             return false;
         }
-        int n = matrice.length;//返回的是行数
+        int n = matrice.length;
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < i; j++) {
                 if (!matrice[i][j].equals(matrice[j][i])) {

@@ -58,14 +58,13 @@ public class Graphe implements Cloneable {
 
     //Ce constructeur accepte une matrice de poids des arêtes et une liste de noms de sommets. 
     //Ceci s'applique à la création d'un graphe pondéré.
-    //相当于这里，除开第二个参数顶点列表中的顶点，其余的都应在权重矩阵中去掉，从而构成一个新的图，方便调用tsp
     public Graphe(Double[][] poidsA_0, ArrayList<Integer> nomSommets) {
         this.nbSommets = poidsA_0.length;  // 使用originalPoidsA的大小作为新图的顶点数
         this.poidsA = new Double[nbSommets][nbSommets];
         this.adj = new int[nbSommets][nbSommets];
         this.nomSommets = nomSommets;
 
-        // 初始化权重矩阵和邻接矩阵
+        // Initialiser la matrice de poids et la matrice d'adjacence
         for (int i = 0; i < nbSommets; i++) {
             for (int j = 0; j < nbSommets; j++) {
                 if (nomSommets.contains(i) && nomSommets.contains(j)) {  // 只在nomSommets列表中的顶点之间设置权重
@@ -82,18 +81,6 @@ public class Graphe implements Cloneable {
             }
         }
     }
-
-    // 打印矩阵的方法
-//    public void printMatrices() {
-//        System.out.println("Weight Matrix (poidsA):");
-//        for (Double[] row : poidsA) {
-//            System.out.println(Arrays.toString(row));
-//        }
-//        System.out.println("\nAdjacency Matrix (adj):");
-//        for (int[] row : adj) {
-//            System.out.println(Arrays.toString(row));
-//        }
-//    }
 
 
     ///Convient pour créer un graphe non pondéré ou un graphe dont les poids sont traités séparément,
@@ -232,37 +219,35 @@ public class Graphe implements Cloneable {
     //les piles suivent le principe LIFO
     //La recherche en profondeur d'abord (DFS) est souvent mise en œuvre à l'aide de piles car leur nature Last-In-First-Out (LIFO) est bien adaptée à la manière dont la recherche en profondeur d'abord est explorée.
     public ArrayList<Integer> parcoursProfondeur(int debut) {
-        ArrayList<Integer> visited = new ArrayList<>();  // 存储访问过的节点
-        Stack<Integer> stack = new Stack<>();            // 支持DFS的栈
-        stack.push(debut);                               // 将起始节点压入栈
+        boolean[] visited = new boolean[nbSommets];
+        ArrayList<Integer> path = new ArrayList<>();
+        Stack<Integer> stack = new Stack<>();
+        stack.push(debut);
 
         while (!stack.isEmpty()) {
-            int vertex = stack.pop();                    // 弹出栈顶元素
-            if (!visited.contains(vertex)) {
-                visited.add(vertex);                     // 标记为已访问，在这里防止重复
-                // 获取与vertex相连的所有边，按权重排序
+            int vertex = stack.pop();
+            if (!visited[vertex]) {
+                visited[vertex] = true;
+                path.add(vertex);
+
+                //  Obtenir toutes les arêtes connectées au sommet, triées par poids
                 List<Triplet> connectedEdges = new ArrayList<>();
                 for (int i = 0; i < nbSommets; i++) {
-                    if (adj[vertex][i] == 1 && !visited.contains(i)) {
+                    if (adj[vertex][i] == 1 && !visited[i]) {
                         connectedEdges.add(new Triplet(vertex, i, poidsA[vertex][i]));
                     }
                 }
-                // 按权重排序
-                Collections.sort(connectedEdges);
-                // 将排序后的节点压入栈
+                Collections.sort(connectedEdges, Comparator.comparingDouble(Triplet::getPoids));
+
+                // Presser les nœuds triés sur la pile
                 for (Triplet edge : connectedEdges) {
                     stack.push(edge.getC2());
                 }
             }
         }
-        // 确保路径是闭环
-        ////但是没有必要闭环，毕竟最后输出的时候，每个点只能出现一次。即使不加，在计算路径的时候已经手动加上了
-//        if (visited.size() == nbSommets && adj[visited.getLast()][debut] == 1) {
-//            visited.add(debut);
-//        }
-        return visited;  // 返回访问顺序
-    }
 
+        return path;
+    }
 
 
 
@@ -277,7 +262,7 @@ public class Graphe implements Cloneable {
     public List<Triplet> listeAretes(){
         List<Triplet> list = new ArrayList<>();
         for(int i=0;i<this.nbSommets;i++){
-            for (int j = i + 1; j < this.nbSommets; j++) { // 注意这里的修改，只有当 j > i 时才添加边。避免出现一条边添加两次的情况
+            for (int j = i + 1; j < this.nbSommets; j++) { // // Notez le changement qui consiste à n'ajouter des arêtes que lorsque j > i. Cela permet d'éviter qu'une arête soit ajoutée deux fois.
                 if(this.poidsA[i][j] != 0){
                     Triplet edge = new Triplet(i, j, this.poidsA[i][j]);
                     list.add(edge);
@@ -316,20 +301,20 @@ public class Graphe implements Cloneable {
     }
 
     public Graphe Kruskal() {
-        // 创建一个空的图 T，其实是复制当前图的结构但不复制边
-        //所以这里没有用到克隆
+        // Créer un graphe vide T, en copiant la structure du graphe actuel mais sans copier les arêtes
+        // Donc ici, on n'utilise pas le clonage
         Graphe T = new Graphe(this.nbSommets);
-        List<Triplet> sortedEdges = this.aretesTriees(true); // 将当前图的边按权重升序排序
+        List<Triplet> sortedEdges = this.aretesTriees(true); // Trier les arêtes du graphe actuel par ordre croissant de poids
         UnionFind uf = new UnionFind(this.nbSommets);
 
         for (Triplet edge : sortedEdges) {
             int u = edge.getC1();
             int v = edge.getC2();
-            if (uf.find(u) != uf.find(v)) { // 检查这两个顶点是否已经在同一个连通分量中
-                T.ajouterArete(u, v, edge.getPoids()); // 将边添加到 T 中
-                uf.union(u, v); // 在 Union-Find 结构中合并这两个顶点的连通分量
+            if (uf.find(u) != uf.find(v)) { // Vérifier si ces deux sommets sont déjà dans la même composante connexe
+                T.ajouterArete(u, v, edge.getPoids()); // Ajouter l'arête à T
+                uf.union(u, v); // Fusionner les deux composantes connexes dans la structure Union-Find
             }
-            // 一旦加入足够的边就停止，即边数等于顶点数减一
+            // Arrêter une fois que suffisamment d'arêtes ont été ajoutées, c'est-à-dire lorsque le nombre d'arêtes est égal au nombre de sommets moins un
             if (T.listeAretes().size() == this.nbSommets - 1) {
                 break;
             }
@@ -347,7 +332,7 @@ public class Graphe implements Cloneable {
                 hamiltonianPath.add(v);
             }
         }
-        hamiltonianPath.add(hamiltonianPath.get(0)); // 回到起点
+        hamiltonianPath.add(hamiltonianPath.get(0)); // retourner au debut
 
         return hamiltonianPath;
     }
@@ -357,13 +342,47 @@ public class Graphe implements Cloneable {
         return poidsA[i][j];
     }/////diagramme中没有的方法
 
+    // Générer des graphes aléatoires qui satisfont l'inégalité triangulaire
+    public static Graphe generateRandomGraphWithTriangleInequality(int n) {
+        Graphe graph = new Graphe(n);
+        Random rand = new Random();
+
+        // Génération initiale de poids aléatoires pour les arêtes
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                double weight = 1 + rand.nextInt(100);
+                graph.ajouterArete(i, j, weight);
+            }
+        }
+
+        // S'assurer que l'inégalité trigonométrique
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                for (int k = 0; k < n; k++) {
+                    if (k != i && k != j) {
+                        double weightIK = graph.getPoids(i, k);
+                        double weightKJ = graph.getPoids(k, j);
+                        if (weightIK != 0 && weightKJ != 0) {
+                            double newWeight = Math.min(graph.getPoids(i, j), weightIK + weightKJ);
+                            graph.ajouterArete(i, j, newWeight);
+                        }
+                    }
+                }
+            }
+        }
+
+        return graph;
+    }
+
+
+
 
     // Version un pour permettre l'intégration de cette partie avec les autres parties du projet sans causer d'erreurs, triez et produisez les sorties dans l'ordre croissant des numéros
     public ArrayList<Integer> tsp(int debut) {
-        Graphe minT = this.Kruskal();  // 获取最小生成树
+        Graphe minT = this.Kruskal();
         ArrayList<Integer> dfspath = minT.parcoursProfondeur(debut);
-        return generateHamiltonianCycle(dfspath);  // 从指定的起点开始DFS遍历
-        //返回的是一个tournne
+        return generateHamiltonianCycle(dfspath);
+
     }
 
 }

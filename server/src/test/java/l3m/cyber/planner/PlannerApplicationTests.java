@@ -1,11 +1,9 @@
 package l3m.cyber.planner;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import l3m.cyber.planner.responses.PlannerResult;
 import l3m.cyber.planner.utils.Graphe;
@@ -174,26 +172,152 @@ class PlannerApplicationTests {
 
 	@Test
 	public void testCompletGraphe() {
-//		Double[][] matrix = {{0.0, 10.0, 15.0, 20.0},
-//				{10.0, 0.0, 35.0, 25.0},
-//				{15.0, 35.0, 0.0, 30.0},
-//				{20.0, 25.0, 30.0, 0.0}};
 		Graphe graph = new Graphe(4);
-		graph.ajouterArete(0, 1, 10);
-		graph.ajouterArete(0, 2, 15);
-		graph.ajouterArete(0, 3, 20);
-		graph.ajouterArete(1, 2, 35);
-		graph.ajouterArete(1, 3, 25);
-		graph.ajouterArete(2, 3, 30);
+		graph.ajouterArete(0, 1, 5);
+		graph.ajouterArete(0, 2, 6);
+		graph.ajouterArete(0, 3, 7);
+		graph.ajouterArete(1, 2, 4);
+		graph.ajouterArete(1, 3, 6);
+		graph.ajouterArete(2, 3, 5);
+
+		// Tester l'algorithme de Kruskal
+		Graphe mst = graph.Kruskal();
+		List<Triplet> edges = mst.listeAretes();
+		assertEquals(3, edges.size(), "L'arbre couvrant minimum (MST) devrait avoir n-1 arêtes");
+		double totalWeight = edges.stream().mapToDouble(Triplet::getPoids).sum();
+		assertEquals(14.0, totalWeight, "Le poids total du MST devrait être 14");
+
+		// Tester l'algorithme TSP
 		ArrayList<Integer> resultat = graph.tsp(0);
-		assertNotNull(resultat,"Result should not be null");
-		assertEquals(4, resultat.size()-1,"Result should contain all vertices");
-		assertTrue(resultat.stream().distinct().count() == 4,"Each vertex should be visited exactly once");
+		assertNotNull(resultat, "Le résultat ne devrait pas être nul");
+		assertEquals(4, resultat.size()-1, "Le résultat devrait contenir tous les sommets");
+		assertTrue(resultat.stream().distinct().count() == 4, "Chaque sommet devrait être visité exactement une fois");
+
+		// Calculer le poids total du TSP
+		double tspWeight = 0.0;
+		for (int i = 0; i < resultat.size() - 1; i++) {
+			tspWeight += graph.getPoids(resultat.get(i), resultat.get(i + 1));
+		}
+
+		System.out.println("le résultat: " + resultat);
+		System.out.println("Poids total du TSP: " + tspWeight);
+		assertTrue(tspWeight >= totalWeight, "Le poids du TSP devrait être au moins aussi grand que le poids du MST");
+		System.out.println("Poids total du TSP: " + tspWeight + " contre (2 * poids du MST): " + (totalWeight * 2));
+		assertTrue(tspWeight <= 2 * totalWeight);
 	}
 
 	@Test
+	public void testSmallGraph() {
+		Graphe graph = new Graphe(3);
+		graph.ajouterArete(0, 1, 1);
+		graph.ajouterArete(1, 2, 1);
+		graph.ajouterArete(0, 2, 1);
+
+		// Tester l'algorithme de Kruskal
+		Graphe mst = graph.Kruskal();
+		List<Triplet> edges = mst.listeAretes();
+		assertEquals(2, edges.size(), "Le MST devrait avoir n-1 arêtes");
+		double totalWeight = edges.stream().mapToDouble(Triplet::getPoids).sum();
+		assertEquals(2.0, totalWeight, 0.1, "Le poids total du MST devrait être 2");
+
+		// Tester l'algorithme TSP
+		ArrayList<Integer> resultat = graph.tsp(0);
+		assertNotNull(resultat, "Le résultat ne devrait pas être nul");
+		assertEquals(3, resultat.size()-1, "Le résultat devrait contenir tous les sommets");
+		assertTrue(resultat.stream().distinct().count() == 3, "Chaque sommet devrait être visité exactement une fois");
+
+		// Calculer le poids total du TSP
+		double tspWeight = 0.0;
+		for (int i = 0; i < resultat.size() - 1; i++) {
+			tspWeight += graph.getPoids(resultat.get(i), resultat.get(i + 1));
+		}
+
+		System.out.println("Poids total du TSP: " + tspWeight);
+		assertTrue(tspWeight <= 2 * totalWeight, "Le poids du TSP devrait être inférieur ou égal à deux fois le poids du MST");
+	}
+
+	@Test
+	public void testMediumGraph() {
+		Graphe graph = new Graphe(6);
+		graph.ajouterArete(0, 1, 10);
+		graph.ajouterArete(0, 2, 15);
+		graph.ajouterArete(0, 3, 20);
+		graph.ajouterArete(1, 4, 25);
+		graph.ajouterArete(2, 4, 30);
+		graph.ajouterArete(3, 5, 35);
+
+		// Tester l'algorithme de Kruskal
+		Graphe mst = graph.Kruskal();
+		List<Triplet> edges = mst.listeAretes();
+		assertEquals(5, edges.size(), "Le MST devrait avoir n-1 arêtes");
+		double totalWeight = edges.stream().mapToDouble(Triplet::getPoids).sum();
+		assertEquals(105.0, totalWeight, 0.1, "Le poids total du MST devrait être 105");
+
+		// Tester l'algorithme TSP
+		ArrayList<Integer> resultat = graph.tsp(0);
+		assertNotNull(resultat, "Le résultat ne devrait pas être nul");
+		assertEquals(6, resultat.size()-1, "Le résultat devrait contenir tous les sommets");
+		assertTrue(resultat.stream().distinct().count() == 6, "Chaque sommet devrait être visité exactement une fois");
+
+		// Calculer le poids total du TSP
+		double tspWeight = 0.0;
+		for (int i = 0; i < resultat.size() - 1; i++) {
+			tspWeight += graph.getPoids(resultat.get(i), resultat.get(i + 1));
+		}
+
+		System.out.println("Poids total du TSP: " + tspWeight);
+		assertTrue(tspWeight <= 2 * totalWeight, "Le poids du TSP devrait être inférieur ou égal à deux fois le poids du MST");
+	}
+
+
+
+	@Test
+	public void testLargeGraph() {
+		int n = 50;
+		System.out.println("Génération d'un graphe aléatoire...");
+		Graphe graph = Graphe.generateRandomGraphWithTriangleInequality(n);
+		System.out.println("Graphe généré.");
+
+		// Tester l'algorithme de Kruskal
+		long startTime = System.currentTimeMillis();
+		System.out.println("Exécution de l'algorithme de Kruskal...");
+		Graphe mst = graph.Kruskal();
+		long endTime = System.currentTimeMillis();
+		System.out.println("Algorithme de Kruskal terminé.");
+		System.out.println("Temps d'exécution de l'algorithme de Kruskal: " + (endTime - startTime) + "ms");
+
+		List<Triplet> edges = mst.listeAretes();
+		assertEquals(n - 1, edges.size(), "Le MST devrait avoir n-1 arêtes");
+
+		// Tester l'algorithme TSP
+		startTime = System.currentTimeMillis();
+		System.out.println("Exécution de l'algorithme TSP...");
+		ArrayList<Integer> resultat = graph.tsp(0);
+		endTime = System.currentTimeMillis();
+		System.out.println("Algorithme TSP terminé.");
+		System.out.println("Temps d'exécution de l'algorithme TSP: " + (endTime - startTime) + "ms");
+
+		assertNotNull(resultat, "Le résultat ne devrait pas être nul");
+		assertEquals(n, resultat.size()-1, "Le résultat devrait contenir tous les sommets");
+		assertTrue(resultat.stream().distinct().count() == n, "Chaque sommet devrait être visité exactement une fois");
+
+		// Calculer le poids total du TSP
+		double tspWeight = 0.0;
+		for (int i = 0; i < resultat.size() - 1; i++) {
+			tspWeight += graph.getPoids(resultat.get(i), resultat.get(i + 1));
+		}
+
+		double mstWeight = edges.stream().mapToDouble(Triplet::getPoids).sum();
+		System.out.println("Poids total du TSP: " + tspWeight);
+		assertTrue(tspWeight <= 2 * mstWeight, "Le poids du TSP devrait être inférieur ou égal à deux fois le poids du MST");
+	}
+
+
+
+
+	@Test
 	public void testTSPAlgorithm() {
-		// 创建图实例并添加节点和边
+		// Créer une instance de graphe et ajouter des arêtes
 		Graphe graph = new Graphe(4);
 		graph.ajouterArete(0, 1, 28.3);
 		graph.ajouterArete(0, 2, 53.8);
@@ -202,27 +326,25 @@ class PlannerApplicationTests {
 		graph.ajouterArete(1, 3, 22.4);
 		graph.ajouterArete(2, 3, 28.3);
 
-		// 检查边的数量是否正确
+		// Vérifier si le nombre d'arêtes est correct
 		List<Triplet> liste = graph.listeAretes();
-		System.out.println("Le size de la liste des arêtes: " + liste.size());
+		System.out.println("Le nombre d'arêtes: " + liste.size());
 		assertEquals(6, liste.size());
 
-		// 计算并输出 TSP 近似解的结果
+		// Calculer et afficher le résultat approximatif du TSP
 		ArrayList<Integer> resultat = graph.tsp(0);
 		for (int point : resultat) {
-			System.out.println("La liste de résultat est: " + point);
+			System.out.println("La liste de résultats est: " + point);
 		}
 
-		// 计算近似解的总权重
+		// Calculer le poids total de la solution approximative du TSP
 		double pondre = 0.0;
 		for (int j = 0; j < resultat.size() - 1; j++) {
 			double segmentLength = graph.getPoids(resultat.get(j), resultat.get(j + 1));
 			pondre += segmentLength;
 		}
-		// 加上最后一个点到起始点的距离形成回路
-		pondre += graph.getPoids(resultat.get(resultat.size() - 1), resultat.get(0));
 
-		// 计算最小生成树的权重
+		// Calculer le poids de l'arbre couvrant minimum
 		double mstPondre = 0.0;
 		Graphe MST = graph.Kruskal();
 		List<Triplet> listeMST = MST.listeAretes();
@@ -232,12 +354,13 @@ class PlannerApplicationTests {
 			mstPondre += edge.getPoids();
 		}
 
-		// 输出和比较权重
-		System.out.println("TSP Total Weight: " + pondre + " vs Known Optimal (2 * MST Weight): " + (mstPondre * 2));
+		// Afficher et comparer les poids
+		System.out.println("Poids total du TSP: " + pondre + " contre (2 * poids du MST): " + (mstPondre * 2));
 
-		// 验证TSP解的权重是否符合预期
+		// Vérifier si le poids du TSP respecte les attentes
 		assertTrue(pondre <= 2 * mstPondre);
 	}
+
 
 
 
@@ -274,7 +397,7 @@ class PlannerApplicationTests {
 		PlannerParameter param= new PlannerParameter(matrix, k, start);
 		Planner pl= new Planner(param);
 		pl.result();
-		ArrayList< ArrayList<Integer>> Ar = new ArrayList< ArrayList<Integer> >(); //({{3, 0, 1, 2}, {3, 4, 5}} )
+		ArrayList< ArrayList<Integer>> Ar = new ArrayList< ArrayList<Integer> >();
 		Ar.add(new ArrayList<>(List.of(start, 1, 2,4)));
 		Ar.add(new ArrayList<>(List.of(start, 5, 3)));
 
@@ -292,13 +415,13 @@ class PlannerApplicationTests {
 				{4.0, 3.0, 2.0, 5.0, 0.0}
 		};
 		int k = 2;
-		int start = 3; // assuming 3 is the index for V3
+		int start = 3;
 		PlannerParameter param = new PlannerParameter(matrix, k, start);
 		Planner pl = new Planner(param);
 		pl.result();
 		ArrayList<ArrayList<Integer>> Ar = new ArrayList<>();
-		Ar.add(new ArrayList<>(List.of(3, 0, 1))); // Group 1 centered around V3
-		Ar.add(new ArrayList<>(List.of(3,2, 4)));    // Group 2 centered around V2
+		Ar.add(new ArrayList<>(List.of(3, 0, 1)));
+		Ar.add(new ArrayList<>(List.of(3,2, 4)));
 
 		assertEquals(Ar, pl.getTournees());
 	}

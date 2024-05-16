@@ -21,10 +21,8 @@ public class Planner{
         this.debut = param.start();
         this.tournees = new ArrayList<>();
         this.longTournees = new ArrayList<>();
-         //La méthode de classification aléatoire est utilisée ici pour l'instant
         //this.p = new PartitionAlea(distances.length,k,debut);///choisir le constructeur correspondant pour l'initialiser si nécessaire
         this.p = new PartitionKCentre( distances.length, k,debut);
-        // le constructeur partitionkcentre .
     }
 
     // Ce constructeur est utilisé pour les tests directs
@@ -106,7 +104,6 @@ public class Planner{
     }
     
     public String toString() {
-        // 返回类的字符串表示
         return "Planner with " + k + " routes";
     }
     

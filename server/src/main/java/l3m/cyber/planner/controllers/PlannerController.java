@@ -21,7 +21,7 @@ public class PlannerController implements PlannerEndpoints {
     
     @Override
     //************ @GetMapping("/planif/")
-    @CrossOrigin(origins = "http://localhost:4200")
+    @CrossOrigin("http://130.190.78.146:4200")
     public PlannerResult planif(PlannerParameter params) {
         return plannerService.getResult(params);
     }
