@@ -64,12 +64,6 @@
     <tr *ngIf="commandeSelectionnee.dateDeCreation">
       <td>Date de Creation : </td><td>{{commandeSelectionnee.dateDeCreation}}</td>
     </tr>
-    <tr *ngIf="commandeSelectionnee.client">
-      <td>Client :</td><td>{{commandeSelectionnee.client.prenom}} {{commandeSelectionnee.client.nom}}</td>
-    </tr>
-    <tr *ngIf="commandeSelectionnee.client">
-      <td>Adresse :</td><td>{{commandeSelectionnee.client.adresse}} </td>
-    </tr>
     <tr *ngIf="commandeSelectionnee.etat">
       <td>Etat :</td><td>{{commandeSelectionnee.etat }}</td>
     </tr>
