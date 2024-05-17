@@ -361,7 +361,7 @@ public class Graphe implements Cloneable {
 
     public double getPoids(int i, int j) {
         return poidsA[i][j];
-    }/////diagramme中没有的方法
+    }/////Il est pratique d'obtenir les poids correspondants sur la base des deux sommets
 
 
     // Générer des graphes aléatoires qui satisfont l'inégalité triangulaire
